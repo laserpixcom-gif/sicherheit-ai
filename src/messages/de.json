@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Home",
+    "insights": "Insights",
+    "glossar": "Glossar",
+    "tools": "Tools",
+    "dark": "Dark",
+    "light": "Hell"
+  },
+  "hero": {
+    "eyebrow": "Deutschlands führende KI-Sicherheitsplattform",
+    "headline1": "KI-Sicherheit.",
+    "headline2": "Neu definiert.",
+    "phrases": [
+      "Intelligente Bedrohungserkennung · Echtzeit-Monitoring · KI-Expertise",
+      "Jeden Tag. Überall. Für jedes Unternehmen in Deutschland.",
+      "Von Forschern für Praktiker — unabhängig und faktenbasiert."
+    ],
+    "scroll": "Entdecken"
+  },
+  "hud": {
+    "threats": "Aktive Bedrohungen",
+    "threatsValue": "2,847",
+    "threatsSub": "Global · Echtzeit",
+    "status": "Sicherheitsstatus",
+    "statusValue": "AKTIV",
+    "statusSub": "Alle Systeme normal",
+    "cve": "CVE-Feed",
+    "cveValue": "14",
+    "cveSub": "Neue Schwachstellen heute",
+    "ai": "KI-Modell-Status",
+    "aiValue": "GPT-4 · Gemini · Claude",
+    "aiSub": "3 aktive Warnungen"
+  },
+  "ticker": {
+    "items": [
+      "CVE-2026-4821: RCE in OpenSSL 3.x — Patch verfügbar",
+      "KI-generierte Phishing-Angriffe +340% gegenüber Vorjahr",
+      "BSI Warnung: Kritische Infrastruktur unter Beschuss",
+      "DSGVO: 12 neue Bußgelder im April 2026",
+      "Ransomware-Gruppe 'Phantom' greift DAX-Unternehmen an",
+      "Microsoft Patch Tuesday: 47 Sicherheitslücken geschlossen",
+      "EU AI Act: Neue Compliance-Anforderungen ab Juni 2026",
+      "Zero-Day in Chrome: Update dringend empfohlen"
+    ]
+  },
+  "stats": {
+    "label": "Aktive Bedrohungen heute",
+    "label2": "Monatliche Leser",
+    "label3": "Anstieg KI-Angriffe 2026",
+    "label4": "Ø Zeit bis Erkennung",
+    "desc1": "// live threat-feed",
+    "desc2": "// unique sessions / mo",
+    "desc3": "// vs. vorjahr YoY",
+    "desc4": "// mean detection window"
+  },
+  "radar": {
+    "label": "// Live Threat Intelligence",
+    "title1": "Die globale",
+    "title2": "Bedrohungslage",
+    "title3": "in Echtzeit",
+    "desc": "Unser KI-gestützter Threat-Sensor analysiert kontinuierlich Millionen von Datenpunkten und liefert dir die wichtigsten Sicherheitsereignisse aus aller Welt.",
+    "ransomware": "Ransomware-Kampagnen",
+    "phishing": "Phishing / Social Engineering",
+    "state": "State-Sponsored Angriffe",
+    "aiMalware": "KI-gestützte Malware"
+  },
+  "news": {
+    "label": "// Aktuelle Insights",
+    "title": "Security Intelligence",
+    "allArticles": "Alle Artikel"
+  },
+  "score": {
+    "label": "// Security Score Dashboard",
+    "title1": "Verstehe dein",
+    "title2": "Risikoprofil",
+    "desc": "Unser KI-Modell analysiert tausende Variablen und berechnet deinen persönlichen Sicherheits-Score in Echtzeit. Identifiziere Schwachstellen bevor Angreifer sie ausnutzen.",
+    "scoreLabel": "Sicherheits-Score",
+    "network": "Netzwerk",
+    "endpoints": "Endpoints",
+    "identities": "Identitäten",
+    "aiCompliance": "KI-Compliance",
+    "privacy": "Datenschutz"
+  },
+  "tools": {
+    "label": "// Sicherheits-Tools",
+    "title": "Direkt ausprobieren",
+    "allTools": "Alle Tools",
+    "password": "Passwort-Checker",
+    "passwordDesc": "Analysiere die Stärke deiner Passwörter mit KI-gestütztem Angriffssimulator.",
+    "phishing": "Phishing-Detektor",
+    "phishingDesc": "Paste eine URL oder E-Mail und unser KI-Modell analysiert sie auf Phishing-Indikatoren.",
+    "cve": "CVE-Dashboard",
+    "cveDesc": "Live-Feed der neuesten CVEs mit KI-Priorisierung für dein Tech-Stack.",
+    "breach": "Data-Breach-Prüfer",
+    "breachDesc": "Prüfe ob deine E-Mail-Adresse in bekannten Datenlecks kompromittiert wurde.",
+    "aiRisk": "KI-Risiko-Scanner",
+    "aiRiskDesc": "Bewerte das Sicherheitsrisiko von KI-Modellen nach dem EU AI Act Framework.",
+    "incident": "Incident-Response",
+    "incidentDesc": "Geführte Checklisten und Playbooks für die ersten kritischen 72 Stunden."
+  },
+  "terminal": {
+    "label": "// Live Security Feed",
+    "title1": "Echtzeit-",
+    "title2": "Bedrohungs",
+    "title3": "logs",
+    "desc": "Erhalte einen direkten Blick in das Geschehen: Unser simulierter Security-Feed zeigt die Art von Ereignissen, die täglich in deutschen Unternehmen auftreten.",
+    "exploreTools": "Tools erkunden →"
+  },
+  "newsletter": {
+    "label": "// Intelligence Briefing",
+    "title1": "Bleib immer",
+    "title2": "einen Schritt voraus",
+    "desc": "Wöchentliche Zusammenfassungen der wichtigsten Bedrohungen, Schwachstellen und KI-Sicherheitsnews — direkt in dein Postfach.",
+    "placeholder": "deine@email.de",
+    "button": "Anmelden →",
+    "meta": "Kein Spam · Jederzeit kündbar · DSGVO-konform",
+    "success": "Danke! Erfolgreich registriert."
+  },
+  "footer": {
+    "tagline": "Deutschlands führende Plattform für KI-Sicherheit und Cybersecurity. Unabhängig, forschungsbasiert, praxisnah.",
+    "content": "Inhalte",
+    "insights": "Insights",
+    "analyses": "Analysen",
+    "glossar": "Glossar",
+    "cveFeed": "CVE-Feed",
+    "tools": "Tools",
+    "passwordChecker": "Passwort-Checker",
+    "phishingDetector": "Phishing-Detektor",
+    "cveDashboard": "CVE-Dashboard",
+    "aiScanner": "KI-Scanner",
+    "legal": "Rechtliches",
+    "privacy": "Datenschutz",
+    "imprint": "Impressum",
+    "terms": "AGB",
+    "gdpr": "DSGVO",
+    "copyright": "© 2026 sicherheit.ai — Alle Rechte vorbehalten",
+    "statusNormal": "Alle Systeme normal"
+  }
+}
