@@ -12,8 +12,14 @@ import TerminalSection from '@/components/TerminalSection';
 import NewsletterSection from '@/components/NewsletterSection';
 import Footer from '@/components/Footer';
 import ScrollAnimator from '@/components/ScrollAnimator';
+import { setRequestLocale } from 'next-intl/server';
+
+export function generateStaticParams() {
+  return [{ locale: 'de' }, { locale: 'en' }];
+}
 
 export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   return (
     <>
       <ScrollAnimator />

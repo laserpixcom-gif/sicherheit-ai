@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
+
+export function generateStaticParams() {
+  return [{ locale: 'de' }, { locale: 'en' }];
+}
 
 export const revalidate = 3600;
 
@@ -15,6 +20,7 @@ export default async function BlogPage({
 }: {
   params: { locale: string };
 }) {
+  setRequestLocale(locale);
   const articles = await getPosts();
 
   return (

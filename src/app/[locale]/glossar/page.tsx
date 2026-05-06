@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import Footer from '@/components/Footer';
 import GlossarClient from '@/components/GlossarClient';
 import { GLOSSARY_TERMS } from '@/lib/glossary';
+
+export function generateStaticParams() {
+  return [{ locale: 'de' }, { locale: 'en' }];
+}
 
 export const metadata: Metadata = {
   title: 'Glossar — KI-Sicherheit & Cybersecurity Begriffe | sicherheit.ai',
@@ -16,6 +21,7 @@ export default function GlossarPage({
 }: {
   params: { locale: string };
 }) {
+  setRequestLocale(locale);
   // Schema.org DefinedTermSet
   const schema = {
     '@context': 'https://schema.org',

@@ -1,6 +1,11 @@
+export function generateStaticParams() {
+  return [{ locale: 'de' }, { locale: 'en' }];
+}
+
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import Nav from '@/components/Nav';
 import CustomCursor from '@/components/CustomCursor';
@@ -20,6 +25,7 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  setRequestLocale(locale);
   const messages = await getMessages();
 
   return (
@@ -27,18 +33,10 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            {/* Scroll progress bar */}
-            <div
-              id="scroll-progress"
-              className="scroll-progress"
-              style={{ width: '0%' }}
-            />
+            <div id="scroll-progress" className="scroll-progress" style={{ width: '0%' }} />
             <ScrollProgress />
-            {/* Custom cursor (desktop only, no-op on touch) */}
             <CustomCursor />
-            {/* Fixed nav */}
             <Nav locale={locale} />
-            {/* Page transition wrapper */}
             <PageTransition>
               {children}
             </PageTransition>

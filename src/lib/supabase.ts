@@ -1,0 +1,14 @@
+import { createClient } from '@supabase/supabase-js';
+
+const url  = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const key  = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const skey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+export const supabase = url && key
+  ? createClient(url, key)
+  : null;
+
+/** Server-side client with elevated privileges (API routes only) */
+export const supabaseAdmin = url && skey
+  ? createClient(url, skey, { auth: { autoRefreshToken: false, persistSession: false } })
+  : null;

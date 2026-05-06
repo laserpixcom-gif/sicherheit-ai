@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import Footer from '@/components/Footer';
 import { getPosts, getPost, getRelatedPosts, formatDate } from '@/lib/posts';
 import ArticleTOC from '@/components/blog/ArticleTOC';
@@ -70,6 +71,7 @@ export default async function BlogPostPage({
     ),
   ]);
 
+  setRequestLocale(params.locale);
   if (!post) notFound();
 
   const headings = extractHeadings(post.content);
