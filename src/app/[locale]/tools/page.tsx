@@ -1,259 +1,613 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Footer from '@/components/Footer';
+
+// ─── Passwort-Checker ────────────────────────────────────────────────────────
+
+function calcEntropy(pw: string): number {
+  const charsets = [
+    /[a-z]/.test(pw) ? 26 : 0,
+    /[A-Z]/.test(pw) ? 26 : 0,
+    /[0-9]/.test(pw) ? 10 : 0,
+    /[^a-zA-Z0-9]/.test(pw) ? 32 : 0,
+  ];
+  const pool = charsets.reduce((a, b) => a + b, 0);
+  return pool > 0 ? Math.round(pw.length * Math.log2(pool)) : 0;
+}
+
+function crackTime(entropy: number): string {
+  // Annahme: 10^12 Versuche/Sekunde (GPU-Cluster)
+  const seconds = Math.pow(2, entropy) / 1e12;
+  if (seconds < 1) return 'sofort';
+  if (seconds < 60) return `${Math.round(seconds)} Sekunden`;
+  if (seconds < 3600) return `${Math.round(seconds / 60)} Minuten`;
+  if (seconds < 86400) return `${Math.round(seconds / 3600)} Stunden`;
+  if (seconds < 31536000) return `${Math.round(seconds / 86400)} Tage`;
+  if (seconds < 31536000 * 1000) return `${Math.round(seconds / 31536000)} Jahre`;
+  if (seconds < 31536000 * 1e6) return `${(seconds / 31536000 / 1000).toFixed(0)}k Jahre`;
+  return '> 1 Million Jahre';
+}
 
 function PasswordChecker() {
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
 
-  const getScore = (pw: string) => {
-    let s = 0;
-    if (pw.length >= 8) s++;
-    if (pw.length >= 12) s++;
-    if (/[A-Z]/.test(pw)) s++;
-    if (/[0-9]/.test(pw)) s++;
-    if (/[^A-Za-z0-9]/.test(pw)) s++;
-    return s;
-  };
+  const checks = [
+    { label: '≥ 8 Zeichen', pass: password.length >= 8 },
+    { label: '≥ 16 Zeichen', pass: password.length >= 16 },
+    { label: 'Großbuchstabe', pass: /[A-Z]/.test(password) },
+    { label: 'Ziffer', pass: /[0-9]/.test(password) },
+    { label: 'Sonderzeichen', pass: /[^a-zA-Z0-9]/.test(password) },
+    { label: 'Kein Wörterbuchword', pass: password.length > 5 && !/^(password|passwort|qwerty|123456|admin|letmein)/i.test(password) },
+  ];
 
-  const score = getScore(password);
+  const score = checks.filter(c => c.pass).length;
+  const entropy = calcEntropy(password);
   const levels = [
-    { label: 'Sehr schwach', color: '#FF2D6F' },
-    { label: 'Schwach', color: '#FF5A3A' },
-    { label: 'Mittel', color: '#FF9632' },
+    { label: 'Extrem schwach', color: '#FF2D6F' },
+    { label: 'Sehr schwach', color: '#FF4A1A' },
+    { label: 'Schwach', color: '#FF9632' },
+    { label: 'Mittel', color: '#FFCC00' },
     { label: 'Stark', color: '#78C864' },
     { label: 'Sehr stark', color: '#00F0FF' },
     { label: 'Maximale Sicherheit', color: '#00F0FF' },
   ];
-  const current = levels[Math.min(score, 5)];
-
-  const CHECKS = [
-    { label: 'Mindestens 8 Zeichen', pass: password.length >= 8 },
-    { label: 'Mindestens 12 Zeichen', pass: password.length >= 12 },
-    { label: 'Großbuchstabe (A-Z)', pass: /[A-Z]/.test(password) },
-    { label: 'Ziffer (0-9)', pass: /[0-9]/.test(password) },
-    { label: 'Sonderzeichen (!@#$…)', pass: /[^A-Za-z0-9]/.test(password) },
-  ];
-
-  const attackTimes = [
-    { label: 'Brute-Force (GPU)', value: score === 0 ? '< 1s' : score <= 2 ? '~2min' : score <= 3 ? '~6 Monate' : score <= 4 ? '~200 Jahre' : '> 1 Billion Jahre' },
-    { label: 'Wörterbuch-Angriff', value: score <= 1 ? 'Sofort' : score <= 3 ? '~3 Tage' : '> 10 Jahre' },
-    { label: 'KI-gestützter Angriff', value: score <= 2 ? '~1h' : score <= 4 ? '~50 Jahre' : '> 500 Jahre' },
-  ];
+  const level = levels[Math.min(score, 6)];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div style={{ position: 'relative' }}>
         <input
           type={show ? 'text' : 'password'}
           value={password}
           onChange={e => setPassword(e.target.value)}
           placeholder="Passwort eingeben…"
-          style={{
-            width: '100%', padding: '16px 52px 16px 18px',
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: '10px', color: 'var(--text)',
-            fontFamily: 'var(--mono)', fontSize: '15px', outline: 'none',
-            boxSizing: 'border-box', transition: 'border-color 0.2s',
-          }}
+          autoComplete="off"
+          style={{ width: '100%', padding: '14px 48px 14px 16px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: '15px', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
           onFocus={e => (e.target.style.borderColor = 'var(--border-bright)')}
           onBlur={e => (e.target.style.borderColor = 'var(--border)')}
         />
-        <button onClick={() => setShow(!show)} style={{
-          position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: 'var(--text-muted)', fontSize: '16px',
-        }}>
-          {show ? '🙈' : '👁️'}
+        <button onClick={() => setShow(!show)} style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: '15px' }}>
+          {show ? '●' : '○'}
         </button>
       </div>
 
-      {/* Meter */}
+      {/* Strength bar */}
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-          <span style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Stärke</span>
-          <span style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: current.color, fontWeight: 700 }}>
-            {password ? current.label : '—'}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Stärke</span>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: level.color, fontWeight: 700 }}>{password ? level.label : '—'}</span>
         </div>
-        <div style={{ display: 'flex', gap: '6px' }}>
-          {[0,1,2,3,4].map(i => (
-            <div key={i} style={{
-              flex: 1, height: '5px', borderRadius: '3px',
-              background: i < score ? current.color : 'var(--border)',
-              boxShadow: i < score ? `0 0 8px ${current.color}66` : 'none',
-              transition: 'all 0.3s',
-            }} />
+        <div style={{ display: 'flex', gap: '4px' }}>
+          {[0,1,2,3,4,5].map(i => (
+            <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i < score ? level.color : 'var(--border)', transition: 'all 0.3s', boxShadow: i < score ? `0 0 6px ${level.color}66` : 'none' }} />
           ))}
         </div>
       </div>
 
-      {/* Checks */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '8px' }}>
-        {CHECKS.map(c => (
-          <div key={c.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontFamily: 'var(--mono)' }}>
-            <span style={{ color: c.pass ? '#78C864' : 'var(--text-muted)', fontSize: '14px' }}>{c.pass ? '✓' : '○'}</span>
+      {/* Checks grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+        {checks.map(c => (
+          <div key={c.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', fontFamily: 'var(--mono)' }}>
+            <span style={{ color: c.pass ? '#78C864' : 'var(--border)', fontSize: '14px', fontWeight: 700 }}>{c.pass ? '✓' : '○'}</span>
             <span style={{ color: c.pass ? 'var(--text-dim)' : 'var(--text-muted)' }}>{c.label}</span>
           </div>
         ))}
       </div>
 
-      {/* Attack time simulation */}
+      {/* Stats */}
       {password && (
-        <div style={{
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: '10px',
-          padding: '16px 18px',
-        }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--cyan)', marginBottom: '12px' }}>
-            // Angriffszeit-Simulation
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Entropie</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '18px', fontWeight: 800, color: level.color }}>{entropy} Bit</div>
           </div>
-          {attackTimes.map(a => (
-            <div key={a.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
-              <span style={{ fontSize: '13px', color: 'var(--text-dim)' }}>{a.label}</span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text)', fontWeight: 700 }}>{a.value}</span>
-            </div>
-          ))}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Crackzeit (GPU)</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '14px', fontWeight: 800, color: level.color, lineHeight: 1.2 }}>{crackTime(entropy)}</div>
+          </div>
         </div>
       )}
+
+      <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        Berechnung lokal im Browser. Kein Passwort wird übertragen. Entropie-Basis: NIST SP 800-63B.
+      </div>
     </div>
   );
 }
 
-const TOOLS = [
-  {
-    id: 'password',
-    icon: '🔐',
-    title: 'Passwort-Checker',
-    desc: 'Analysiere Passwort-Stärke mit KI-gestütztem Angriffssimulator, Entropy-Berechnung und Breach-Check.',
-    tag: 'Live-Tool',
-    tagColor: '#00F0FF',
-    tagBg: 'rgba(0,240,255,0.1)',
-    component: <PasswordChecker />,
-  },
-  {
-    id: 'phishing',
-    icon: '🛡️',
-    title: 'Phishing-Detektor',
-    desc: 'Analysiere URLs und E-Mails auf Phishing-Indikatoren mit unserem KI-Modell.',
-    tag: 'Beta',
-    tagColor: '#FF9632',
-    tagBg: 'rgba(255,150,50,0.1)',
-    component: (
-      <div style={{ padding: '24px', background: 'var(--surface)', borderRadius: '10px', border: '1px solid var(--border)', fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--text-muted)', textAlign: 'center' }}>
-        <div style={{ fontSize: '32px', marginBottom: '12px' }}>🚧</div>
-        Kommt bald — KI-Modell wird trainiert
-      </div>
-    ),
-  },
-  {
-    id: 'cve',
-    icon: '📊',
-    title: 'CVE-Dashboard',
-    desc: 'Live-Feed der neuesten Schwachstellen mit KI-Priorisierung für deinen Tech-Stack.',
-    tag: 'Live-Daten',
-    tagColor: '#78C864',
-    tagBg: 'rgba(120,200,100,0.1)',
-    component: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {[
-          { id: 'CVE-2026-4821', score: 9.8, title: 'RCE in OpenSSL 3.x', color: '#FF2D6F' },
-          { id: 'CVE-2026-3811', score: 8.1, title: 'Privilege Escalation in Linux Kernel', color: '#FF9632' },
-          { id: 'CVE-2026-2047', score: 7.5, title: 'XSS in Apache HTTP Server 2.4', color: '#FF9632' },
-          { id: 'CVE-2026-1923', score: 6.8, title: 'SQLi in WordPress Plugin', color: '#00F0FF' },
-        ].map(cve => (
-          <div key={cve.id} style={{
-            display: 'flex', alignItems: 'center', gap: '12px',
-            padding: '12px 14px', background: 'var(--surface)',
-            border: '1px solid var(--border)', borderRadius: '8px',
-          }}>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: cve.color, fontWeight: 700, minWidth: '100px' }}>{cve.id}</span>
-            <span style={{ flex: 1, fontSize: '13px', color: 'var(--text-dim)' }}>{cve.title}</span>
-            <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, background: `${cve.color}18`, color: cve.color, fontFamily: 'var(--mono)' }}>
-              {cve.score}
-            </span>
-          </div>
+// ─── Have I Been Pwned Checker ────────────────────────────────────────────────
+
+async function sha1(text: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase();
+}
+
+function BreachChecker() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<null | { breached: boolean; count?: number; breaches?: string[] }>(null);
+  const [pwResult, setPwResult] = useState<null | { count: number }>(null);
+  const [mode, setMode] = useState<'email' | 'password'>('email');
+  const [error, setError] = useState('');
+
+  const checkEmail = async () => {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Bitte gültige E-Mail eingeben.');
+      return;
+    }
+    setLoading(true); setError(''); setResult(null);
+    try {
+      const res = await fetch(`/api/hibp?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      if (data.error) {
+        if (data.needsKey) {
+          setError('HIBP E-Mail-Check erfordert einen API-Key. Nutze die Passwort-Prüfung (keine Registrierung nötig).');
+        } else {
+          setError(data.error);
+        }
+      } else {
+        const breaches: { name: string }[] = data.breaches ?? [];
+        setResult({
+          breached: breaches.length > 0,
+          count: breaches.length,
+          breaches: breaches.map((b) => b.name),
+        });
+      }
+    } catch {
+      setError('Fehler bei der Abfrage. Bitte erneut versuchen.');
+    }
+    setLoading(false);
+  };
+
+  const checkPassword = async () => {
+    if (!password) return;
+    setLoading(true); setError(''); setPwResult(null);
+    try {
+      // k-Anonymity: Nur erste 5 Zeichen des SHA1-Hash senden
+      const hash = await sha1(password);
+      const prefix = hash.slice(0, 5);
+      const suffix = hash.slice(5);
+      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      const text = await res.text();
+      const lines = text.split('\n');
+      const match = lines.find(l => l.toUpperCase().startsWith(suffix));
+      const count = match ? parseInt(match.split(':')[1].trim()) : 0;
+      setPwResult({ count });
+    } catch {
+      setError('Fehler bei der Passwort-Prüfung.');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* Mode toggle */}
+      <div style={{ display: 'flex', gap: '6px' }}>
+        {(['email', 'password'] as const).map(m => (
+          <button key={m} onClick={() => { setMode(m); setResult(null); setPwResult(null); setError(''); }}
+            style={{ flex: 1, padding: '8px', borderRadius: '8px', border: '1px solid', borderColor: mode === m ? 'var(--cyan)' : 'var(--border)', background: mode === m ? 'var(--cyan-dim)' : 'transparent', color: mode === m ? 'var(--cyan)' : 'var(--text-muted)', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            {m === 'email' ? 'E-Mail prüfen' : 'Passwort prüfen'}
+          </button>
         ))}
       </div>
-    ),
-  },
+
+      {mode === 'email' ? (
+        <>
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="deine@email.de"
+            onKeyDown={e => e.key === 'Enter' && checkEmail()}
+            style={{ width: '100%', padding: '13px 16px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
+          <button onClick={checkEmail} disabled={loading}
+            style={{ padding: '13px', background: loading ? 'var(--surface2)' : 'var(--cyan)', border: 'none', borderRadius: '10px', color: '#060B18', fontWeight: 700, fontSize: '14px', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'var(--font)', transition: 'background 0.2s' }}>
+            {loading ? 'Prüfe…' : 'E-Mail prüfen →'}
+          </button>
+        </>
+      ) : (
+        <>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Passwort eingeben (lokal gehasht)"
+            onKeyDown={e => e.key === 'Enter' && checkPassword()}
+            style={{ width: '100%', padding: '13px 16px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
+          <button onClick={checkPassword} disabled={loading}
+            style={{ padding: '13px', background: loading ? 'var(--surface2)' : 'var(--cyan)', border: 'none', borderRadius: '10px', color: '#060B18', fontWeight: 700, fontSize: '14px', cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'var(--font)', transition: 'background 0.2s' }}>
+            {loading ? 'Prüfe…' : 'Passwort prüfen →'}
+          </button>
+        </>
+      )}
+
+      {error && <div style={{ padding: '10px 14px', background: 'rgba(255,45,111,0.08)', border: '1px solid rgba(255,45,111,0.2)', borderRadius: '8px', fontSize: '13px', color: '#FF2D6F', fontFamily: 'var(--mono)' }}>{error}</div>}
+
+      {result && (
+        <div style={{ padding: '16px', background: result.breached ? 'rgba(255,45,111,0.08)' : 'rgba(120,200,100,0.08)', border: `1px solid ${result.breached ? 'rgba(255,45,111,0.25)' : 'rgba(120,200,100,0.25)'}`, borderRadius: '10px' }}>
+          <div style={{ fontWeight: 700, color: result.breached ? '#FF2D6F' : '#78C864', marginBottom: '8px', fontSize: '15px' }}>
+            {result.breached ? '⚠ In Datenpannen gefunden' : '✓ Nicht gefunden'}
+          </div>
+          {result.breached && result.count !== undefined && (
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-dim)' }}>
+              In {result.count} Datenpanne{result.count !== 1 ? 'n' : ''} aufgetaucht.
+            </div>
+          )}
+          {!result.breached && <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-dim)' }}>Diese E-Mail wurde in keiner bekannten Datenpanne gefunden.</div>}
+        </div>
+      )}
+
+      {pwResult && (
+        <div style={{ padding: '16px', background: pwResult.count > 0 ? 'rgba(255,45,111,0.08)' : 'rgba(120,200,100,0.08)', border: `1px solid ${pwResult.count > 0 ? 'rgba(255,45,111,0.25)' : 'rgba(120,200,100,0.25)'}`, borderRadius: '10px' }}>
+          <div style={{ fontWeight: 700, color: pwResult.count > 0 ? '#FF2D6F' : '#78C864', marginBottom: '8px', fontSize: '15px' }}>
+            {pwResult.count > 0 ? `⚠ ${pwResult.count.toLocaleString('de')}× in Datenpannen` : '✓ Nicht in bekannten Datenpannen'}
+          </div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-dim)' }}>
+            {pwResult.count > 0 ? 'Dieses Passwort sofort ersetzen! Nur der SHA1-Hashpräfix (5 Zeichen) wurde gesendet — k-Anonymity-Methode (NIST SP 800-63B).' : 'Passwort nicht in Have I Been Pwned gefunden. Datensatz: 13+ Milliarden kompromittierte Passwörter.'}
+          </div>
+        </div>
+      )}
+
+      <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        Powered by Have I Been Pwned (haveibeenpwned.com) · DSGVO-konform · Keine Daten werden gespeichert
+      </div>
+    </div>
+  );
+}
+
+// ─── Live CVE Dashboard ───────────────────────────────────────────────────────
+
+interface CveItem {
+  id: string;
+  score: number | null;
+  severity: string;
+  description: string;
+  published: string;
+  refs: string[];
+}
+
+function CveDashboard() {
+  const [cves, setCves] = useState<CveItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [fetchedAt, setFetchedAt] = useState('');
+  const [fallback, setFallback] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const fetchCves = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/cves');
+      const data = await res.json();
+      setCves(data.cves ?? []);
+      setFetchedAt(data.fetchedAt ?? '');
+      setFallback(data.fallback ?? false);
+    } catch {
+      setCves([]);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { fetchCves(); }, [fetchCves]);
+
+  const scoreColor = (score: number | null) => {
+    if (!score) return 'var(--text-muted)';
+    if (score >= 9) return '#FF2D6F';
+    if (score >= 7) return '#FF9632';
+    if (score >= 4) return '#FFCC00';
+    return '#78C864';
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: loading ? 'var(--text-muted)' : '#78C864', boxShadow: loading ? 'none' : '0 0 8px #78C864', animation: loading ? 'none' : 'pulse-dot 2s infinite' }} />
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            {loading ? 'Lädt…' : fallback ? 'Bekannte CVEs' : 'Live — NVD API'}
+          </span>
+        </div>
+        {fetchedAt && (
+          <button onClick={fetchCves} style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--cyan)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            ↻ Aktualisieren
+          </button>
+        )}
+      </div>
+
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {[1,2,3,4,5].map(i => (
+            <div key={i} style={{ height: '52px', background: 'var(--surface)', borderRadius: '8px', animation: 'pulse-dot 1.5s infinite', opacity: 0.5 + i * 0.05 }} />
+          ))}
+        </div>
+      ) : cves.length === 0 ? (
+        <div style={{ padding: '20px', textAlign: 'center', fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>
+          Keine Daten verfügbar
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {cves.map(cve => (
+            <div key={cve.id} style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden', transition: 'border-color 0.2s', borderColor: expanded === cve.id ? 'var(--border-bright)' : 'var(--border)' }}>
+              <button onClick={() => setExpanded(expanded === cve.id ? null : cve.id)}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', padding: '11px 13px', background: 'var(--surface)', border: 'none', cursor: 'pointer', textAlign: 'left' }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: scoreColor(cve.score), fontWeight: 800, flexShrink: 0, minWidth: '110px' }}>{cve.id}</span>
+                <span style={{ flex: 1, fontSize: '12px', color: 'var(--text-dim)', lineHeight: 1.3, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const }}>{cve.description}</span>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: '12px', fontWeight: 800, color: scoreColor(cve.score), flexShrink: 0, padding: '2px 7px', background: `${scoreColor(cve.score)}15`, borderRadius: '4px' }}>
+                  {cve.score ?? '?'}
+                </span>
+              </button>
+              {expanded === cve.id && (
+                <div style={{ padding: '12px 13px', borderTop: '1px solid var(--border)', background: 'var(--card-bg)' }}>
+                  <p style={{ fontSize: '12px', color: 'var(--text-dim)', lineHeight: 1.7, marginBottom: '10px' }}>{cve.description}</p>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {cve.refs?.map(ref => (
+                      <a key={ref} href={ref} target="_blank" rel="noopener noreferrer"
+                        style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--cyan)', textDecoration: 'none', padding: '3px 8px', border: '1px solid var(--border-bright)', borderRadius: '4px' }}>
+                        → NVD Details
+                      </a>
+                    ))}
+                  </div>
+                  {cve.published && (
+                    <div style={{ marginTop: '8px', fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)' }}>
+                      Veröffentlicht: {new Date(cve.published).toLocaleDateString('de-DE')}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        Quelle: NIST NVD (nvd.nist.gov) · Kritische CVEs (CVSS ≥ 9) · 30-Tage-Fenster · Cache 30 min
+      </div>
+    </div>
+  );
+}
+
+// ─── HTTP Security Headers Checker ───────────────────────────────────────────
+
+const SECURITY_HEADERS = [
+  { name: 'Strict-Transport-Security', short: 'HSTS', desc: 'Erzwingt HTTPS-Verbindungen', importance: 'critical' },
+  { name: 'Content-Security-Policy', short: 'CSP', desc: 'Verhindert XSS und Injection-Angriffe', importance: 'critical' },
+  { name: 'X-Frame-Options', short: 'X-Frame', desc: 'Verhindert Clickjacking', importance: 'high' },
+  { name: 'X-Content-Type-Options', short: 'XCTO', desc: 'Verhindert MIME-Sniffing', importance: 'medium' },
+  { name: 'Referrer-Policy', short: 'Referrer', desc: 'Kontrolliert Referrer-Informationen', importance: 'medium' },
+  { name: 'Permissions-Policy', short: 'Permissions', desc: 'Kontrolliert Browser-Features', importance: 'medium' },
+];
+
+function HeaderChecker() {
+  const [url, setUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<null | { url: string; headers: Record<string, string | null>; score: number }>(null);
+  const [error, setError] = useState('');
+
+  const check = async () => {
+    let target = url.trim();
+    if (!target) return;
+    if (!target.startsWith('http')) target = 'https://' + target;
+    setLoading(true); setError(''); setResults(null);
+    try {
+      const res = await fetch(`/api/header-check?url=${encodeURIComponent(target)}`);
+      if (!res.ok) throw new Error('Fehler');
+      const data = await res.json();
+      setResults(data);
+    } catch {
+      setError('Domain nicht erreichbar oder Fehler bei der Prüfung.');
+    }
+    setLoading(false);
+  };
+
+  const scoreColor = (score: number) => score >= 80 ? '#78C864' : score >= 50 ? '#FF9632' : '#FF2D6F';
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <input value={url} onChange={e => setUrl(e.target.value)} placeholder="example.de" onKeyDown={e => e.key === 'Enter' && check()}
+          style={{ flex: 1, padding: '13px 14px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: '14px', outline: 'none' }} />
+        <button onClick={check} disabled={loading}
+          style={{ padding: '13px 18px', background: 'var(--cyan)', border: 'none', borderRadius: '10px', color: '#060B18', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'var(--font)', fontSize: '14px', flexShrink: 0 }}>
+          {loading ? '…' : 'Prüfen'}
+        </button>
+      </div>
+
+      {error && <div style={{ padding: '10px 14px', background: 'rgba(255,45,111,0.08)', border: '1px solid rgba(255,45,111,0.2)', borderRadius: '8px', fontSize: '12px', color: '#FF2D6F', fontFamily: 'var(--mono)' }}>{error}</div>}
+
+      {results && (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 16px', background: 'var(--surface)', borderRadius: '10px', border: '1px solid var(--border)' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '28px', fontWeight: 800, color: scoreColor(results.score) }}>{results.score}</div>
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)' }}>Security Score</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)' }}>{results.url}</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {SECURITY_HEADERS.map(h => {
+              const val = results.headers[h.name.toLowerCase()];
+              const present = val !== null && val !== undefined;
+              return (
+                <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px' }}>
+                  <span style={{ color: present ? '#78C864' : h.importance === 'critical' ? '#FF2D6F' : '#FF9632', fontWeight: 700, fontSize: '14px', flexShrink: 0 }}>{present ? '✓' : '✗'}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700, color: 'var(--text)' }}>{h.short}</div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{h.desc}</div>
+                  </div>
+                  {present && <span style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--text-muted)', maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val?.slice(0, 30)}…</span>}
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: '9px', padding: '2px 6px', borderRadius: '3px', background: h.importance === 'critical' ? 'rgba(255,45,111,0.1)' : h.importance === 'high' ? 'rgba(255,150,50,0.1)' : 'rgba(0,240,255,0.08)', color: h.importance === 'critical' ? '#FF2D6F' : h.importance === 'high' ? '#FF9632' : 'var(--cyan)', textTransform: 'uppercase', letterSpacing: '0.05em', flexShrink: 0 }}>
+                    {h.importance}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        Prüft HTTP-Sicherheits-Header der Zieldomain. Basiert auf OWASP Secure Headers Project.
+      </div>
+    </div>
+  );
+}
+
+// ─── Incident Response Checkliste ────────────────────────────────────────────
+
+function IncidentResponse() {
+  const PHASES = [
+    {
+      phase: '01 — Erkennung & Alarmierung',
+      color: '#FF2D6F',
+      steps: [
+        { text: 'Anomalie oder Vorfall bestätigen — kein Fehlalarm?', ref: '' },
+        { text: 'Incident-Response-Team sofort alarmieren', ref: '' },
+        { text: 'Erste Dokumentation: Was, wann, wie entdeckt?', ref: '' },
+        { text: 'Kritikalitätsstufe einschätzen (P1–P4)', ref: '' },
+      ],
+    },
+    {
+      phase: '02 — Eindämmung',
+      color: '#FF9632',
+      steps: [
+        { text: 'Betroffene Systeme VOM NETZ isolieren (nicht ausschalten!)', ref: 'BSI' },
+        { text: 'Netzwerk-Segmente absperren — laterale Ausbreitung verhindern', ref: '' },
+        { text: 'Kompromittierte Accounts sperren / Passwörter zurücksetzen', ref: '' },
+        { text: 'Externen Angriff noch aktiv? VPN/Firewall-Regeln prüfen', ref: '' },
+      ],
+    },
+    {
+      phase: '03 — Forensik & Analyse',
+      color: '#FFCC00',
+      steps: [
+        { text: 'RAM-Dump und Disk-Image der betroffenen Systeme erstellen', ref: '' },
+        { text: 'Logs sichern: SIEM, Firewall, EDR, Active Directory', ref: '' },
+        { text: 'Initialen Angriffsvektor (Initial Access) identifizieren', ref: 'MITRE' },
+        { text: 'Zeitlinie des Angriffs rekonstruieren (Kill Chain)', ref: '' },
+      ],
+    },
+    {
+      phase: '04 — Meldepflichten',
+      color: '#7890FF',
+      steps: [
+        { text: 'BSI informieren (Pflicht für KRITIS, empfohlen für alle)', ref: 'BSI' },
+        { text: 'DSGVO: Datenschutzbehörde within 72h (wenn personenb. Daten)', ref: 'DSGVO' },
+        { text: 'Staatsanwaltschaft / LKA-Cybercrime bei Ransomware/Diebstahl', ref: '' },
+        { text: 'Versicherung informieren (Cyberpolice falls vorhanden)', ref: '' },
+      ],
+    },
+    {
+      phase: '05 — Wiederherstellung',
+      color: '#78C864',
+      steps: [
+        { text: 'Sauberes Backup identifizieren — Integrität prüfen', ref: '' },
+        { text: 'Systeme nur aus verifizierten Backups wiederherstellen', ref: '' },
+        { text: 'Einfallstor schließen bevor Systeme wieder online gehen', ref: '' },
+        { text: 'Monitoring erhöhen — Wiederinfektion erkennen', ref: '' },
+      ],
+    },
+  ];
+
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+
+  const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }));
+  const total = PHASES.flatMap(p => p.steps).length;
+  const done = Object.values(checked).filter(Boolean).length;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* Progress */}
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Fortschritt</span>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--cyan)', fontWeight: 700 }}>{done}/{total}</span>
+        </div>
+        <div style={{ height: '4px', background: 'var(--border)', borderRadius: '2px', overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${(done / total) * 100}%`, background: 'linear-gradient(90deg, var(--cyan), var(--magenta))', transition: 'width 0.4s', borderRadius: '2px' }} />
+        </div>
+      </div>
+
+      {PHASES.map((phase) => (
+        <div key={phase.phase}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700, color: phase.color, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>{phase.phase}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            {phase.steps.map((step, si) => {
+              const key = `${phase.phase}-${si}`;
+              return (
+                <div key={key} onClick={() => toggle(key)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '7px', cursor: 'pointer', transition: 'border-color 0.2s', borderColor: checked[key] ? phase.color + '44' : 'var(--border)' }}>
+                  <div style={{ width: '16px', height: '16px', borderRadius: '4px', border: `1.5px solid ${checked[key] ? phase.color : 'var(--border)'}`, background: checked[key] ? phase.color + '20' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+                    {checked[key] && <span style={{ fontSize: '10px', color: phase.color, fontWeight: 800 }}>✓</span>}
+                  </div>
+                  <span style={{ fontSize: '12px', color: checked[key] ? 'var(--text-muted)' : 'var(--text-dim)', flex: 1, textDecoration: checked[key] ? 'line-through' : 'none', lineHeight: 1.4 }}>{step.text}</span>
+                  {step.ref && <span style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--text-muted)', padding: '1px 5px', border: '1px solid var(--border)', borderRadius: '3px', flexShrink: 0 }}>{step.ref}</span>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+        Basierend auf: BSI IT-Grundschutz, NIST SP 800-61, SANS Incident Handler's Handbook
+      </div>
+    </div>
+  );
+}
+
+// ─── Tool-Liste ───────────────────────────────────────────────────────────────
+
+const TOOLS = [
   {
     id: 'breach',
     icon: '🔍',
-    title: 'Data-Breach-Prüfer',
-    desc: 'Prüfe ob deine E-Mail-Adresse in bekannten Datenlecks kompromittiert wurde.',
-    tag: 'Kostenlos',
-    tagColor: '#78C864',
-    tagBg: 'rgba(120,200,100,0.1)',
-    component: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <input
-          type="email"
-          placeholder="deine@email.de"
-          style={{
-            width: '100%', padding: '14px 18px',
-            background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: '10px', color: 'var(--text)',
-            fontFamily: 'var(--mono)', fontSize: '14px', outline: 'none',
-            boxSizing: 'border-box',
-          }}
-        />
-        <button style={{
-          padding: '14px', background: 'linear-gradient(135deg, #00F0FF, #007A9A)',
-          border: 'none', borderRadius: '10px', color: '#060B18',
-          fontWeight: 700, fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font)',
-        }}>
-          Prüfen →
-        </button>
-        <div style={{ padding: '12px 14px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px', fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center' }}>
-          Daten werden nicht gespeichert · DSGVO-konform
-        </div>
-      </div>
-    ),
+    title: 'Datenpanne-Checker',
+    desc: 'Prüfe E-Mail und Passwort gegen Have I Been Pwned — 13+ Milliarden kompromittierte Einträge.',
+    tag: 'Live · HIBP',
+    tagColor: '#00F0FF',
+    tagBg: 'rgba(0,240,255,0.1)',
+    component: <BreachChecker />,
   },
   {
-    id: 'ai-risk',
-    icon: '🤖',
-    title: 'KI-Risiko-Scanner',
-    desc: 'Bewerte das Sicherheitsrisiko von KI-Modellen nach dem EU AI Act Framework.',
-    tag: 'Neu',
-    tagColor: '#FF9632',
-    tagBg: 'rgba(255,150,50,0.1)',
-    component: (
-      <div style={{ padding: '24px', background: 'var(--surface)', borderRadius: '10px', border: '1px solid var(--border)', fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--text-muted)', textAlign: 'center' }}>
-        <div style={{ fontSize: '32px', marginBottom: '12px' }}>🚧</div>
-        In Entwicklung — erscheint Q3 2026
-      </div>
-    ),
+    id: 'password',
+    icon: '🔐',
+    title: 'Passwort-Analyzer',
+    desc: 'Entropie-Berechnung, Crack-Zeit-Simulation (GPU-Cluster) nach NIST SP 800-63B.',
+    tag: 'Lokal · Sicher',
+    tagColor: '#78C864',
+    tagBg: 'rgba(120,200,100,0.1)',
+    component: <PasswordChecker />,
+  },
+  {
+    id: 'cve',
+    icon: '📡',
+    title: 'CVE Live-Dashboard',
+    desc: 'Aktuelle kritische Schwachstellen direkt aus der NIST NVD — in Echtzeit.',
+    tag: 'Live · NVD API',
+    tagColor: '#FF2D6F',
+    tagBg: 'rgba(255,45,111,0.1)',
+    component: <CveDashboard />,
+  },
+  {
+    id: 'headers',
+    icon: '🛡️',
+    title: 'Security Headers Prüfer',
+    desc: 'HTTP-Sicherheits-Header einer Domain prüfen — HSTS, CSP, X-Frame-Options und mehr.',
+    tag: 'Live-Tool',
+    tagColor: '#9664FF',
+    tagBg: 'rgba(150,100,255,0.1)',
+    component: <HeaderChecker />,
   },
   {
     id: 'incident',
     icon: '⚡',
-    title: 'Incident-Response',
-    desc: 'Geführte Checklisten und Playbooks für die ersten kritischen 72 Stunden nach einem Vorfall.',
-    tag: 'Pro',
-    tagColor: '#9664FF',
-    tagBg: 'rgba(150,100,255,0.1)',
-    component: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {['Systeme isolieren', 'Logs sichern', 'Team alarmieren', 'BSI informieren', 'Forensik einleiten'].map((step, i) => (
-          <div key={step} style={{
-            display: 'flex', alignItems: 'center', gap: '12px',
-            padding: '10px 14px', background: 'var(--surface)',
-            border: '1px solid var(--border)', borderRadius: '8px',
-          }}>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--cyan)', minWidth: '24px' }}>
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span style={{ fontSize: '13px', color: 'var(--text-dim)' }}>{step}</span>
-            <input type="checkbox" style={{ marginLeft: 'auto', accentColor: 'var(--cyan)', width: '16px', height: '16px' }} />
-          </div>
-        ))}
-      </div>
-    ),
+    title: 'Incident Response Checkliste',
+    desc: 'Interaktive IR-Checkliste für die ersten kritischen Stunden nach einem Sicherheitsvorfall — nach BSI und NIST.',
+    tag: 'Interaktiv',
+    tagColor: '#FF9632',
+    tagBg: 'rgba(255,150,50,0.1)',
+    component: <IncidentResponse />,
   },
 ];
 
@@ -264,65 +618,40 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
         <div className="subpage-header" style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
           <div className="r-wrap">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
-              // Sicherheits-Tools
+              // Kostenlose Sicherheits-Tools
             </div>
             <h1 style={{ fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.95, color: 'var(--text)', margin: 0 }}>
-              Direkt<br /><span style={{ color: 'var(--cyan)' }}>ausprobieren</span>
+              Security<br /><span style={{ color: 'var(--cyan)' }}>Tools</span>
             </h1>
-            <p style={{ fontSize: '16px', color: 'var(--text-dim)', marginTop: '20px', maxWidth: '500px', lineHeight: 1.7 }}>
-              Kostenlose Sicherheits-Tools — direkt im Browser, ohne Registrierung.
+            <p style={{ fontSize: '16px', color: 'var(--text-dim)', marginTop: '20px', maxWidth: '520px', lineHeight: 1.7 }}>
+              {TOOLS.length} kostenlose Tools — direkt im Browser, ohne Registrierung, DSGVO-konform.
             </p>
           </div>
         </div>
 
         <div className="subpage-content">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(400px, 100%), 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(420px, 100%), 1fr))', gap: '24px' }}>
             {TOOLS.map((tool, i) => (
-              <motion.div
-                key={tool.id}
+              <motion.div key={tool.id}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  background: 'var(--card-bg)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '18px',
-                  padding: '28px',
-                  boxShadow: 'var(--card-shadow)',
-                }}
+                transition={{ duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '18px', padding: '28px', boxShadow: 'var(--card-shadow)', display: 'flex', flexDirection: 'column', gap: '20px' }}
               >
-                {/* Tool header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                  <div style={{
-                    width: '48px', height: '48px',
-                    background: 'var(--surface2)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '12px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '22px', flexShrink: 0,
-                  }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '48px', height: '48px', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
                     {tool.icon}
                   </div>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <h2 style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)', margin: 0 }}>
-                        {tool.title}
-                      </h2>
-                      <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', background: tool.tagBg, color: tool.tagColor, fontFamily: 'var(--mono)' }}>
-                        {tool.tag}
-                      </span>
+                      <h2 style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)', margin: 0 }}>{tool.title}</h2>
+                      <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', background: tool.tagBg, color: tool.tagColor, fontFamily: 'var(--mono)', whiteSpace: 'nowrap' }}>{tool.tag}</span>
                     </div>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-                      {tool.desc}
-                    </p>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>{tool.desc}</p>
                   </div>
                 </div>
-
-                {/* Divider */}
-                <div style={{ height: '1px', background: 'var(--border)', margin: '20px 0' }} />
-
-                {/* Live component */}
+                <div style={{ height: '1px', background: 'var(--border)' }} />
                 {tool.component}
               </motion.div>
             ))}
