@@ -45,12 +45,11 @@ export default function BlogPage({ params: { locale } }: { params: { locale: str
     <>
       <main style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '80px' }}>
         {/* Header */}
-        <div style={{
+        <div className="subpage-header" style={{
           background: 'var(--bg2)',
           borderBottom: '1px solid var(--border)',
-          padding: '80px 0 60px',
         }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+          <div className="r-wrap">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
               // Aktuelle Insights
             </div>
@@ -61,8 +60,8 @@ export default function BlogPage({ params: { locale } }: { params: { locale: str
         </div>
 
         {/* Articles grid */}
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 48px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '20px' }}>
+        <div className="subpage-content">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(380px, 100%), 1fr))', gap: '20px' }}>
             {ARTICLES.map((article, i) => (
               <article key={i} style={{
                 background: 'var(--card-bg)',

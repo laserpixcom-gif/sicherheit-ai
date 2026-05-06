@@ -155,6 +155,7 @@ const cardVariants = {
 function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured?: boolean }) {
   return (
     <motion.article
+      className={featured ? 'bento-featured' : undefined}
       variants={cardVariants}
       whileHover={{
         scale: 1.02,
@@ -300,8 +301,8 @@ export default function BentoThreats() {
   return (
     <section
       ref={sectionRef}
+      className="sec-xl"
       style={{
-        padding: '140px 0',
         background: 'var(--bg)',
         position: 'relative',
         overflow: 'hidden',
@@ -318,9 +319,7 @@ export default function BentoThreats() {
         maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
       }} />
 
-      <motion.div
-        style={{ opacity, y: springY, maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}
-      >
+      <motion.div className="r-wrap" style={{ opacity, y: springY }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
           <div style={{
@@ -346,16 +345,11 @@ export default function BentoThreats() {
 
         {/* Bento Grid */}
         <motion.div
+          className="g-bento"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gridTemplateRows: 'auto auto',
-            gap: '16px',
-          }}
         >
           {CARDS.map((card, i) => (
             <BentoCard key={card.id} card={card} featured={i === 0} />

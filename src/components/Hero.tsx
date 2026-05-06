@@ -235,7 +235,7 @@ export default function Hero() {
     <section style={{
       position: 'relative',
       width: '100%',
-      height: '100vh',
+      minHeight: '100svh',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
@@ -257,8 +257,8 @@ export default function Hero() {
         `,
       }} />
 
-      {/* HUD Cards - no hooks in loop, pure CSS animation */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
+      {/* HUD Cards - hidden on mobile to avoid overlap */}
+      <div className="hide-mobile" style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
         {hudCards.map((card, i) => (
           <motion.div
             key={i}
@@ -361,7 +361,7 @@ export default function Hero() {
           <span className="cursor-blink" />
         </p>
 
-        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+        <div className="hero-ctas">
           <a href="#tools" style={{
             background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
             color: theme === 'dark' ? '#060B18' : '#fff',

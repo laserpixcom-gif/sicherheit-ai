@@ -56,9 +56,9 @@ export default function TerminalSection({ locale }: { locale: string }) {
   }, []);
 
   return (
-    <section style={{ padding: '120px 0', position: 'relative' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+    <section className="sec-lg" style={{ position: 'relative' }}>
+      <div className="r-wrap">
+        <div className="g-2c">
           <div className="animate-in">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '10px' }}>
               {t('label')}

@@ -153,8 +153,7 @@ export default function RadarSection() {
   ];
 
   return (
-    <section id="radar" style={{
-      padding: '120px 0',
+    <section id="radar" className="sec-lg" style={{
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -163,13 +162,8 @@ export default function RadarSection() {
         background: 'radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,240,255,0.04) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '80px',
-          alignItems: 'center',
-        }}>
+      <div className="r-wrap">
+        <div className="g-2c">
           <div className="animate-in">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '10px' }}>
               {t('label')}

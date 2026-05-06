@@ -38,12 +38,7 @@ function RadarSVG({ progress }: { progress: number }) {
   const sweepAngle = progress * 360 * 4; // 4 full rotations across the scroll
 
   return (
-    <div style={{
-      position: 'relative',
-      width: '460px',
-      height: '460px',
-      flexShrink: 0,
-    }}>
+    <div className="sticky-radar-viz">
       {/* Outer glow ring */}
       <div style={{
         position: 'absolute', inset: '-20px',
@@ -210,7 +205,8 @@ export default function StickyThreatRadar() {
   return (
     <div
       ref={stickyRef}
-      style={{ height: '250vh', position: 'relative' }}
+      className="sticky-scroll-outer"
+      style={{ position: 'relative' }}
     >
       {/* Sticky container */}
       <div style={{
@@ -231,16 +227,7 @@ export default function StickyThreatRadar() {
           `,
         }} />
 
-        <div style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '0 48px',
-          width: '100%',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '80px',
-          alignItems: 'center',
-        }}>
+        <div className="r-wrap g-2c" style={{ width: '100%' }}>
           {/* Left: Radar */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px' }}>
             <div style={{ textAlign: 'left', width: '100%' }}>

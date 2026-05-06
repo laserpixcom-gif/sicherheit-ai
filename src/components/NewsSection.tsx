@@ -64,8 +64,7 @@ export default function NewsSection({ locale }: { locale: string }) {
   const t = useTranslations('news');
 
   return (
-    <section style={{
-      padding: '120px 0',
+    <section className="sec-lg" style={{
       background: 'var(--bg2)',
       position: 'relative',
       transition: 'background 0.35s',
@@ -75,10 +74,8 @@ export default function NewsSection({ locale }: { locale: string }) {
         background: 'radial-gradient(ellipse 50% 60% at 20% 50%, rgba(255,45,111,0.03) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
-        <div className="animate-in" style={{
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '48px',
-        }}>
+      <div className="r-wrap">
+        <div className="animate-in sec-hdr">
           <div>
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '10px' }}>
               {t('label')}
@@ -95,16 +92,12 @@ export default function NewsSection({ locale }: { locale: string }) {
           </Link>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '16px',
-        }}>
+        <div className="g-tools">
           {ARTICLES.map((article, i) => (
             <Link
               key={i}
               href={`/${locale}/blog`}
-              className={`news-card ${article.featured ? 'animate-in' : `animate-in animate-delay-${(i % 3) + 1}`}`}
+              className={`news-card ${article.featured ? 'animate-in news-featured' : `animate-in animate-delay-${(i % 3) + 1}`}`}
               style={{
                 gridColumn: article.featured ? 'span 2' : undefined,
                 background: 'var(--card-bg)',

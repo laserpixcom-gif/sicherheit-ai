@@ -407,14 +407,13 @@ export default function HorizontalToolScroll() {
   };
 
   return (
-    <section style={{
-      padding: '140px 0',
+    <section className="sec-xl" style={{
       background: 'var(--bg)',
       position: 'relative',
       overflow: 'hidden',
     }}>
       {/* Header */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px', marginBottom: '56px' }}>
+      <div className="r-wrap" style={{ marginBottom: '56px' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -468,7 +467,7 @@ export default function HorizontalToolScroll() {
       <div
         ref={containerRef}
         style={{
-          paddingLeft: '48px',
+          paddingLeft: 'clamp(16px, 4vw, 48px)',
           overflow: 'visible',
           cursor: dragging ? 'grabbing' : 'grab',
         }}

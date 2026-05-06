@@ -14,12 +14,12 @@ export default function ScoreSection() {
   const t = useTranslations('score');
 
   return (
-    <section style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+    <section className="sec-lg" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div className="r-wrap">
+        <div className="g-2c">
           <div className="animate-in" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ position: 'relative', width: '340px', height: '340px' }}>
-              <svg viewBox="0 0 340 340" style={{ width: '340px', height: '340px' }}>
+            <div className="score-ring">
+              <svg viewBox="0 0 340 340">
                 <defs>
                   <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#00F0FF" />
@@ -41,12 +41,9 @@ export default function ScoreSection() {
                   style={{ filter: 'drop-shadow(0 0 8px rgba(0,240,255,0.5))' }}
                 />
               </svg>
-              <div style={{
-                position: 'absolute', top: '50%', left: '50%',
-                transform: 'translate(-50%,-50%)', textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '72px', fontWeight: 800, letterSpacing: '-0.05em', color: 'var(--text)', lineHeight: 1 }}>
-                  72<span style={{ color: 'var(--cyan)', fontSize: '36px' }}>/100</span>
+              <div className="score-center">
+                <div className="score-number" style={{ color: 'var(--text)' }}>
+                  72<span style={{ color: 'var(--cyan)', fontSize: '0.5em' }}>/100</span>
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontFamily: 'var(--mono)', marginTop: '6px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                   {t('scoreLabel')}

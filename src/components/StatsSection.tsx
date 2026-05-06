@@ -45,28 +45,18 @@ export default function StatsSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{
-      padding: '100px 0',
+    <section ref={sectionRef} className="sec-md" style={{
       background: 'var(--bg2)',
       transition: 'background 0.35s',
     }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '1px',
-          background: 'var(--border)',
-          border: '1px solid var(--border)',
-          borderRadius: '16px',
-          overflow: 'hidden',
-        }}>
+      <div className="r-wrap">
+        <div className="g-stats">
           {STATS.map((stat, i) => (
             <div
               key={i}
-              className="animate-in"
+              className="animate-in stat-cell"
               style={{
                 background: 'var(--bg2)',
-                padding: '48px 36px',
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'background 0.35s',

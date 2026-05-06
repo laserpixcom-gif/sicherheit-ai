@@ -91,7 +91,7 @@ function PasswordChecker() {
       </div>
 
       {/* Checks */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '8px' }}>
         {CHECKS.map(c => (
           <div key={c.label} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontFamily: 'var(--mono)' }}>
             <span style={{ color: c.pass ? '#78C864' : 'var(--text-muted)', fontSize: '14px' }}>{c.pass ? '✓' : '○'}</span>
@@ -261,8 +261,8 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
   return (
     <>
       <main style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '80px' }}>
-        <div style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)', padding: '80px 0 60px' }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+        <div className="subpage-header" style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
+          <div className="r-wrap">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
               // Sicherheits-Tools
             </div>
@@ -275,8 +275,8 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
           </div>
         </div>
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 48px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '24px' }}>
+        <div className="subpage-content">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(400px, 100%), 1fr))', gap: '24px' }}>
             {TOOLS.map((tool, i) => (
               <motion.div
                 key={tool.id}

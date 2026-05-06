@@ -12,12 +12,7 @@ export default function Footer({ locale }: { locale: string }) {
       transition: 'border-color 0.35s',
     }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 48px 0' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr 1fr 1fr',
-          gap: '48px',
-          marginBottom: '64px',
-        }}>
+        <div className="g-footer" style={{ marginBottom: '64px' }}>
           {/* Brand column */}
           <div>
             <Link href={`/${locale}`} style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', height: '52px' }}>

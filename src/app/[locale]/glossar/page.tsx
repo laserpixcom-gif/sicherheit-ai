@@ -27,12 +27,11 @@ export default function GlossarPage({ params: { locale } }: { params: { locale: 
   return (
     <>
       <main style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '80px' }}>
-        <div style={{
+        <div className="subpage-header" style={{
           background: 'var(--bg2)',
           borderBottom: '1px solid var(--border)',
-          padding: '80px 0 60px',
         }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+          <div className="r-wrap">
             <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
               // Sicherheitsbegriffe A–Z
             </div>
@@ -45,7 +44,7 @@ export default function GlossarPage({ params: { locale } }: { params: { locale: 
           </div>
         </div>
 
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 48px' }}>
+        <div className="subpage-content">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {TERMS.map((item, i) => (
               <div key={i} style={{
