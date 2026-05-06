@@ -1,74 +1,109 @@
+import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
+import GlossarClient from '@/components/GlossarClient';
+import { GLOSSARY_TERMS } from '@/lib/glossary';
 
-const TERMS = [
-  { term: 'Advanced Persistent Threat (APT)', def: 'Langfristige, zielgerichtete Cyberangriffe, meist staatlich gesponsert, die über Monate oder Jahre unentdeckt bleiben.' },
-  { term: 'Brute-Force-Angriff', def: 'Systematisches Durchprobieren aller möglichen Passwörter oder Schlüssel bis die korrekte Kombination gefunden wird.' },
-  { term: 'CVE (Common Vulnerabilities and Exposures)', def: 'Standardisiertes System zur Katalogisierung von Sicherheitslücken in Software und Hardware mit eindeutiger ID.' },
-  { term: 'DDoS (Distributed Denial of Service)', def: 'Angriff bei dem viele kompromittierte Systeme gleichzeitig einen Dienst mit Anfragen überlasten und lahmlegen.' },
-  { term: 'Endpoint Detection & Response (EDR)', def: 'Sicherheitslösung die Endgeräte kontinuierlich überwacht, Bedrohungen erkennt und automatisch reagiert.' },
-  { term: 'Firewall', def: 'Netzwerksicherheitssystem das den Datenverkehr anhand von Regeln kontrolliert und unerwünschte Verbindungen blockiert.' },
-  { term: 'Honeypot', def: 'Täuschungssystem das Angreifer anzieht und deren Methoden dokumentiert, ohne echte Systeme zu gefährden.' },
-  { term: 'Intrusion Detection System (IDS)', def: 'System zur Erkennung von unbefugten Zugriffen oder Anomalien im Netzwerkverkehr.' },
-  { term: 'KI-Angriff (Adversarial AI)', def: 'Angriff der KI-Systeme durch manipulierte Eingabedaten täuscht oder deren Ausgabe gezielt beeinflusst.' },
-  { term: 'Lateral Movement', def: 'Technik bei der sich Angreifer nach dem Erstzugang seitwärts durch ein Netzwerk bewegen um weitere Systeme zu kompromittieren.' },
-  { term: 'MFA (Multi-Faktor-Authentifizierung)', def: 'Sicherheitsverfahren das mehrere unabhängige Faktoren zur Identitätsbestätigung erfordert.' },
-  { term: 'OSINT (Open Source Intelligence)', def: 'Informationsgewinnung aus öffentlich zugänglichen Quellen zur Vorbereitung von Angriffen oder Sicherheitsanalysen.' },
-  { term: 'Patch Management', def: 'Systematischer Prozess zur Identifikation, Beschaffung und Installation von Software-Updates zum Schließen von Sicherheitslücken.' },
-  { term: 'Phishing', def: 'Täuschungsangriff bei dem Nutzer durch gefälschte E-Mails, Websites oder Nachrichten zur Preisgabe sensibler Daten verleitet werden.' },
-  { term: 'Ransomware', def: 'Schadsoftware die Daten verschlüsselt und Lösegeld für die Entschlüsselung verlangt.' },
-  { term: 'Social Engineering', def: 'Manipulation von Menschen um vertrauliche Informationen preiszugeben oder sicherheitsrelevante Handlungen auszuführen.' },
-  { term: 'SQL-Injection', def: 'Angriff bei dem manipulierter SQL-Code in Eingabefelder eingeschleust wird um Datenbanken zu manipulieren.' },
-  { term: 'SIEM (Security Information and Event Management)', def: 'Plattform die Sicherheitsdaten aus verschiedenen Quellen sammelt, korreliert und Alarme generiert.' },
-  { term: 'TTP (Tactics, Techniques and Procedures)', def: 'Beschreibung der Vorgehensweise von Angreifern — wichtig für Bedrohungsmodellierung und Abwehrstrategien.' },
-  { term: 'Zero-Day', def: 'Sicherheitslücke die noch unbekannt oder ungepatcht ist und von Angreifern aktiv ausgenutzt wird.' },
-];
+export const metadata: Metadata = {
+  title: 'Glossar — KI-Sicherheit & Cybersecurity Begriffe | sicherheit.ai',
+  description: 'Über 25 Begriffe aus KI-Sicherheit und Cybersecurity — verständlich erklärt mit Kategorien, erweiterten Definitionen und verwandten Begriffen.',
+};
 
-export default function GlossarPage({ params: { locale } }: { params: { locale: string } }) {
+// All possible letters A-Z for nav display
+const ALL_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+export default function GlossarPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  // Schema.org DefinedTermSet
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'KI-Sicherheit & Cybersecurity Glossar',
+    url: 'https://sicherheit.ai/glossar',
+    hasDefinedTerm: GLOSSARY_TERMS.map(t => ({
+      '@type': 'DefinedTerm',
+      name: t.abbr ? `${t.term} (${t.abbr})` : t.term,
+      description: t.def,
+      inDefinedTermSet: 'https://sicherheit.ai/glossar',
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <main style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '80px' }}>
-        <div className="subpage-header" style={{
-          background: 'var(--bg2)',
-          borderBottom: '1px solid var(--border)',
-        }}>
+        {/* Header */}
+        <div
+          className="subpage-header"
+          style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}
+        >
           <div className="r-wrap">
-            <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
+            <div
+              style={{
+                fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px',
+              }}
+            >
               // Sicherheitsbegriffe A–Z
             </div>
-            <h1 style={{ fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 0.95, color: 'var(--text)', margin: 0 }}>
+            <h1
+              style={{
+                fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.04em',
+                lineHeight: 0.95, color: 'var(--text)', margin: 0,
+              }}
+            >
               Glossar
             </h1>
-            <p style={{ fontSize: '16px', color: 'var(--text-dim)', marginTop: '20px', maxWidth: '500px', lineHeight: 1.7 }}>
-              {TERMS.length} Begriffe aus KI-Sicherheit und Cybersecurity — verständlich erklärt.
+            <p
+              style={{
+                fontSize: '16px', color: 'var(--text-dim)', marginTop: '20px',
+                maxWidth: '520px', lineHeight: 1.7,
+              }}
+            >
+              {GLOSSARY_TERMS.length} Begriffe aus KI-Sicherheit und Cybersecurity — mit erweiterten Definitionen und verwandten Konzepten.
             </p>
+
+            {/* Category legend */}
+            <div style={{ display: 'flex', gap: '8px', marginTop: '28px', flexWrap: 'wrap' }}>
+              {(['Angriff', 'Abwehr', 'KI', 'Malware', 'Authentifizierung', 'Netzwerk', 'Regulierung', 'Protokoll'] as const).map(cat => {
+                const count = GLOSSARY_TERMS.filter(t => t.category === cat).length;
+                if (!count) return null;
+                const colors: Record<string, { color: string; bg: string }> = {
+                  Angriff:          { color: '#FF2D6F', bg: 'rgba(255,45,111,0.10)' },
+                  Abwehr:           { color: '#00F0FF', bg: 'rgba(0,240,255,0.10)' },
+                  Regulierung:      { color: '#7890FF', bg: 'rgba(120,144,255,0.10)' },
+                  KI:               { color: '#FF9632', bg: 'rgba(255,150,50,0.10)' },
+                  Malware:          { color: '#FF2D6F', bg: 'rgba(255,45,111,0.10)' },
+                  Authentifizierung:{ color: '#78C864', bg: 'rgba(120,200,100,0.10)' },
+                  Netzwerk:         { color: '#9664FF', bg: 'rgba(150,100,255,0.10)' },
+                  Protokoll:        { color: '#00C8A0', bg: 'rgba(0,200,160,0.10)' },
+                };
+                const c = colors[cat];
+                return (
+                  <span
+                    key={cat}
+                    style={{
+                      padding: '3px 10px', borderRadius: '4px', fontSize: '11px',
+                      fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em',
+                      background: c.bg, color: c.color,
+                    }}
+                  >
+                    {cat} ({count})
+                  </span>
+                );
+              })}
+            </div>
           </div>
         </div>
 
+        {/* Client-side interactive glossary */}
         <div className="subpage-content">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {TERMS.map((item, i) => (
-              <div key={i} style={{
-                background: 'var(--card-bg)',
-                border: '1px solid var(--border)',
-                borderRadius: '12px',
-                padding: '24px 28px',
-                boxShadow: 'var(--card-shadow)',
-                transition: 'border-color 0.2s',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px', marginBottom: '10px' }}>
-                  <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--cyan)', minWidth: '28px' }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h2 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)', margin: 0 }}>
-                    {item.term}
-                  </h2>
-                </div>
-                <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.7, margin: '0 0 0 44px' }}>
-                  {item.def}
-                </p>
-              </div>
-            ))}
-          </div>
+          <GlossarClient terms={GLOSSARY_TERMS} letters={ALL_LETTERS} />
         </div>
       </main>
       <Footer locale={locale} />
