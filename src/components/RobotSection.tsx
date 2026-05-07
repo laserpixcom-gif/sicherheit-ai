@@ -353,19 +353,50 @@ export default function RobotSection() {
     setTimeout(() => setShowExplain(true), 350);
   }
 
-  // Forward global mouse events to Spline canvas so robot reacts anywhere on page
+  // Forward global pointer events to Spline canvas — clamped to canvas bounds
+  // so Spline always sees coordinates "inside" the canvas while direction is preserved
   useEffect(() => {
     const handleGlobalMove = (e: MouseEvent) => {
       const canvas = robotContainerRef.current?.querySelector('canvas');
       if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+
+      // Map the real cursor to the canvas center + direction, clamped to canvas bounds
+      // This way the robot always looks toward the real mouse, never ignores it
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+
+      // Clamp within canvas, preserving direction (90% of half-size to keep away from edge)
+      const maxX = rect.width * 0.45;
+      const maxY = rect.height * 0.45;
+      const len = Math.sqrt(dx * dx + dy * dy) || 1;
+      const clampedLen = Math.min(len, Math.max(maxX, maxY));
+      const scale = clampedLen / len;
+
+      const mappedX = cx + dx * scale;
+      const mappedY = cy + dy * scale;
+
+      // Dispatch pointermove (what Spline actually listens to internally)
+      canvas.dispatchEvent(new PointerEvent('pointermove', {
+        clientX: mappedX,
+        clientY: mappedY,
+        bubbles: true,
+        cancelable: true,
+        pointerType: 'mouse',
+        isPrimary: true,
+      }));
+      // Also dispatch mousemove as fallback
       canvas.dispatchEvent(new MouseEvent('mousemove', {
-        clientX: e.clientX,
-        clientY: e.clientY,
+        clientX: mappedX,
+        clientY: mappedY,
         bubbles: true,
         cancelable: true,
       }));
     };
-    window.addEventListener('mousemove', handleGlobalMove);
+
+    window.addEventListener('mousemove', handleGlobalMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleGlobalMove);
   }, []);
 
