@@ -1,4 +1,3 @@
-import { supabase } from './supabase';
 
 export interface Post {
   id: string;
@@ -541,25 +540,10 @@ POST /guestaccess.aspx HTTP/1.1
 // ─── Data access functions ───────────────────────────────────────────────────
 
 export async function getPosts(): Promise<Post[]> {
-  if (supabase) {
-    const { data } = await supabase
-      .from('posts')
-      .select('*')
-      .order('published_at', { ascending: false });
-    if (data?.length) return data as Post[];
-  }
   return STATIC_POSTS;
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
-  if (supabase) {
-    const { data } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-    if (data) return data as Post;
-  }
   return STATIC_POSTS.find(p => p.slug === slug) ?? null;
 }
 
