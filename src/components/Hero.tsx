@@ -239,22 +239,61 @@ export default function Hero() {
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
     }}>
+      {/* Light mode: animated canvas background */}
       <canvas
         ref={canvasRef}
-        style={{ position: 'absolute', inset: 0, zIndex: 0, width: '100%', height: '100%' }}
+        style={{
+          position: 'absolute', inset: 0, zIndex: 0, width: '100%', height: '100%',
+          opacity: theme === 'dark' ? 0 : 1,
+          transition: 'opacity 0.5s',
+        }}
       />
 
+      {/* Dark mode: looping video background */}
+      {theme === 'dark' && (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center right',
+            zIndex: 0,
+          }}
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* Gradient overlay — left side dark for text legibility */}
       <div style={{
         position: 'absolute',
         inset: 0,
         zIndex: 1,
-        background: `
-          radial-gradient(ellipse 80% 60% at 50% 80%, var(--hero-glow1) 0%, transparent 70%),
-          radial-gradient(ellipse 60% 40% at 20% 20%, var(--hero-glow2) 0%, transparent 60%),
-          radial-gradient(ellipse 70% 50% at 80% 60%, var(--hero-glow1) 0%, transparent 60%)
-        `,
+        background: theme === 'dark'
+          ? `linear-gradient(to right,
+              rgba(6,11,24,0.97) 0%,
+              rgba(6,11,24,0.90) 30%,
+              rgba(6,11,24,0.55) 55%,
+              rgba(6,11,24,0.10) 75%,
+              rgba(6,11,24,0.00) 100%
+            ),
+            linear-gradient(to bottom,
+              rgba(6,11,24,0.4) 0%,
+              transparent 20%,
+              transparent 80%,
+              rgba(6,11,24,0.6) 100%
+            )`
+          : `radial-gradient(ellipse 80% 60% at 50% 80%, var(--hero-glow1) 0%, transparent 70%),
+             radial-gradient(ellipse 60% 40% at 20% 20%, var(--hero-glow2) 0%, transparent 60%),
+             radial-gradient(ellipse 70% 50% at 80% 60%, var(--hero-glow1) 0%, transparent 60%)`,
       }} />
 
       {/* HUD Cards - hidden on mobile to avoid overlap */}
@@ -313,7 +352,14 @@ export default function Hero() {
 
       {/* Hero Content */}
       <motion.div
-        style={{ position: 'relative', zIndex: 3, textAlign: 'center', maxWidth: '960px', padding: '0 24px' }}
+        style={{
+          position: 'relative',
+          zIndex: 3,
+          textAlign: theme === 'dark' ? 'left' : 'center',
+          maxWidth: theme === 'dark' ? '620px' : '960px',
+          padding: theme === 'dark' ? '0 0 0 clamp(24px, 6vw, 96px)' : '0 24px',
+          width: '100%',
+        }}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -327,18 +373,18 @@ export default function Hero() {
           marginBottom: '24px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: theme === 'dark' ? 'flex-start' : 'center',
           gap: '10px',
         }}>
           <span style={{ width: '32px', height: '1px', background: 'var(--cyan)', opacity: 0.6, display: 'block' }} />
           {t('eyebrow')}
-          <span style={{ width: '32px', height: '1px', background: 'var(--cyan)', opacity: 0.6, display: 'block' }} />
+          {theme === 'light' && <span style={{ width: '32px', height: '1px', background: 'var(--cyan)', opacity: 0.6, display: 'block' }} />}
         </div>
 
         <h1
           className="gradient-text"
           style={{
-            fontSize: 'clamp(56px, 8vw, 112px)',
+            fontSize: 'clamp(48px, 6.5vw, 96px)',
             fontWeight: 800,
             lineHeight: 0.95,
             letterSpacing: '-0.04em',
@@ -351,9 +397,9 @@ export default function Hero() {
         <p style={{
           fontFamily: 'var(--mono)',
           fontSize: 'clamp(14px, 1.5vw, 17px)',
-          color: 'var(--text-dim)',
-          maxWidth: '560px',
-          margin: '0 auto 48px',
+          color: theme === 'dark' ? 'rgba(232,237,248,0.80)' : 'var(--text-dim)',
+          maxWidth: '520px',
+          margin: theme === 'dark' ? '0 0 48px' : '0 auto 48px',
           lineHeight: 1.7,
           minHeight: '2.5em',
         }}>
@@ -361,7 +407,7 @@ export default function Hero() {
           <span className="cursor-blink" />
         </p>
 
-        <div className="hero-ctas">
+        <div className="hero-ctas" style={{ justifyContent: theme === 'dark' ? 'flex-start' : 'center' }}>
           <a href="#tools" style={{
             background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
             color: theme === 'dark' ? '#060B18' : '#fff',
@@ -379,7 +425,7 @@ export default function Hero() {
             Tools erkunden →
           </a>
           <a href="#radar" style={{
-            background: 'none',
+            background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'none',
             border: '1px solid var(--border)',
             color: 'var(--text-dim)',
             padding: '14px 32px',
@@ -391,6 +437,7 @@ export default function Hero() {
             textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
+            backdropFilter: theme === 'dark' ? 'blur(8px)' : 'none',
           }}>
             Mehr erfahren
           </a>
