@@ -457,79 +457,247 @@ export default function RobotSection() {
         }
       `}</style>
 
-      {/* Layout: robot left + interface right */}
+      {/* Outer wrapper: sidebar + center */}
       <div style={{
         position: 'relative',
-        maxWidth: '1200px',
+        maxWidth: '1100px',
         margin: '0 auto',
-        padding: 'clamp(32px, 5vw, 64px) 24px',
+        padding: 'clamp(32px, 5vw, 56px) 24px',
         display: 'grid',
-        gridTemplateColumns: 'minmax(280px, 480px) 1fr',
-        gap: '32px',
-        alignItems: 'center',
+        gridTemplateColumns: '148px 1fr',
+        gap: '20px',
+        alignItems: 'start',
         zIndex: 2,
       }}>
 
-        {/* ─── LEFT: Robot ────────────────────────────────── */}
-        <div style={{ position: 'relative' }}>
-          {/* Badge */}
+        {/* ─── LEFT SIDEBAR: Topic selector ─────────── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '12px' }}>
           <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.18em',
-            color: 'rgba(0,240,255,0.5)', textTransform: 'uppercase',
-            border: '1px solid rgba(0,240,255,0.12)',
-            padding: '5px 12px', borderRadius: '100px',
-            background: 'rgba(0,240,255,0.04)',
-            marginBottom: '12px',
+            fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.2em',
+            color: 'rgba(255,255,255,0.2)', textTransform: 'uppercase',
+            marginBottom: '6px', paddingLeft: '2px',
           }}>
+            Themen
+          </div>
+          {QUIZ_TOPICS.map((t, i) => {
+            const isActive = topicIdx === i;
+            return (
+              <button
+                key={t.id}
+                onClick={() => startTopic(i)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '8px 10px',
+                  background: isActive ? `${t.color}15` : 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${isActive ? t.color + '40' : 'rgba(255,255,255,0.06)'}`,
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'all 0.2s',
+                  width: '100%',
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.background = `${t.color}08`;
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)';
+                }}
+              >
+                <span style={{
+                  fontSize: '12px', color: isActive ? t.color : 'rgba(255,255,255,0.3)',
+                  flexShrink: 0, transition: 'color 0.2s',
+                }}>
+                  {t.icon}
+                </span>
+                <div>
+                  <div style={{
+                    fontFamily: 'var(--font)', fontSize: '11px', fontWeight: isActive ? 700 : 500,
+                    color: isActive ? t.color : 'rgba(255,255,255,0.45)',
+                    lineHeight: 1.2, transition: 'color 0.2s',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                    maxWidth: '100px',
+                  }}>
+                    {t.title}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ─── CENTER: Robot + Quiz ──────────────────── */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.18em',
+              color: 'rgba(0,240,255,0.5)', textTransform: 'uppercase',
+              border: '1px solid rgba(0,240,255,0.12)',
+              padding: '5px 14px', borderRadius: '100px',
+              background: 'rgba(0,240,255,0.04)',
+              marginBottom: '16px',
+            }}
+          >
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00F0FF', animation: 'blink 1.4s ease-in-out infinite' }} />
             KI-SICHERHEITS-ANALYSE
-          </div>
+          </motion.div>
 
-          {/* Robot canvas */}
+          {/* Speech bubble — shown during quiz */}
+          <AnimatePresence mode="wait">
+            {phase === 'quiz' && topic && (
+              <motion.div
+                key={`bubble-${current}`}
+                initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                transition={{ duration: 0.25 }}
+                style={{
+                  position: 'relative',
+                  background: 'rgba(0,0,0,0.35)',
+                  border: `1px solid ${accentColor}25`,
+                  borderRadius: '12px 12px 12px 4px',
+                  padding: '16px 20px',
+                  marginBottom: '8px',
+                  width: '100%',
+                  maxWidth: '620px',
+                }}
+              >
+                <div style={{
+                  position: 'absolute', top: -1, left: -1, width: 16, height: 16,
+                  borderTop: `1px solid ${accentColor}60`, borderLeft: `1px solid ${accentColor}60`,
+                  borderRadius: '12px 0 0 0',
+                }} />
+                <div style={{
+                  fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.18em',
+                  color: `${accentColor}60`, textTransform: 'uppercase', marginBottom: '6px',
+                }}>
+                  {topic.icon} {topic.title} · Frage {current + 1}/{topic.questions.length}
+                </div>
+                <p style={{
+                  fontFamily: 'var(--font)', fontSize: 'clamp(13px, 1.4vw, 15px)',
+                  color: '#D0DCEF', lineHeight: 1.65, margin: 0,
+                }}>
+                  {qDisplayed}
+                  {!qDone && <span style={{ animation: 'blink 0.7s ease-in-out infinite', color: accentColor }}>▌</span>}
+                </p>
+              </motion.div>
+            )}
+
+            {/* Idle / select hint */}
+            {phase === 'select' && (
+              <motion.div
+                key="hint"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{
+                  fontFamily: 'var(--mono)', fontSize: '11px',
+                  color: 'rgba(255,255,255,0.2)', letterSpacing: '0.1em',
+                  marginBottom: '8px', textAlign: 'center',
+                  animation: 'blink 2.5s ease-in-out infinite',
+                }}
+              >
+                ← Thema auswählen und starten
+              </motion.div>
+            )}
+
+            {/* Result bubble */}
+            {phase === 'result' && topic && (
+              <motion.div
+                key="result-bubble"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{
+                  background: `${resultMeta.color}08`,
+                  border: `1px solid ${resultMeta.color}30`,
+                  borderRadius: '12px',
+                  padding: '14px 20px',
+                  marginBottom: '8px',
+                  width: '100%',
+                  maxWidth: '620px',
+                  display: 'flex', alignItems: 'center', gap: '16px',
+                }}
+              >
+                <div style={{
+                  width: '52px', height: '52px', flexShrink: 0,
+                  border: `2px solid ${resultMeta.color}`,
+                  borderRadius: '10px',
+                  background: `${resultMeta.color}10`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: `0 0 16px ${resultMeta.color}20`,
+                }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: '20px', fontWeight: 900, color: resultMeta.color }}>
+                    {resultMeta.grade}
+                  </span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: 'var(--font)', fontSize: '17px', fontWeight: 800, color: resultMeta.color }}>
+                    {resultMeta.label}
+                  </div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>
+                    {score}/{topic.questions.length} richtig · {topic.title}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  {answers.map((c, i) => (
+                    <div key={i} style={{
+                      width: '20px', height: '20px', borderRadius: '4px',
+                      background: c ? 'rgba(0,240,160,0.12)' : 'rgba(255,59,92,0.12)',
+                      border: `1px solid ${c ? 'rgba(0,240,160,0.3)' : 'rgba(255,59,92,0.3)'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'var(--mono)', fontSize: '9px',
+                      color: c ? '#00F0A0' : '#FF3B5C',
+                    }}>{c ? '✓' : '✗'}</div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Robot */}
           <div ref={robotContainerRef} style={{
             position: 'relative',
-            height: 'clamp(380px, 45vw, 560px)',
+            width: '100%',
+            maxWidth: '520px',
+            height: 'clamp(320px, 40vw, 480px)',
             borderRadius: '16px',
             overflow: 'hidden',
-            border: phase === 'quiz' ? `1px solid ${accentColor}25` : '1px solid rgba(0,240,255,0.08)',
+            border: `1px solid ${accentColor}15`,
             transition: 'border-color 0.4s',
-            background: 'rgba(0,0,0,0.2)',
+            background: 'rgba(0,0,0,0.15)',
           }}>
             <div className="scan-line" />
-
-            {/* Glow behind robot */}
             <div style={{
               position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
               width: '60%', height: '40%',
-              background: `radial-gradient(ellipse, ${accentColor}12 0%, transparent 70%)`,
-              transition: 'all 0.5s',
-              pointerEvents: 'none', zIndex: 0,
+              background: `radial-gradient(ellipse, ${accentColor}10 0%, transparent 70%)`,
+              transition: 'all 0.5s', pointerEvents: 'none', zIndex: 0,
             }} />
-
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="w-full h-full"
             />
-
             {/* Corner decorators */}
-            {['tl', 'tr', 'bl', 'br'].map(pos => (
+            {(['tl','tr','bl','br'] as const).map(pos => (
               <div key={pos} style={{
                 position: 'absolute',
                 top: pos.startsWith('t') ? 8 : 'auto',
                 bottom: pos.startsWith('b') ? 8 : 'auto',
                 left: pos.endsWith('l') ? 8 : 'auto',
                 right: pos.endsWith('r') ? 8 : 'auto',
-                width: 16, height: 16,
-                borderTop: pos.startsWith('t') ? `1px solid ${accentColor}40` : 'none',
-                borderBottom: pos.startsWith('b') ? `1px solid ${accentColor}40` : 'none',
-                borderLeft: pos.endsWith('l') ? `1px solid ${accentColor}40` : 'none',
-                borderRight: pos.endsWith('r') ? `1px solid ${accentColor}40` : 'none',
+                width: 14, height: 14,
+                borderTop: pos.startsWith('t') ? `1px solid ${accentColor}35` : 'none',
+                borderBottom: pos.startsWith('b') ? `1px solid ${accentColor}35` : 'none',
+                borderLeft: pos.endsWith('l') ? `1px solid ${accentColor}35` : 'none',
+                borderRight: pos.endsWith('r') ? `1px solid ${accentColor}35` : 'none',
                 transition: 'border-color 0.4s',
               }} />
             ))}
-
-            {/* Progress bar inside robot box */}
+            {/* Progress bar */}
             {phase === 'quiz' && (
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: 'rgba(255,255,255,0.05)', zIndex: 5 }}>
                 <motion.div
@@ -541,336 +709,130 @@ export default function RobotSection() {
             )}
           </div>
 
-          {/* Source citation */}
-          {topic && phase !== 'select' && (
-            <div style={{
-              marginTop: '8px',
-              fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em',
-              color: 'rgba(255,255,255,0.2)', textAlign: 'center',
-            }}>
-              Quellen: {topic.source}
-            </div>
-          )}
-        </div>
+          {/* ── OPTIONS / RESULT ACTIONS below robot ── */}
+          <div style={{ width: '100%', maxWidth: '620px', marginTop: '16px' }}>
+            <AnimatePresence mode="wait">
 
-        {/* ─── RIGHT: Interface ───────────────────────────── */}
-        <div style={{ position: 'relative', minHeight: '480px', display: 'flex', flexDirection: 'column' }}>
-          <AnimatePresence mode="wait">
-
-            {/* ── SELECT SCREEN ─────────────────────── */}
-            {phase === 'select' && (
-              <motion.div
-                key="select"
-                initial={{ opacity: 0, x: 24 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -24 }}
-                transition={{ duration: 0.35 }}
-                style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-              >
-                <div style={{ marginBottom: '24px' }}>
-                  <h2 style={{
-                    fontFamily: 'var(--font)',
-                    fontSize: 'clamp(24px, 3vw, 36px)',
-                    fontWeight: 800,
-                    color: '#E8F0FF',
-                    letterSpacing: '-0.03em',
-                    lineHeight: 1.1,
-                    marginBottom: '8px',
-                  }}>
-                    Teste dein Wissen<br />
-                    <span style={{ color: '#00F0FF' }}>zu KI-Sicherheit</span>
-                  </h2>
-                  <p style={{
-                    fontFamily: 'var(--font)', fontSize: '14px',
-                    color: 'rgba(255,255,255,0.4)', lineHeight: 1.6,
-                  }}>
-                    5 Themen · je 5 Fragen · faktenbasiert
-                  </p>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
-                  {QUIZ_TOPICS.map((t, i) => (
-                    <motion.button
-                      key={t.id}
-                      onClick={() => startTopic(i)}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.07 }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '16px',
-                        padding: '16px 20px',
-                        background: t.colorDim,
-                        border: `1px solid ${t.color}25`,
-                        borderRadius: '12px',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        transition: 'all 0.2s',
-                      }}
-                      whileHover={{ borderColor: `${t.color}60`, scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                    >
-                      <span style={{
-                        width: '40px', height: '40px', flexShrink: 0,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        background: `${t.color}15`,
-                        border: `1px solid ${t.color}30`,
-                        borderRadius: '10px',
-                        fontSize: '18px', color: t.color,
-                        fontFamily: 'var(--mono)',
-                      }}>
-                        {t.icon}
-                      </span>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontFamily: 'var(--font)', fontSize: '15px', fontWeight: 700, color: '#E8F0FF', lineHeight: 1.2 }}>
-                          {t.title}
-                        </div>
-                        <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: t.color, letterSpacing: '0.08em', marginTop: '2px' }}>
-                          {t.subtitle}
-                        </div>
-                      </div>
-                      <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>
-                        5 Fragen →
-                      </span>
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* ── QUIZ ──────────────────────────────── */}
-            {phase === 'quiz' && topic && (
-              <motion.div
-                key={`quiz-${current}`}
-                initial={{ opacity: 0, x: 24 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -24 }}
-                transition={{ duration: 0.3 }}
-                style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-              >
-                {/* Topic + progress header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <button onClick={reset} style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: 'var(--mono)', fontSize: '10px',
-                    color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em',
-                    transition: 'color 0.2s', padding: 0,
-                  }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.25)'}
-                  >
-                    ← Themen
-                  </button>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: accentColor, letterSpacing: '0.1em' }}>
-                      {topic.icon} {topic.title.toUpperCase()}
-                    </span>
-                    <span style={{
-                      fontFamily: 'var(--mono)', fontSize: '10px',
-                      color: 'rgba(255,255,255,0.25)',
-                    }}>
-                      {current + 1}/{topic.questions.length}
-                    </span>
+              {/* Quiz options */}
+              {phase === 'quiz' && topic && qDone && (
+                <motion.div
+                  key={`opts-${current}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                    {q?.options.map((opt, idx) => {
+                      const isSelected = selected === idx;
+                      const isCorrect = idx === q.correct;
+                      const revealed = selected !== null;
+                      let bg = 'rgba(255,255,255,0.02)';
+                      let border = 'rgba(255,255,255,0.07)';
+                      let color = 'rgba(255,255,255,0.65)';
+                      if (revealed) {
+                        if (isCorrect) { bg = 'rgba(0,240,160,0.07)'; border = 'rgba(0,240,160,0.3)'; color = '#00F0A0'; }
+                        else if (isSelected) { bg = 'rgba(255,59,92,0.07)'; border = 'rgba(255,59,92,0.3)'; color = '#FF3B5C'; }
+                        else { border = 'rgba(255,255,255,0.03)'; color = 'rgba(255,255,255,0.2)'; }
+                      }
+                      return (
+                        <motion.button
+                          key={idx}
+                          onClick={() => handleSelect(idx)}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          whileHover={selected === null ? { borderColor: `${accentColor}40`, backgroundColor: `${accentColor}06` } : {}}
+                          style={{
+                            display: 'flex', alignItems: 'flex-start', gap: '10px',
+                            padding: '11px 14px',
+                            background: bg, border: `1px solid ${border}`,
+                            borderRadius: '10px', color,
+                            fontFamily: 'var(--font)', fontSize: '13px', lineHeight: 1.45,
+                            textAlign: 'left', cursor: selected !== null ? 'default' : 'pointer',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          <span style={{
+                            fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 800,
+                            color: revealed ? (isCorrect ? '#00F0A0' : (isSelected ? '#FF3B5C' : 'rgba(255,255,255,0.15)')) : `${accentColor}70`,
+                            flexShrink: 0, marginTop: '1px',
+                          }}>
+                            {revealed ? (isCorrect ? '✓' : (isSelected ? '✗' : String.fromCharCode(65 + idx))) : String.fromCharCode(65 + idx)}
+                          </span>
+                          {opt}
+                        </motion.button>
+                      );
+                    })}
                   </div>
-                </div>
 
-                {/* Speech bubble */}
-                <div style={{
-                  position: 'relative',
-                  background: 'rgba(0,0,0,0.3)',
-                  border: `1px solid ${accentColor}25`,
-                  borderRadius: '12px 12px 12px 4px',
-                  padding: '18px 20px',
-                  marginBottom: '16px',
-                  minHeight: '80px',
-                }}>
-                  <div style={{
-                    position: 'absolute', top: -1, left: -1, width: 18, height: 18,
-                    borderTop: `1px solid ${accentColor}60`, borderLeft: `1px solid ${accentColor}60`,
-                    borderRadius: '12px 0 0 0',
-                  }} />
-                  <p style={{
-                    fontFamily: 'var(--font)', fontSize: 'clamp(14px, 1.5vw, 16px)',
-                    color: '#D0DCEF', lineHeight: 1.65, margin: 0,
-                  }}>
-                    {qDisplayed}
-                    {!qDone && <span style={{ animation: 'blink 0.7s ease-in-out infinite', color: accentColor }}>▌</span>}
-                  </p>
-                </div>
-
-                {/* Options */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
-                  {qDone && q?.options.map((opt, idx) => {
-                    const isSelected = selected === idx;
-                    const isCorrect = idx === q.correct;
-                    const revealed = selected !== null;
-                    let bg = 'rgba(255,255,255,0.02)';
-                    let border = 'rgba(255,255,255,0.07)';
-                    let color = 'rgba(255,255,255,0.65)';
-                    if (revealed) {
-                      if (isCorrect) { bg = 'rgba(0,240,160,0.07)'; border = 'rgba(0,240,160,0.3)'; color = '#00F0A0'; }
-                      else if (isSelected) { bg = 'rgba(255,59,92,0.07)'; border = 'rgba(255,59,92,0.3)'; color = '#FF3B5C'; }
-                      else { border = 'rgba(255,255,255,0.03)'; color = 'rgba(255,255,255,0.25)'; }
-                    }
-                    return (
-                      <motion.button
-                        key={idx}
-                        onClick={() => handleSelect(idx)}
-                        initial={{ opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.06 }}
-                        whileHover={selected === null ? { borderColor: `${accentColor}40`, backgroundColor: `${accentColor}06` } : {}}
-                        style={{
-                          display: 'flex', alignItems: 'flex-start', gap: '12px',
-                          padding: '12px 16px',
-                          background: bg, border: `1px solid ${border}`,
-                          borderRadius: '10px', color,
-                          fontFamily: 'var(--font)', fontSize: '13px', lineHeight: 1.5,
-                          textAlign: 'left', cursor: selected !== null ? 'default' : 'pointer',
+                  <AnimatePresence>
+                    {showExplain && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div style={{
+                          padding: '11px 14px', borderRadius: '10px', marginBottom: '8px',
+                          background: answers[answers.length - 1] ? 'rgba(0,240,160,0.05)' : 'rgba(255,59,92,0.05)',
+                          border: `1px solid ${answers[answers.length - 1] ? 'rgba(0,240,160,0.2)' : 'rgba(255,59,92,0.2)'}`,
+                        }}>
+                          <div style={{
+                            fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.18em',
+                            textTransform: 'uppercase', marginBottom: '4px',
+                            color: answers[answers.length - 1] ? '#00F0A0' : '#FF3B5C',
+                          }}>
+                            {answers[answers.length - 1] ? '[ KORREKT ]' : '[ FALSCH ]'} — Erklärung:
+                          </div>
+                          <p style={{ fontFamily: 'var(--font)', fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, margin: 0 }}>
+                            {q?.explain}
+                          </p>
+                        </div>
+                        <button onClick={next} style={{
+                          width: '100%', padding: '12px',
+                          background: `${accentColor}10`, border: `1px solid ${accentColor}30`,
+                          borderRadius: '10px', color: accentColor,
+                          fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700,
+                          letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
                           transition: 'all 0.2s',
                         }}
-                      >
-                        <span style={{
-                          fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 800,
-                          color: revealed ? (isCorrect ? '#00F0A0' : (isSelected ? '#FF3B5C' : 'rgba(255,255,255,0.15)')) : `${accentColor}70`,
-                          flexShrink: 0, marginTop: '2px', minWidth: '14px',
-                        }}>
-                          {revealed ? (isCorrect ? '✓' : (isSelected ? '✗' : String.fromCharCode(65 + idx))) : String.fromCharCode(65 + idx)}
-                        </span>
-                        {opt}
-                      </motion.button>
-                    );
-                  })}
-                </div>
+                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = `${accentColor}18`}
+                          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = `${accentColor}10`}
+                        >
+                          {current + 1 >= (topic?.questions.length ?? 5) ? 'Auswertung →' : `Weiter (${current + 1}/${topic?.questions.length}) →`}
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )}
 
-                {/* Explain + Next */}
-                <AnimatePresence>
-                  {showExplain && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
-                      <div style={{
-                        padding: '12px 16px', borderRadius: '10px', marginBottom: '10px',
-                        background: answers[answers.length - 1] ? 'rgba(0,240,160,0.05)' : 'rgba(255,59,92,0.05)',
-                        border: `1px solid ${answers[answers.length - 1] ? 'rgba(0,240,160,0.2)' : 'rgba(255,59,92,0.2)'}`,
-                      }}>
-                        <div style={{
-                          fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.18em',
-                          textTransform: 'uppercase', marginBottom: '5px',
-                          color: answers[answers.length - 1] ? '#00F0A0' : '#FF3B5C',
-                        }}>
-                          {answers[answers.length - 1] ? '[ KORREKT ]' : '[ FALSCH ]'} — Erklärung:
-                        </div>
-                        <p style={{ fontFamily: 'var(--font)', fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, margin: 0 }}>
-                          {q?.explain}
-                        </p>
-                      </div>
-                      <button onClick={next} style={{
-                        width: '100%', padding: '13px',
-                        background: `${accentColor}10`, border: `1px solid ${accentColor}30`,
-                        borderRadius: '10px', color: accentColor,
-                        fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700,
-                        letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer',
-                        transition: 'all 0.2s',
-                      }}
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = `${accentColor}18`}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = `${accentColor}10`}
-                      >
-                        {current + 1 >= (topic?.questions.length ?? 5) ? 'Auswertung →' : `Weiter (${current + 1}/${topic?.questions.length}) →`}
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )}
-
-            {/* ── RESULT ────────────────────────────── */}
-            {phase === 'result' && topic && (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-              >
-                {/* Grade */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
-                  <div style={{
-                    width: '68px', height: '68px', flexShrink: 0,
-                    border: `2px solid ${resultMeta.color}`,
-                    borderRadius: '12px',
-                    background: `${resultMeta.color}10`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: `0 0 20px ${resultMeta.color}20`,
-                  }}>
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: '24px', fontWeight: 900, color: resultMeta.color }}>
-                      {resultMeta.grade}
-                    </span>
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', marginBottom: '4px' }}>
-                      {topic.icon} {topic.title} — Ergebnis
-                    </div>
-                    <div style={{ fontFamily: 'var(--font)', fontSize: '22px', fontWeight: 800, color: resultMeta.color }}>
-                      {resultMeta.label}
-                    </div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>
-                      {score} von {topic.questions.length} richtig
-                    </div>
-                  </div>
-                </div>
-
-                {/* Score bar */}
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ height: '5px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(score / topic.questions.length) * 100}%` }}
-                      transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-                      style={{ height: '100%', background: `linear-gradient(90deg, ${resultMeta.color}70, ${resultMeta.color})`, borderRadius: '3px' }}
-                    />
-                  </div>
-                </div>
-
-                {/* Answer breakdown */}
-                <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
-                  {answers.map((correct, i) => (
-                    <motion.div key={i}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.07 }}
-                      style={{
-                        flex: 1, height: '28px', borderRadius: '5px',
-                        background: correct ? 'rgba(0,240,160,0.1)' : 'rgba(255,59,92,0.1)',
-                        border: `1px solid ${correct ? 'rgba(0,240,160,0.25)' : 'rgba(255,59,92,0.25)'}`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontFamily: 'var(--mono)', fontSize: '11px',
-                        color: correct ? '#00F0A0' : '#FF3B5C',
-                      }}
-                    >
-                      {correct ? '✓' : '✗'}
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {/* Result actions */}
+              {phase === 'result' && topic && (
+                <motion.div
+                  key="result-actions"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}
+                >
                   <button onClick={reset} style={{
-                    flex: 1, minWidth: '140px', padding: '13px 16px',
-                    background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '10px', color: 'rgba(255,255,255,0.5)',
+                    flex: 1, minWidth: '130px', padding: '12px 16px',
+                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '10px', color: 'rgba(255,255,255,0.4)',
                     fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700,
                     letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
                     transition: 'all 0.2s',
                   }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.07)'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.06)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'}
                   >
                     ← Anderes Thema
                   </button>
                   <button onClick={() => startTopic(topicIdx!)} style={{
-                    flex: 1, minWidth: '140px', padding: '13px 16px',
+                    flex: 1, minWidth: '130px', padding: '12px 16px',
                     background: `${topic.color}10`, border: `1px solid ${topic.color}30`,
                     borderRadius: '10px', color: topic.color,
                     fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700,
@@ -883,37 +845,59 @@ export default function RobotSection() {
                     ↺ Wiederholen
                   </button>
                   <a href="/de/tools" style={{
-                    flex: 1, minWidth: '140px', padding: '13px 16px',
-                    background: 'rgba(0,240,255,0.08)', border: '1px solid rgba(0,240,255,0.25)',
+                    flex: 1, minWidth: '130px', padding: '12px 16px',
+                    background: 'rgba(0,240,255,0.07)', border: '1px solid rgba(0,240,255,0.2)',
                     borderRadius: '10px', color: '#00F0FF',
                     fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700,
-                    letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer',
+                    letterSpacing: '0.1em', textTransform: 'uppercase',
                     textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.2s',
                   }}>
                     Sicherheit prüfen →
                   </a>
-                </div>
+                </motion.div>
+              )}
 
-                <div style={{
-                  marginTop: '16px',
-                  fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.08em',
-                  color: 'rgba(255,255,255,0.15)', textAlign: 'center',
-                }}>
-                  Quellen: {topic.source}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              {/* Select idle prompt */}
+              {phase === 'select' && (
+                <motion.div key="select-cta" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <div style={{
+                    display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px',
+                  }}>
+                    {QUIZ_TOPICS.map((t, i) => (
+                      <button key={t.id} onClick={() => startTopic(i)} style={{
+                        padding: '10px 12px',
+                        background: t.colorDim,
+                        border: `1px solid ${t.color}20`,
+                        borderRadius: '8px', cursor: 'pointer',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        transition: 'all 0.2s',
+                      }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = `${t.color}50`}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = `${t.color}20`}
+                      >
+                        <span style={{ color: t.color, fontSize: '13px' }}>{t.icon}</span>
+                        <span style={{ fontFamily: 'var(--font)', fontSize: '12px', fontWeight: 600, color: '#C0CCDF' }}>{t.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Source */}
+          {topic && (
+            <div style={{
+              marginTop: '10px',
+              fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.08em',
+              color: 'rgba(255,255,255,0.15)', textAlign: 'center',
+            }}>
+              Quellen: {topic.source}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Responsive: stack on mobile */}
-      <style>{`
-        @media (max-width: 700px) {
-          .robot-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </section>
   );
 }
