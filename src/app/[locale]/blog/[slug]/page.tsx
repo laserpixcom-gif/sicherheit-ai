@@ -8,6 +8,7 @@ import ArticleShare from '@/components/blog/ArticleShare';
 import ArticleProgress from '@/components/blog/ArticleProgress';
 import JsonLd, { articleSchema } from '@/components/JsonLd';
 import Link from 'next/link';
+import { autolinkGlossary } from '@/lib/autolink';
 
 export const revalidate = 3600;
 
@@ -95,6 +96,7 @@ export default async function BlogPostPage({
 
   const headings = extractHeadings(post.content);
   const badgeStyle = getBadgeStyle(post.badge);
+  const linkedContent = autolinkGlossary(post.content, params.locale);
 
   return (
     <>
@@ -235,10 +237,10 @@ export default async function BlogPostPage({
                 {post.excerpt}
               </p>
 
-              {/* HTML content */}
+              {/* HTML content — Glossar-Begriffe automatisch verlinkt */}
               <div
                 className="prose"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: linkedContent }}
               />
 
               {/* Tags */}
