@@ -1,7 +1,7 @@
 'use client';
 
 import { SplineScene } from '@/components/ui/splite';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const QUIZ_TOPICS = [
@@ -86,8 +86,6 @@ export default function RobotSection() {
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [showExplain, setShowExplain] = useState(false);
   const [typeActive, setTypeActive] = useState(true);
-  const robotRef = useRef<HTMLDivElement>(null);
-
   const topic = QUIZ_TOPICS[topicIdx];
   const q = topic.questions[current];
   const score = answers.filter(Boolean).length;
@@ -106,30 +104,6 @@ export default function RobotSection() {
     return () => clearTimeout(t);
   }, [phase, current]);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      const canvas = robotRef.current?.querySelector('canvas');
-      if (!canvas) return;
-      const r = canvas.getBoundingClientRect();
-      canvas.dispatchEvent(new PointerEvent('pointermove', { clientX: r.left + r.width / 2, clientY: r.top + r.height * 0.35, bubbles: true, cancelable: true, pointerType: 'mouse', isPrimary: true }));
-    }, 900);
-    return () => clearTimeout(t);
-  }, [phase]);
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const canvas = robotRef.current?.querySelector('canvas');
-      if (!canvas) return;
-      const r = canvas.getBoundingClientRect();
-      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      const dx = e.clientX - cx, dy = e.clientY - cy;
-      const len = Math.sqrt(dx * dx + dy * dy) || 1;
-      const clamp = Math.min(len, r.width * 0.42);
-      canvas.dispatchEvent(new PointerEvent('pointermove', { clientX: cx + (dx / len) * clamp, clientY: cy + (dy / len) * clamp, bubbles: true, cancelable: true, pointerType: 'mouse', isPrimary: true }));
-    };
-    window.addEventListener('mousemove', onMove, { passive: true });
-    return () => window.removeEventListener('mousemove', onMove);
-  }, []);
 
   function startTopic(idx: number) {
     setTopicIdx(idx); setCurrent(0); setAnswers([]); setSelected(null); setShowExplain(false); setPhase('quiz');
@@ -330,7 +304,7 @@ export default function RobotSection() {
             {phase === 'quiz' ? topic.icon + ' ' + topic.title : phase === 'result' ? '✓ Fertig' : 'Bereit'}
           </motion.div>
 
-          <div ref={robotRef} style={{ width: '100%', height: 'clamp(380px,48vw,540px)', position: 'relative' }}>
+          <div style={{ width: '100%', height: 'clamp(380px,48vw,540px)', position: 'relative' }}>
             <div className="rs-scanline" style={{ top: 0 }} />
             <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '65%', height: '28%', background: 'radial-gradient(ellipse,' + ac + '12 0%,transparent 70%)', transition: 'all 0.6s', pointerEvents: 'none' }} />
             <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full" />
