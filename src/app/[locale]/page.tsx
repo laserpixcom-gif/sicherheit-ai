@@ -25,8 +25,8 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
     <>
       <ScrollAnimator />
       <Hero />
-      <RobotSection />
       <Ticker />
+      <RobotSection />
       <StatsSection />
 
       {/* NEW: 3 immersive scroll sections */}
