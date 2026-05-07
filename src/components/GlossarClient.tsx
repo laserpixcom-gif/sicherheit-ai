@@ -29,6 +29,31 @@ export default function GlossarClient({ terms }: Props) {
   const letterRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const debounceRef = useRef<NodeJS.Timeout>();
 
+  // Auto-expand + scroll to term from URL hash (e.g. #term-ransomware)
+  useEffect(() => {
+    const hash = window.location.hash; // e.g. "#term-ransomware"
+    if (!hash.startsWith('#term-')) return;
+    const termId = hash.replace('#term-', '');
+    const termExists = terms.find(t => t.id === termId);
+    if (!termExists) return;
+
+    // Open the term
+    setExpanded(termId);
+
+    // Scroll after render — wait for expand animation + nav offset
+    const timer = setTimeout(() => {
+      const el = document.getElementById(`term-${termId}`);
+      if (!el) return;
+      const navHeight = 80; // sticky nav height
+      const extraPadding = 24;
+      const top = el.getBoundingClientRect().top + window.scrollY - navHeight - extraPadding;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 120);
+
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSearch = (val: string) => {
     setQuery(val);
     clearTimeout(debounceRef.current);
@@ -59,7 +84,7 @@ export default function GlossarClient({ terms }: Props) {
     setActiveLetter(letter);
     const el = letterRefs.current[letter];
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 160;
+    const top = el.getBoundingClientRect().top + window.scrollY - 104;
     window.scrollTo({ top, behavior: 'smooth' });
   };
 
