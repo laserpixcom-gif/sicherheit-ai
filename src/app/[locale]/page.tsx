@@ -25,12 +25,12 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
     <>
       <ScrollAnimator />
       <Hero />
+      <RobotSection />
       <Ticker />
       <StatsSection />
 
       {/* NEW: 3 immersive scroll sections */}
       <BentoThreats />
-      <RobotSection />
       <StickyThreatRadar />
       <HorizontalToolScroll />
 
