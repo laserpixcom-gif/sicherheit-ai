@@ -31,12 +31,14 @@ export default function RobotSection() {
         maxWidth: '1280px',
         margin: '0 auto',
         display: 'flex',
+        flexWrap: 'wrap',
         minHeight: '560px',
         alignItems: 'stretch',
       }}>
         {/* Left — Text content */}
         <div style={{
-          flex: '0 0 45%',
+          flex: '0 0 min(45%, 100%)',
+          minWidth: 'min(360px, 100%)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -143,8 +145,9 @@ export default function RobotSection() {
         {/* Right — 3D Robot */}
         <div style={{
           flex: '1',
+          minWidth: '300px',
           position: 'relative',
-          minHeight: '500px',
+          minHeight: '400px',
         }}>
           {/* Spotlight effect */}
           <Spotlight size={500} className="z-0" />
