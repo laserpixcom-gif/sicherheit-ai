@@ -1,0 +1,296 @@
+{
+  "name": "sicherheit.ai — Täglicher Blog-Post",
+  "nodes": [
+    {
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Täglich 07:00 Uhr",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "API Keys",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300],
+      "notes": "HIER DEINE API KEYS EINTRAGEN — nur diese 3 Felder ausfüllen",
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "key-001",
+              "name": "PERPLEXITY_KEY",
+              "value": "HIER_PERPLEXITY_API_KEY_EINTRAGEN",
+              "type": "string"
+            },
+            {
+              "id": "key-002",
+              "name": "ANTHROPIC_KEY",
+              "value": "HIER_ANTHROPIC_API_KEY_EINTRAGEN",
+              "type": "string"
+            },
+            {
+              "id": "key-003",
+              "name": "GITHUB_TOKEN",
+              "value": "HIER_GITHUB_TOKEN_EINTRAGEN",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "Perplexity Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "parameters": {
+        "jsCode": "const body = {\n  model: \"sonar-pro\",\n  messages: [\n    {\n      role: \"system\",\n      content: \"Du bist ein erfahrener IT-Sicherheitsjournalist mit Fokus auf Deutschland und Europa. Recherchiere praezise, faktenbasiert und vollstaendig auf Deutsch.\"\n    },\n    {\n      role: \"user\",\n      content: \"Was ist das wichtigste und aktuellste Ereignis aus den Bereichen Cybersecurity, KI-Sicherheit oder kritische Technologie der letzten 24-48 Stunden mit Relevanz fuer Deutschland oder Europa? Berichte sehr detailliert: 1) Was genau ist passiert? 2) Wer ist betroffen (Firmennamen, Behoerden, wie viele Nutzer/Systeme)? 3) Was sind die technischen Details und Hintergruende? 4) Was sollten deutsche Unternehmen und Nutzer jetzt konkret tun? Nenne bis zu 3 Quell-URLs. Antworte vollstaendig auf Deutsch mit allen verfuegbaren Fakten und Zahlen.\"\n    }\n  ]\n};\n\nreturn [{ json: { body: JSON.stringify(body) } }];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Perplexity Recherche",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "none",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $('API Keys').first().json.PERPLEXITY_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Claude Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300],
+      "parameters": {
+        "jsCode": "const perplexityResult = $('Perplexity Recherche').first().json.choices[0].message.content;\nconst today = new Date().toISOString().split('T')[0];\n\nconst prompt = `Schreibe einen professionellen deutschen Cybersecurity-Blog-Post fuer sicherheit.ai.\n\nRECHERCHE-BASIS (Perplexity):\n${perplexityResult}\n\nHEUTIGES DATUM: ${today}\n\nWICHTIG: Antworte NUR mit dem rohen JSON-Objekt. KEIN Markdown, KEIN Backtick-Block, KEINE Erklaerung davor oder danach. Nur das pure JSON.\n\nDas JSON muss exakt diese Felder haben:\n{\n  \"slug\": \"url-slug-nur-kleinbuchstaben-und-bindestriche-maximal-60-zeichen\",\n  \"title\": \"Klarer praegnanter Titel maximal 80 Zeichen\",\n  \"excerpt\": \"Zwei praezise informative Saetze als Artikel-Teaser. Maximal 220 Zeichen.\",\n  \"content\": \"<h2 id=\\\\\"was-passiert\\\\\">Was ist passiert?</h2><p>Vollstaendiger Artikel mindestens 700 Woerter als HTML. Nutze h2 und h3 Tags mit id-Attributen. Sachlich, faktisch, mit Zahlen, Firmennamen, Zeitangaben. Konkrete Handlungsempfehlungen am Ende.</p><h2 id=\\\\\"technische-details\\\\\">Technische Details</h2><p>...</p><h2 id=\\\\\"was-tun\\\\\">Was sollten Sie jetzt tun?</h2><p>...</p>\",\n  \"category\": \"KATEGORIE_HIER\",\n  \"categoryColor\": \"#FARBE_HIER\",\n  \"categoryBg\": \"rgba(r,g,b,0.1)\",\n  \"author\": \"sicherheit.ai Redaktion\",\n  \"authorRole\": \"KI-recherchiert & kuratiert\",\n  \"publishedAt\": \"${today}\",\n  \"readTime\": 8,\n  \"imageGradient\": \"linear-gradient(135deg, #060B18 0%, #0D1A3A 100%)\",\n  \"badge\": null,\n  \"badgeColor\": null,\n  \"tags\": [\"tag1\", \"tag2\", \"tag3\", \"tag4\"],\n  \"faqs\": [\n    {\"q\": \"Wichtige Frage zum Thema?\", \"a\": \"Vollstaendige hilfreiche Antwort.\"},\n    {\"q\": \"Zweite relevante Frage?\", \"a\": \"Antwort.\"},\n    {\"q\": \"Dritte Frage fuer Einsteiger?\", \"a\": \"Verstaendliche Antwort.\"}\n  ],\n  \"sources\": [{\"title\": \"Quellenname\", \"url\": \"https://beispiel.de\"}]\n}\n\nKategorie-Auswahl (waehle die passendste):\n- CVE/Sicherheitsluecke: category=Schwachstelle, categoryColor=#FF9632, categoryBg=rgba(255,150,50,0.1), imageGradient=linear-gradient(135deg, #1A0800 0%, #2A1200 100%)\n- Hack/Datenpanne/Cyberangriff: category=Incident, categoryColor=#FF2D6F, categoryBg=rgba(255,45,111,0.1), imageGradient=linear-gradient(135deg, #1A0010 0%, #2A0020 100%)\n- Gesetz/DSGVO/NIS2/AI Act: category=Regulierung, categoryColor=#7890FF, categoryBg=rgba(100,120,255,0.12), imageGradient=linear-gradient(135deg, #060B18 0%, #0A1230 100%)\n- KI/ML Sicherheit: category=KI-Sicherheit, categoryColor=#00F0FF, categoryBg=rgba(0,240,255,0.1), imageGradient=linear-gradient(135deg, #001A1A 0%, #003333 100%)\n- APT/Bedrohungsakteur: category=Bedrohung, categoryColor=#FF2D6F, categoryBg=rgba(255,45,111,0.1), imageGradient=linear-gradient(135deg, #1A0010 0%, #2A0020 100%)\n- Bericht/Studie/Analyse: category=Analyse, categoryColor=#9664FF, categoryBg=rgba(150,100,255,0.1), imageGradient=linear-gradient(135deg, #0D0820 0%, #1A1030 100%)\n- Allgemeine Tech-News: category=News, categoryColor=#78C864, categoryBg=rgba(120,200,100,0.1), imageGradient=linear-gradient(135deg, #060E08 0%, #0A1A0E 100%)\n\nFalls es sich um eine kritische CVE handelt, setze badge=CVSS Score (z.B. CVSS 9.8) und badgeColor=#FF2D6F.`;\n\nconst body = {\n  model: \"claude-opus-4-6\",\n  max_tokens: 4000,\n  messages: [{\n    role: \"user\",\n    content: prompt\n  }]\n};\n\nreturn [{ json: { body: JSON.stringify(body) } }];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "Claude Blog schreiben",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "none",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('API Keys').first().json.ANTHROPIC_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "name": "Response parsen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 300],
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.content[0].text;\n\nlet clean = raw.trim();\n\n// Entferne Markdown-Wrapper die Claude manchmal hinzufuegt\nif (clean.startsWith('```json')) {\n  clean = clean.replace(/^```json\\s*/, '').replace(/\\s*```$/, '').trim();\n} else if (clean.startsWith('```')) {\n  clean = clean.replace(/^```\\s*/, '').replace(/\\s*```$/, '').trim();\n}\n\n// Falls noch Text vor dem JSON steht, extrahiere das JSON-Objekt\nif (!clean.startsWith('{')) {\n  const match = clean.match(/\\{[\\s\\S]*\\}/);\n  if (match) clean = match[0];\n}\n\nlet post;\ntry {\n  post = JSON.parse(clean);\n} catch(e) {\n  throw new Error('JSON Parse Fehler: ' + e.message + '\\n\\nErster Teil des Textes: ' + clean.slice(0, 300));\n}\n\n// Pflichtfelder garantieren\npost.id = Date.now().toString();\npost.publishedAt = post.publishedAt || new Date().toISOString().split('T')[0];\npost.author = post.author || 'sicherheit.ai Redaktion';\npost.authorRole = post.authorRole || 'KI-recherchiert & kuratiert';\npost.tags = Array.isArray(post.tags) ? post.tags : [];\npost.faqs = Array.isArray(post.faqs) ? post.faqs : [];\npost.sources = Array.isArray(post.sources) ? post.sources : [];\npost.readTime = Number(post.readTime) || 8;\n\n// null-Felder entfernen\nif (!post.badge) delete post.badge;\nif (!post.badgeColor) delete post.badgeColor;\n\nreturn [{ json: post }];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "name": "GitHub Datei laden",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.github.com/repos/laserpixcom-gif/sicherheit-ai/contents/src/data/generated-posts.json",
+        "authentication": "none",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $('API Keys').first().json.GITHUB_TOKEN }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "sendBody": false,
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "name": "Post einfuegen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 300],
+      "parameters": {
+        "jsCode": "const fileData = $('GitHub Datei laden').first().json;\nconst sha = fileData.sha;\n\n// GitHub gibt Base64 mit Zeilenumbruechen zurueck\nconst base64Clean = fileData.content.replace(/\\n/g, '');\nconst currentJson = Buffer.from(base64Clean, 'base64').toString('utf8');\nlet posts = JSON.parse(currentJson);\n\nconst newPost = $('Response parsen').first().json;\n\n// Duplikat-Schutz via Slug\nconst exists = posts.some(p => p.slug === newPost.slug);\nif (!exists) {\n  posts.unshift(newPost); // Neuester Post zuerst\n}\n\n// Maximal 100 Posts (verhindert riesige JSON-Datei)\nposts = posts.slice(0, 100);\n\nconst updatedBase64 = Buffer.from(JSON.stringify(posts, null, 2)).toString('base64');\n\nreturn [{\n  json: {\n    sha,\n    updatedBase64,\n    postTitle: newPost.title,\n    postSlug: newPost.slug,\n    totalPosts: posts.length\n  }\n}];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0010-4000-8000-000000000010",
+      "name": "GitHub Datei aktualisieren",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 300],
+      "parameters": {
+        "method": "PUT",
+        "url": "https://api.github.com/repos/laserpixcom-gif/sicherheit-ai/contents/src/data/generated-posts.json",
+        "authentication": "none",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $('API Keys').first().json.GITHUB_TOKEN }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ message: 'feat: auto blog — ' + $json.postSlug + ' (' + new Date().toISOString().split('T')[0] + ')', sha: $json.sha, content: $json.updatedBase64, committer: { name: 'sicherheit.ai Bot', email: 'bot@sicherheit.ai' } }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Täglich 07:00 Uhr": {
+      "main": [
+        [{ "node": "API Keys", "type": "main", "index": 0 }]
+      ]
+    },
+    "API Keys": {
+      "main": [
+        [{ "node": "Perplexity Body", "type": "main", "index": 0 }]
+      ]
+    },
+    "Perplexity Body": {
+      "main": [
+        [{ "node": "Perplexity Recherche", "type": "main", "index": 0 }]
+      ]
+    },
+    "Perplexity Recherche": {
+      "main": [
+        [{ "node": "Claude Body", "type": "main", "index": 0 }]
+      ]
+    },
+    "Claude Body": {
+      "main": [
+        [{ "node": "Claude Blog schreiben", "type": "main", "index": 0 }]
+      ]
+    },
+    "Claude Blog schreiben": {
+      "main": [
+        [{ "node": "Response parsen", "type": "main", "index": 0 }]
+      ]
+    },
+    "Response parsen": {
+      "main": [
+        [{ "node": "GitHub Datei laden", "type": "main", "index": 0 }]
+      ]
+    },
+    "GitHub Datei laden": {
+      "main": [
+        [{ "node": "Post einfuegen", "type": "main", "index": 0 }]
+      ]
+    },
+    "Post einfuegen": {
+      "main": [
+        [{ "node": "GitHub Datei aktualisieren", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "sicherheit.ai" },
+    { "name": "content-automation" }
+  ],
+  "triggerCount": 0,
+  "meta": {
+    "instanceId": "sicherheit-ai-content-machine"
+  }
+}
