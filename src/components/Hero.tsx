@@ -258,6 +258,7 @@ export default function Hero() {
           muted
           loop
           playsInline
+          preload="none"
           style={{
             position: 'absolute',
             inset: 0,
