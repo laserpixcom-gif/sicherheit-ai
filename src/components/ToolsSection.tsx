@@ -4,12 +4,12 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 const TOOLS = [
-  { icon: '🔐', nameKey: 'password', descKey: 'passwordDesc', tagKey: 'Live-Tool', gradient: true },
-  { icon: '🛡️', nameKey: 'phishing', descKey: 'phishingDesc', tagKey: 'Beta' },
-  { icon: '📊', nameKey: 'cve', descKey: 'cveDesc', tagKey: 'Live-Daten' },
-  { icon: '🔍', nameKey: 'breach', descKey: 'breachDesc', tagKey: 'Kostenlos' },
-  { icon: '🤖', nameKey: 'aiRisk', descKey: 'aiRiskDesc', tagKey: 'Neu' },
-  { icon: '⚡', nameKey: 'incident', descKey: 'incidentDesc', tagKey: 'Pro' },
+  { icon: '🔐', nameKey: 'password', descKey: 'passwordDesc', tagKey: 'Live-Tool', gradient: true, slug: 'password' },
+  { icon: '🛡️', nameKey: 'phishing', descKey: 'phishingDesc', tagKey: 'Beta', slug: null },
+  { icon: '📊', nameKey: 'cve', descKey: 'cveDesc', tagKey: 'Live-Daten', slug: 'cve' },
+  { icon: '🔍', nameKey: 'breach', descKey: 'breachDesc', tagKey: 'Kostenlos', slug: 'breach' },
+  { icon: '🤖', nameKey: 'aiRisk', descKey: 'aiRiskDesc', tagKey: 'Neu', slug: null },
+  { icon: '⚡', nameKey: 'incident', descKey: 'incidentDesc', tagKey: 'Pro', slug: 'incident' },
 ];
 
 export default function ToolsSection({ locale }: { locale: string }) {
@@ -43,7 +43,7 @@ export default function ToolsSection({ locale }: { locale: string }) {
           {TOOLS.map((tool, i) => (
             <Link
               key={i}
-              href={`/${locale}/tools`}
+              href={tool.slug ? `/${locale}/tools/${tool.slug}` : `/${locale}/tools`}
               className={`${tool.gradient ? 'gradient-border' : ''} animate-in ${i > 0 ? `animate-delay-${(i % 3) + 1}` : ''}`}
               style={{
                 background: 'var(--card-bg)',
