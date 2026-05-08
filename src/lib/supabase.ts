@@ -1,10 +1,2 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-// Client für öffentliche Lesezugriffe (ISR, Server Components)
-export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
-    : null;
+// Supabase nicht konfiguriert — Blog-Posts kommen aus src/data/generated-posts.json
+export const supabase = null;
