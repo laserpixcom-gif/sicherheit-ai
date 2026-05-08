@@ -6,33 +6,7 @@
 @tailwind utilities;
 
 :root {
-  --bg: #EEF2FA;
-  --bg2: #E2E9F4;
-  --surface: rgba(0,0,0,0.055);
-  --surface2: rgba(0,0,0,0.09);
-  --border: rgba(0,0,0,0.13);
-  --border-bright: rgba(0,120,160,0.40);
-  --cyan: #0078A0;           /* darker cyan → 5.8:1 contrast on light bg */
-  --magenta: #C4184C;        /* darker magenta → readable on light */
-  --cyan-dim: rgba(0,120,160,0.12);
-  --magenta-dim: rgba(196,24,76,0.10);
-  --text: #0B1524;
-  --text-dim: #3A4560;       /* was 0.60 opacity → now solid, 7.2:1 contrast */
-  --text-muted: #6B7590;     /* was 0.38 opacity → now 4.6:1 contrast (WCAG AA) */
-  --font: 'Geist', system-ui, sans-serif;
-  --mono: 'Geist Mono', monospace;
-  --nav-bg: rgba(238,242,250,0.82);
-  --nav-bg-scrolled: rgba(238,242,250,0.97);
-  --card-bg: #FFFFFF;
-  --card-shadow: 0 2px 20px rgba(0,0,0,0.08);
-  --hero-glow1: rgba(0,120,160,0.07);
-  --hero-glow2: rgba(196,24,76,0.05);
-  --cyber-cyan: #0078A0;
-  --code-bg: rgba(0,0,0,0.06);
-  --code-text: #0060A0;      /* readable blue for inline code on light bg */
-}
-
-.dark {
+  /* Dark mode is default */
   --bg: #060B18;
   --bg2: #080E1F;
   --surface: rgba(255,255,255,0.055);
@@ -44,8 +18,10 @@
   --cyan-dim: rgba(0,240,255,0.14);
   --magenta-dim: rgba(255,45,111,0.14);
   --text: #ECF0FA;
-  --text-dim: #A8B4CC;       /* was 0.50 opacity → now solid, 6.1:1 contrast */
-  --text-muted: #6E7A94;     /* was 0.30 opacity → now 3.8:1 contrast (WCAG AA) */
+  --text-dim: #A8B4CC;
+  --text-muted: #6E7A94;
+  --font: 'Geist', system-ui, sans-serif;
+  --mono: 'Geist Mono', monospace;
   --nav-bg: rgba(6,11,24,0.70);
   --nav-bg-scrolled: rgba(6,11,24,0.94);
   --card-bg: rgba(255,255,255,0.05);
@@ -55,6 +31,32 @@
   --cyber-cyan: #00F0FF;
   --code-bg: rgba(0,240,255,0.08);
   --code-text: #00F0FF;
+}
+
+.light {
+  /* Light mode — optional */
+  --bg: #EEF2FA;
+  --bg2: #E2E9F4;
+  --surface: rgba(0,0,0,0.055);
+  --surface2: rgba(0,0,0,0.09);
+  --border: rgba(0,0,0,0.13);
+  --border-bright: rgba(0,120,160,0.40);
+  --cyan: #0078A0;
+  --magenta: #C4184C;
+  --cyan-dim: rgba(0,120,160,0.12);
+  --magenta-dim: rgba(196,24,76,0.10);
+  --text: #0B1524;
+  --text-dim: #3A4560;
+  --text-muted: #6B7590;
+  --nav-bg: rgba(238,242,250,0.82);
+  --nav-bg-scrolled: rgba(238,242,250,0.97);
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  --hero-glow1: rgba(0,120,160,0.07);
+  --hero-glow2: rgba(196,24,76,0.05);
+  --cyber-cyan: #0078A0;
+  --code-bg: rgba(0,0,0,0.06);
+  --code-text: #0060A0;
 }
 
 *, *::before, *::after {
@@ -89,14 +91,14 @@ body {
 
 /* Glassmorphism cards */
 .glass {
-  background: rgba(255,255,255,0.88);
+  background: rgba(6,11,24,0.78);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(0,0,0,0.13);
+  border: 1px solid rgba(0,240,255,0.15);
 }
 
-.dark .glass {
-  background: rgba(6,11,24,0.78);
-  border-color: rgba(0,240,255,0.15);
+.light .glass {
+  background: rgba(255,255,255,0.88);
+  border-color: rgba(0,0,0,0.13);
 }
 
 /* HUD Cards */
@@ -117,7 +119,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #0B1524 0%, #003D6E 35%, #0078A0 65%, #0B1524 100%);
+  background: linear-gradient(135deg, #ECF0FA 0%, #B8C8E8 30%, #00F0FF 60%, #ECF0FA 100%);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -125,8 +127,8 @@ body {
   animation: gradient-shift 8s ease infinite;
 }
 
-.dark .gradient-text {
-  background: linear-gradient(135deg, #ECF0FA 0%, #B8C8E8 30%, #00F0FF 60%, #ECF0FA 100%);
+.light .gradient-text {
+  background: linear-gradient(135deg, #0B1524 0%, #003D6E 35%, #0078A0 65%, #0B1524 100%);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -247,8 +249,8 @@ nav.scrolled {
   background: var(--nav-bg-scrolled) !important;
 }
 
-.dark nav {
-  background: rgba(6,11,24,0.92) !important;
+.light nav.scrolled {
+  background: var(--nav-bg-scrolled) !important;
 }
 
 /* News card */

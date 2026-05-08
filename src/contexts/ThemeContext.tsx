@@ -10,31 +10,32 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'light',
+  theme: 'dark',
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     const saved = localStorage.getItem('sicherheit-theme') as Theme | null;
-    if (saved === 'dark') {
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
+    if (saved === 'light') {
+      setTheme('light');
+      document.documentElement.classList.add('light');
+      document.body.classList.add('light');
     }
+    // dark is default — :root already has dark variables, no class needed
   }, []);
 
   const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light';
+    const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    if (next === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
+    if (next === 'light') {
+      document.documentElement.classList.add('light');
+      document.body.classList.add('light');
     } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
+      document.documentElement.classList.remove('light');
+      document.body.classList.remove('light');
     }
     localStorage.setItem('sicherheit-theme', next);
   };
