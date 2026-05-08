@@ -13,13 +13,18 @@ import NewsletterSection from '@/components/NewsletterSection';
 import Footer from '@/components/Footer';
 import ScrollAnimator from '@/components/ScrollAnimator';
 import { setRequestLocale } from 'next-intl/server';
+import { getLatestPosts } from '@/lib/posts';
+
+export const revalidate = 3600; // ISR: alle 60 Minuten neu generieren
 
 export function generateStaticParams() {
   return [{ locale: 'de' }, { locale: 'en' }];
 }
 
-export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
+  const latestPosts = await getLatestPosts(5);
+
   return (
     <>
       <ScrollAnimator />
@@ -28,12 +33,11 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
       <RobotSection />
       <StatsSection />
 
-      {/* NEW: 3 immersive scroll sections */}
       <BentoThreats />
       <HorizontalToolScroll />
 
       <RadarSection />
-      <NewsSection locale={locale} />
+      <NewsSection locale={locale} posts={latestPosts} />
       <ScoreSection />
       <ToolsSection locale={locale} />
       <TerminalSection locale={locale} />

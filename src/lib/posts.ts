@@ -537,19 +537,82 @@ POST /guestaccess.aspx HTTP/1.1
   },
 ];
 
+// ─── Supabase row → Post mapper ──────────────────────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rowToPost(row: any): Post {
+  return {
+    id: String(row.id),
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    content: row.content,
+    category: row.category,
+    categoryColor: row.category_color ?? '#00F0FF',
+    categoryBg: row.category_bg ?? 'rgba(0,240,255,0.1)',
+    author: row.author ?? 'sicherheit.ai Redaktion',
+    authorRole: row.author_role ?? 'KI-recherchiert & redigiert',
+    publishedAt: row.published_at,
+    readTime: row.read_time ?? 8,
+    imageGradient: row.image_gradient ?? 'linear-gradient(135deg, #060B18 0%, #0D1A3A 100%)',
+    imageAlt: row.image_alt,
+    badge: row.badge,
+    badgeColor: row.badge_color,
+    tags: row.tags ?? [],
+    faqs: row.faqs ?? [],
+    sources: row.sources ?? [],
+  };
+}
+
 // ─── Data access functions ───────────────────────────────────────────────────
 
 export async function getPosts(): Promise<Post[]> {
+  try {
+    const { supabase } = await import('./supabase');
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('published_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        // Merge: Supabase posts first, then static posts that don't conflict
+        const supabasePosts = data.map(rowToPost);
+        const supabaseSlugs = new Set(supabasePosts.map(p => p.slug));
+        const staticOnly = STATIC_POSTS.filter(p => !supabaseSlugs.has(p.slug));
+        return [...supabasePosts, ...staticOnly];
+      }
+    }
+  } catch {
+    // Supabase nicht verfügbar — Fallback auf statische Posts
+  }
   return STATIC_POSTS;
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
+  try {
+    const { supabase } = await import('./supabase');
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+      if (!error && data) return rowToPost(data);
+    }
+  } catch {
+    // Fallback
+  }
   return STATIC_POSTS.find(p => p.slug === slug) ?? null;
 }
 
 export async function getRelatedPosts(slug: string, category: string): Promise<Post[]> {
   const all = await getPosts();
   return all.filter(p => p.slug !== slug && p.category === category).slice(0, 3);
+}
+
+export async function getLatestPosts(limit = 5): Promise<Post[]> {
+  const all = await getPosts();
+  return all.slice(0, limit);
 }
 
 export function formatDate(dateStr: string): string {
