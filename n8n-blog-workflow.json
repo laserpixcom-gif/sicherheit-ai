@@ -1,5 +1,5 @@
 {
-  "name": "sicherheit.ai — Täglicher Blog-Post",
+  "name": "sicherheit.ai — Täglicher Blog-Post (RSS)",
   "nodes": [
     {
       "id": "a1b2c3d4-0001-4000-8000-000000000001",
@@ -24,7 +24,6 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [460, 300],
-      "notes": "HIER DEINE API KEYS EINTRAGEN — nur diese 3 Felder ausfüllen",
       "parameters": {
         "mode": "manual",
         "duplicateItem": false,
@@ -32,18 +31,12 @@
           "assignments": [
             {
               "id": "key-001",
-              "name": "PERPLEXITY_KEY",
-              "value": "HIER_PERPLEXITY_API_KEY_EINTRAGEN",
-              "type": "string"
-            },
-            {
-              "id": "key-002",
               "name": "ANTHROPIC_KEY",
               "value": "HIER_ANTHROPIC_API_KEY_EINTRAGEN",
               "type": "string"
             },
             {
-              "id": "key-003",
+              "id": "key-002",
               "name": "GITHUB_TOKEN",
               "value": "HIER_GITHUB_TOKEN_EINTRAGEN",
               "type": "string"
@@ -55,66 +48,84 @@
     },
     {
       "id": "a1b2c3d4-0003-4000-8000-000000000003",
-      "name": "Perplexity Body",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 300],
+      "name": "RSS — The Hacker News",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [680, 160],
       "parameters": {
-        "jsCode": "const body = {\n  model: \"sonar-pro\",\n  messages: [\n    {\n      role: \"system\",\n      content: \"Du bist ein erfahrener IT-Sicherheitsjournalist mit Fokus auf Deutschland und Europa. Recherchiere praezise, faktenbasiert und vollstaendig auf Deutsch.\"\n    },\n    {\n      role: \"user\",\n      content: \"Was ist das wichtigste und aktuellste Ereignis aus den Bereichen Cybersecurity, KI-Sicherheit oder kritische Technologie der letzten 24-48 Stunden mit Relevanz fuer Deutschland oder Europa? Berichte sehr detailliert: 1) Was genau ist passiert? 2) Wer ist betroffen (Firmennamen, Behoerden, wie viele Nutzer/Systeme)? 3) Was sind die technischen Details und Hintergruende? 4) Was sollten deutsche Unternehmen und Nutzer jetzt konkret tun? Nenne bis zu 3 Quell-URLs. Antworte vollstaendig auf Deutsch mit allen verfuegbaren Fakten und Zahlen.\"\n    }\n  ]\n};\n\nreturn [{ json: { body: JSON.stringify(body) } }];"
+        "url": "https://feeds.feedburner.com/TheHackersNews"
       }
     },
     {
       "id": "a1b2c3d4-0004-4000-8000-000000000004",
-      "name": "Perplexity Recherche",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [900, 300],
+      "name": "RSS — Heise Security",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [680, 300],
       "parameters": {
-        "method": "POST",
-        "url": "https://api.perplexity.ai/chat/completions",
-        "authentication": "none",
-        "sendQuery": false,
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "={{ 'Bearer ' + $('API Keys').first().json.PERPLEXITY_KEY }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $json.body }}",
-        "options": {}
+        "url": "https://www.heise.de/security/rss/news-atom.xml"
       }
     },
     {
       "id": "a1b2c3d4-0005-4000-8000-000000000005",
-      "name": "Claude Body",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1120, 300],
+      "name": "RSS — CISA",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [680, 440],
       "parameters": {
-        "jsCode": "const perplexityResult = $('Perplexity Recherche').first().json.choices[0].message.content;\nconst today = new Date().toISOString().split('T')[0];\n\nconst prompt = `Schreibe einen professionellen deutschen Cybersecurity-Blog-Post fuer sicherheit.ai.\n\nRECHERCHE-BASIS (Perplexity):\n${perplexityResult}\n\nHEUTIGES DATUM: ${today}\n\nWICHTIG: Antworte NUR mit dem rohen JSON-Objekt. KEIN Markdown, KEIN Backtick-Block, KEINE Erklaerung davor oder danach. Nur das pure JSON.\n\nDas JSON muss exakt diese Felder haben:\n{\n  \"slug\": \"url-slug-nur-kleinbuchstaben-und-bindestriche-maximal-60-zeichen\",\n  \"title\": \"Klarer praegnanter Titel maximal 80 Zeichen\",\n  \"excerpt\": \"Zwei praezise informative Saetze als Artikel-Teaser. Maximal 220 Zeichen.\",\n  \"content\": \"<h2 id=\\\\\"was-passiert\\\\\">Was ist passiert?</h2><p>Vollstaendiger Artikel mindestens 700 Woerter als HTML. Nutze h2 und h3 Tags mit id-Attributen. Sachlich, faktisch, mit Zahlen, Firmennamen, Zeitangaben. Konkrete Handlungsempfehlungen am Ende.</p><h2 id=\\\\\"technische-details\\\\\">Technische Details</h2><p>...</p><h2 id=\\\\\"was-tun\\\\\">Was sollten Sie jetzt tun?</h2><p>...</p>\",\n  \"category\": \"KATEGORIE_HIER\",\n  \"categoryColor\": \"#FARBE_HIER\",\n  \"categoryBg\": \"rgba(r,g,b,0.1)\",\n  \"author\": \"sicherheit.ai Redaktion\",\n  \"authorRole\": \"KI-recherchiert & kuratiert\",\n  \"publishedAt\": \"${today}\",\n  \"readTime\": 8,\n  \"imageGradient\": \"linear-gradient(135deg, #060B18 0%, #0D1A3A 100%)\",\n  \"badge\": null,\n  \"badgeColor\": null,\n  \"tags\": [\"tag1\", \"tag2\", \"tag3\", \"tag4\"],\n  \"faqs\": [\n    {\"q\": \"Wichtige Frage zum Thema?\", \"a\": \"Vollstaendige hilfreiche Antwort.\"},\n    {\"q\": \"Zweite relevante Frage?\", \"a\": \"Antwort.\"},\n    {\"q\": \"Dritte Frage fuer Einsteiger?\", \"a\": \"Verstaendliche Antwort.\"}\n  ],\n  \"sources\": [{\"title\": \"Quellenname\", \"url\": \"https://beispiel.de\"}]\n}\n\nKategorie-Auswahl (waehle die passendste):\n- CVE/Sicherheitsluecke: category=Schwachstelle, categoryColor=#FF9632, categoryBg=rgba(255,150,50,0.1), imageGradient=linear-gradient(135deg, #1A0800 0%, #2A1200 100%)\n- Hack/Datenpanne/Cyberangriff: category=Incident, categoryColor=#FF2D6F, categoryBg=rgba(255,45,111,0.1), imageGradient=linear-gradient(135deg, #1A0010 0%, #2A0020 100%)\n- Gesetz/DSGVO/NIS2/AI Act: category=Regulierung, categoryColor=#7890FF, categoryBg=rgba(100,120,255,0.12), imageGradient=linear-gradient(135deg, #060B18 0%, #0A1230 100%)\n- KI/ML Sicherheit: category=KI-Sicherheit, categoryColor=#00F0FF, categoryBg=rgba(0,240,255,0.1), imageGradient=linear-gradient(135deg, #001A1A 0%, #003333 100%)\n- APT/Bedrohungsakteur: category=Bedrohung, categoryColor=#FF2D6F, categoryBg=rgba(255,45,111,0.1), imageGradient=linear-gradient(135deg, #1A0010 0%, #2A0020 100%)\n- Bericht/Studie/Analyse: category=Analyse, categoryColor=#9664FF, categoryBg=rgba(150,100,255,0.1), imageGradient=linear-gradient(135deg, #0D0820 0%, #1A1030 100%)\n- Allgemeine Tech-News: category=News, categoryColor=#78C864, categoryBg=rgba(120,200,100,0.1), imageGradient=linear-gradient(135deg, #060E08 0%, #0A1A0E 100%)\n\nFalls es sich um eine kritische CVE handelt, setze badge=CVSS Score (z.B. CVSS 9.8) und badgeColor=#FF2D6F.`;\n\nconst body = {\n  model: \"claude-opus-4-6\",\n  max_tokens: 4000,\n  messages: [{\n    role: \"user\",\n    content: prompt\n  }]\n};\n\nreturn [{ json: { body: JSON.stringify(body) } }];"
+        "url": "https://www.cisa.gov/news.xml"
       }
     },
     {
       "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "RSS — BSI",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [680, 580],
+      "parameters": {
+        "url": "https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Presse.xml"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "name": "Alle Feeds zusammenfuehren",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [900, 370],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "name": "Neuesten Artikel auswaehlen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 370],
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Alle Artikel mit Datum parsen\nconst articles = items.map(item => {\n  const d = item.json;\n  const dateStr = d.pubDate || d.isoDate || d.date || d.published || '';\n  const ts = dateStr ? new Date(dateStr).getTime() : 0;\n  return {\n    title: d.title || '',\n    summary: d.contentSnippet || d.content || d.summary || d.description || '',\n    link: d.link || d.guid || '',\n    date: dateStr,\n    timestamp: ts,\n    source: d.meta?.title || d.feedUrl || 'Unbekannt'\n  };\n}).filter(a => a.title && a.timestamp > 0);\n\n// Nach Datum sortieren — neuester zuerst\narticles.sort((a, b) => b.timestamp - a.timestamp);\n\n// Top 5 nehmen und als Kontext zusammenfassen\nconst top5 = articles.slice(0, 5);\nconst context = top5.map((a, i) =>\n  `[${i+1}] ${a.title}\\nQuelle: ${a.source}\\nDatum: ${a.date}\\nLink: ${a.link}\\nZusammenfassung: ${a.summary.slice(0, 400)}`\n).join('\\n\\n---\\n\\n');\n\nreturn [{ json: { context, top5 } }];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "name": "Claude Body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 370],
+      "parameters": {
+        "jsCode": "const { context, top5 } = $input.first().json;\nconst today = new Date().toISOString().split('T')[0];\nconst bestArticle = top5[0];\n\nconst prompt = `Du bist ein professioneller IT-Sicherheitsjournalist fuer sicherheit.ai, ein deutsches Cybersecurity-Portal.\n\nHier sind die aktuellsten Security-News der letzten 24 Stunden aus verschiedenen Quellen:\n\n${context}\n\nWaehle das wichtigste und relevanteste Thema fuer ein deutsches Publikum aus und schreibe daraus einen vollstaendigen Blog-Post auf Deutsch.\n\nHEUTIGES DATUM: ${today}\nHAUPT-QUELLE-LINK: ${bestArticle.link}\nHAUPT-QUELLE-TITEL: ${bestArticle.source}\n\nANTWORTE NUR MIT PUREM JSON — kein Markdown, keine Backticks, kein Text davor oder danach.\n\nJSON-Struktur (alle Felder sind Pflicht):\n{\n  \"slug\": \"nur-kleinbuchstaben-und-bindestriche-max-60-zeichen\",\n  \"title\": \"Titel maximal 80 Zeichen sachlich und informativ\",\n  \"excerpt\": \"Genau zwei Saetze als Teaser. Konkrete Fakten. Maximal 200 Zeichen.\",\n  \"content\": \"Vollstaendiger HTML-Artikel. Mindestens 700 Woerter. Nutze diese Struktur: <h2 id='was-passiert'>Was ist passiert?</h2><p>Konkreter Sachverhalt mit Firmennamen, Zahlen, Daten, betroffene Systeme.</p><h2 id='hintergrund'>Technischer Hintergrund</h2><p>Erklaerung fuer Fachleute und Einsteiger.</p><h2 id='auswirkungen'>Auswirkungen fuer deutsche Unternehmen</h2><p>Was bedeutet das konkret fuer deutsche Firmen und Nutzer?</p><h2 id='massnahmen'>Empfohlene Massnahmen</h2><p>Konkrete Schritte die Admins und Nutzer jetzt tun sollten. Nummerierte Liste wenn moeglich.</p>\",\n  \"category\": \"KATEGORIE\",\n  \"categoryColor\": \"#FARBE\",\n  \"categoryBg\": \"rgba(r,g,b,0.1)\",\n  \"author\": \"sicherheit.ai Redaktion\",\n  \"authorRole\": \"Automatisch recherchiert & KI-redigiert\",\n  \"publishedAt\": \"${today}\",\n  \"readTime\": 8,\n  \"imageGradient\": \"GRADIENT\",\n  \"badge\": null,\n  \"badgeColor\": null,\n  \"tags\": [\"tag1\", \"tag2\", \"tag3\", \"tag4\"],\n  \"faqs\": [\n    {\"q\": \"Konkrete relevante Frage zum Thema?\", \"a\": \"Vollstaendige hilfreiche Antwort in 2-3 Saetzen.\"},\n    {\"q\": \"Was sollte ich jetzt sofort tun?\", \"a\": \"Konkrete Handlungsempfehlung.\"},\n    {\"q\": \"Bin ich als Privatnutzer auch betroffen?\", \"a\": \"Ehrliche Einschaetzung.\"}\n  ],\n  \"sources\": [\n    {\"title\": \"${bestArticle.source}\", \"url\": \"${bestArticle.link}\"}\n  ]\n}\n\nKategorie-Tabelle (waehle exakt eine):\n- CVE / Patch / Luecke → category=\"Schwachstelle\", categoryColor=\"#FF9632\", categoryBg=\"rgba(255,150,50,0.1)\", imageGradient=\"linear-gradient(135deg, #1A0800 0%, #2A1200 40%, #1A0800 100%)\"\n- Hack / Datenpanne / Ransomware → category=\"Incident\", categoryColor=\"#FF2D6F\", categoryBg=\"rgba(255,45,111,0.1)\", imageGradient=\"linear-gradient(135deg, #1A0010 0%, #2A0020 40%, #1A0010 100%)\"\n- Gesetz / NIS2 / DSGVO / AI Act → category=\"Regulierung\", categoryColor=\"#7890FF\", categoryBg=\"rgba(100,120,255,0.12)\", imageGradient=\"linear-gradient(135deg, #060B18 0%, #0A1230 40%, #060B18 100%)\"\n- KI / LLM / Machine Learning → category=\"KI-Sicherheit\", categoryColor=\"#00F0FF\", categoryBg=\"rgba(0,240,255,0.1)\", imageGradient=\"linear-gradient(135deg, #001A1A 0%, #003333 40%, #001A1A 100%)\"\n- APT / Nation-State / Spionage → category=\"Bedrohung\", categoryColor=\"#FF2D6F\", categoryBg=\"rgba(255,45,111,0.1)\", imageGradient=\"linear-gradient(135deg, #1A0010 0%, #2A0020 40%, #1A0010 100%)\"\n- Studie / Bericht / Statistik → category=\"Analyse\", categoryColor=\"#9664FF\", categoryBg=\"rgba(150,100,255,0.1)\", imageGradient=\"linear-gradient(135deg, #0D0820 0%, #1A1030 40%, #0D0820 100%)\"\n- Allgemeine Tech-Security-News → category=\"News\", categoryColor=\"#78C864\", categoryBg=\"rgba(120,200,100,0.1)\", imageGradient=\"linear-gradient(135deg, #060E08 0%, #0A1A0E 40%, #060E08 100%)\"\n\nBei kritischer CVE: badge=\"CVSS 9.x\" und badgeColor=\"#FF2D6F\" setzen, sonst beide null lassen.`;\n\nconst body = {\n  model: \"claude-sonnet-4-6\",\n  max_tokens: 4000,\n  messages: [{ role: \"user\", content: prompt }]\n};\n\nreturn [{ json: { body: JSON.stringify(body) } }];"
+      }
+    },
+    {
+      "id": "a1b2c3d4-0010-4000-8000-000000000010",
       "name": "Claude Blog schreiben",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1340, 300],
+      "position": [1560, 370],
       "parameters": {
         "method": "POST",
         "url": "https://api.anthropic.com/v1/messages",
         "authentication": "none",
-        "sendQuery": false,
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -140,26 +151,25 @@
       }
     },
     {
-      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "id": "a1b2c3d4-0011-4000-8000-000000000011",
       "name": "Response parsen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 300],
+      "position": [1780, 370],
       "parameters": {
-        "jsCode": "const raw = $input.first().json.content[0].text;\n\nlet clean = raw.trim();\n\n// Entferne Markdown-Wrapper die Claude manchmal hinzufuegt\nif (clean.startsWith('```json')) {\n  clean = clean.replace(/^```json\\s*/, '').replace(/\\s*```$/, '').trim();\n} else if (clean.startsWith('```')) {\n  clean = clean.replace(/^```\\s*/, '').replace(/\\s*```$/, '').trim();\n}\n\n// Falls noch Text vor dem JSON steht, extrahiere das JSON-Objekt\nif (!clean.startsWith('{')) {\n  const match = clean.match(/\\{[\\s\\S]*\\}/);\n  if (match) clean = match[0];\n}\n\nlet post;\ntry {\n  post = JSON.parse(clean);\n} catch(e) {\n  throw new Error('JSON Parse Fehler: ' + e.message + '\\n\\nErster Teil des Textes: ' + clean.slice(0, 300));\n}\n\n// Pflichtfelder garantieren\npost.id = Date.now().toString();\npost.publishedAt = post.publishedAt || new Date().toISOString().split('T')[0];\npost.author = post.author || 'sicherheit.ai Redaktion';\npost.authorRole = post.authorRole || 'KI-recherchiert & kuratiert';\npost.tags = Array.isArray(post.tags) ? post.tags : [];\npost.faqs = Array.isArray(post.faqs) ? post.faqs : [];\npost.sources = Array.isArray(post.sources) ? post.sources : [];\npost.readTime = Number(post.readTime) || 8;\n\n// null-Felder entfernen\nif (!post.badge) delete post.badge;\nif (!post.badgeColor) delete post.badgeColor;\n\nreturn [{ json: post }];"
+        "jsCode": "const raw = $input.first().json.content[0].text;\n\nlet clean = raw.trim();\n\n// Markdown-Wrapper entfernen\nif (clean.startsWith('```json')) {\n  clean = clean.replace(/^```json\\s*/, '').replace(/\\s*```$/, '').trim();\n} else if (clean.startsWith('```')) {\n  clean = clean.replace(/^```\\s*/, '').replace(/\\s*```$/, '').trim();\n}\n\n// Falls Text vor JSON steht\nif (!clean.startsWith('{')) {\n  const match = clean.match(/\\{[\\s\\S]*\\}/);\n  if (match) clean = match[0];\n}\n\nlet post;\ntry {\n  post = JSON.parse(clean);\n} catch(e) {\n  throw new Error('JSON Parse Fehler: ' + e.message + '\\n\\nText: ' + clean.slice(0, 500));\n}\n\n// Pflichtfelder sicherstellen\npost.id = Date.now().toString();\npost.publishedAt = post.publishedAt || new Date().toISOString().split('T')[0];\npost.author = post.author || 'sicherheit.ai Redaktion';\npost.authorRole = post.authorRole || 'Automatisch recherchiert & KI-redigiert';\npost.tags = Array.isArray(post.tags) ? post.tags : [];\npost.faqs = Array.isArray(post.faqs) ? post.faqs : [];\npost.sources = Array.isArray(post.sources) ? post.sources : [];\npost.readTime = Number(post.readTime) || 8;\n\n// Leere null-Felder entfernen\nif (!post.badge) delete post.badge;\nif (!post.badgeColor) delete post.badgeColor;\nif (!post.imageAlt) delete post.imageAlt;\n\nreturn [{ json: post }];"
       }
     },
     {
-      "id": "a1b2c3d4-0008-4000-8000-000000000008",
+      "id": "a1b2c3d4-0012-4000-8000-000000000012",
       "name": "GitHub Datei laden",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 300],
+      "position": [2000, 370],
       "parameters": {
         "method": "GET",
         "url": "https://api.github.com/repos/laserpixcom-gif/sicherheit-ai/contents/src/data/generated-posts.json",
         "authentication": "none",
-        "sendQuery": false,
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -182,26 +192,25 @@
       }
     },
     {
-      "id": "a1b2c3d4-0009-4000-8000-000000000009",
+      "id": "a1b2c3d4-0013-4000-8000-000000000013",
       "name": "Post einfuegen",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 300],
+      "position": [2220, 370],
       "parameters": {
-        "jsCode": "const fileData = $('GitHub Datei laden').first().json;\nconst sha = fileData.sha;\n\n// GitHub gibt Base64 mit Zeilenumbruechen zurueck\nconst base64Clean = fileData.content.replace(/\\n/g, '');\nconst currentJson = Buffer.from(base64Clean, 'base64').toString('utf8');\nlet posts = JSON.parse(currentJson);\n\nconst newPost = $('Response parsen').first().json;\n\n// Duplikat-Schutz via Slug\nconst exists = posts.some(p => p.slug === newPost.slug);\nif (!exists) {\n  posts.unshift(newPost); // Neuester Post zuerst\n}\n\n// Maximal 100 Posts (verhindert riesige JSON-Datei)\nposts = posts.slice(0, 100);\n\nconst updatedBase64 = Buffer.from(JSON.stringify(posts, null, 2)).toString('base64');\n\nreturn [{\n  json: {\n    sha,\n    updatedBase64,\n    postTitle: newPost.title,\n    postSlug: newPost.slug,\n    totalPosts: posts.length\n  }\n}];"
+        "jsCode": "const fileData = $('GitHub Datei laden').first().json;\nconst sha = fileData.sha;\n\n// GitHub Base64 mit Zeilenumbruechen bereinigen\nconst base64Clean = fileData.content.replace(/\\n/g, '');\nconst currentJson = Buffer.from(base64Clean, 'base64').toString('utf8');\nlet posts = JSON.parse(currentJson);\n\nconst newPost = $('Response parsen').first().json;\n\n// Duplikat-Schutz\nconst exists = posts.some(p => p.slug === newPost.slug);\nif (!exists) {\n  posts.unshift(newPost);\n}\n\n// Max 100 Posts in der Datei\nposts = posts.slice(0, 100);\n\nconst updatedBase64 = Buffer.from(JSON.stringify(posts, null, 2)).toString('base64');\n\nreturn [{\n  json: {\n    sha,\n    updatedBase64,\n    postTitle: newPost.title,\n    postSlug: newPost.slug,\n    totalPosts: posts.length\n  }\n}];"
       }
     },
     {
-      "id": "a1b2c3d4-0010-4000-8000-000000000010",
+      "id": "a1b2c3d4-0014-4000-8000-000000000014",
       "name": "GitHub Datei aktualisieren",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2220, 300],
+      "position": [2440, 370],
       "parameters": {
         "method": "PUT",
         "url": "https://api.github.com/repos/laserpixcom-gif/sicherheit-ai/contents/src/data/generated-posts.json",
         "authentication": "none",
-        "sendQuery": false,
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -233,49 +242,50 @@
   ],
   "connections": {
     "Täglich 07:00 Uhr": {
-      "main": [
-        [{ "node": "API Keys", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "API Keys", "type": "main", "index": 0 }]]
     },
     "API Keys": {
       "main": [
-        [{ "node": "Perplexity Body", "type": "main", "index": 0 }]
+        [
+          { "node": "RSS — The Hacker News", "type": "main", "index": 0 },
+          { "node": "RSS — Heise Security", "type": "main", "index": 0 },
+          { "node": "RSS — CISA", "type": "main", "index": 0 },
+          { "node": "RSS — BSI", "type": "main", "index": 0 }
+        ]
       ]
     },
-    "Perplexity Body": {
-      "main": [
-        [{ "node": "Perplexity Recherche", "type": "main", "index": 0 }]
-      ]
+    "RSS — The Hacker News": {
+      "main": [[{ "node": "Alle Feeds zusammenfuehren", "type": "main", "index": 0 }]]
     },
-    "Perplexity Recherche": {
-      "main": [
-        [{ "node": "Claude Body", "type": "main", "index": 0 }]
-      ]
+    "RSS — Heise Security": {
+      "main": [[{ "node": "Alle Feeds zusammenfuehren", "type": "main", "index": 1 }]]
+    },
+    "RSS — CISA": {
+      "main": [[{ "node": "Alle Feeds zusammenfuehren", "type": "main", "index": 2 }]]
+    },
+    "RSS — BSI": {
+      "main": [[{ "node": "Alle Feeds zusammenfuehren", "type": "main", "index": 3 }]]
+    },
+    "Alle Feeds zusammenfuehren": {
+      "main": [[{ "node": "Neuesten Artikel auswaehlen", "type": "main", "index": 0 }]]
+    },
+    "Neuesten Artikel auswaehlen": {
+      "main": [[{ "node": "Claude Body", "type": "main", "index": 0 }]]
     },
     "Claude Body": {
-      "main": [
-        [{ "node": "Claude Blog schreiben", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "Claude Blog schreiben", "type": "main", "index": 0 }]]
     },
     "Claude Blog schreiben": {
-      "main": [
-        [{ "node": "Response parsen", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "Response parsen", "type": "main", "index": 0 }]]
     },
     "Response parsen": {
-      "main": [
-        [{ "node": "GitHub Datei laden", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "GitHub Datei laden", "type": "main", "index": 0 }]]
     },
     "GitHub Datei laden": {
-      "main": [
-        [{ "node": "Post einfuegen", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "Post einfuegen", "type": "main", "index": 0 }]]
     },
     "Post einfuegen": {
-      "main": [
-        [{ "node": "GitHub Datei aktualisieren", "type": "main", "index": 0 }]
-      ]
+      "main": [[{ "node": "GitHub Datei aktualisieren", "type": "main", "index": 0 }]]
     }
   },
   "active": false,
@@ -289,7 +299,6 @@
     { "name": "sicherheit.ai" },
     { "name": "content-automation" }
   ],
-  "triggerCount": 0,
   "meta": {
     "instanceId": "sicherheit-ai-content-machine"
   }
