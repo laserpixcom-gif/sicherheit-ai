@@ -241,37 +241,38 @@ export default function Hero() {
       alignItems: 'center',
       justifyContent: 'flex-start',
     }}>
-      {/* Light mode: animated canvas background */}
+      {/* Canvas fallback — hidden when video loads */}
       <canvas
         ref={canvasRef}
         style={{
           position: 'absolute', inset: 0, zIndex: 0, width: '100%', height: '100%',
-          opacity: theme === 'dark' ? 0 : 1,
+          opacity: 0,
           transition: 'opacity 0.5s',
         }}
       />
 
-      {/* Dark mode: looping video background */}
-      {theme === 'dark' && (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="none"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center right',
-            zIndex: 0,
-          }}
-        >
-          <source src="/hero-bg.mp4" type="video/mp4" />
-        </video>
-      )}
+      {/* Video background — dark and light mode */}
+      <video
+        key={theme}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="none"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center right',
+          zIndex: 0,
+          opacity: theme === 'dark' ? 1 : 0.85,
+          transition: 'opacity 0.5s',
+        }}
+      >
+        <source src={theme === 'dark' ? '/hero-bg.mp4' : '/hero-bg-light.mp4'} type="video/mp4" />
+      </video>
 
       {/* Gradient overlay — left side dark for text legibility */}
       <div style={{

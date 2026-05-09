@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const LOGS = [
   { time: '09:41:33', level: 'WARN', msg: 'Brute-force attempt detected · IP: 185.234.219.42 · Target: SSH port 22' },
@@ -28,6 +29,7 @@ const LEVEL_COLORS: Record<string, string> = {
 
 export default function TerminalSection({ locale }: { locale: string }) {
   const t = useTranslations('terminal');
+  const { theme } = useTheme();
   const termRef = useRef<HTMLDivElement>(null);
   const logIdxRef = useRef(0);
 
@@ -71,7 +73,7 @@ export default function TerminalSection({ locale }: { locale: string }) {
             </p>
             <Link href={`/${locale}/tools`} style={{
               background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
-              color: '#fff',
+              color: theme === 'dark' ? '#060B18' : '#fff',
               border: 'none',
               padding: '12px 28px',
               borderRadius: '8px',
@@ -89,15 +91,17 @@ export default function TerminalSection({ locale }: { locale: string }) {
 
           <div className="animate-in animate-delay-1">
             <div style={{
-              background: '#0A0F1E',
+              background: theme === 'dark' ? '#0A0F1E' : '#F0F4FC',
               border: '1px solid var(--border)',
               borderRadius: '12px',
               overflow: 'hidden',
-              boxShadow: '0 32px 80px rgba(0,0,0,0.5), 0 0 40px rgba(0,240,255,0.05)',
+              boxShadow: theme === 'dark'
+                ? '0 32px 80px rgba(0,0,0,0.5), 0 0 40px rgba(0,240,255,0.05)'
+                : '0 8px 40px rgba(0,0,0,0.12)',
             }}>
               {/* Title bar */}
               <div style={{
-                background: 'rgba(255,255,255,0.04)',
+                background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
                 borderBottom: '1px solid var(--border)',
                 padding: '12px 16px',
                 display: 'flex',

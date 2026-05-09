@@ -282,7 +282,7 @@ export default function ToolPage({
 
         {/* ── Content ── */}
         <div className="r-wrap" style={{ padding: '56px 48px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '56px', alignItems: 'start' }}>
+          <div className="subpage-sidebar-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '56px', alignItems: 'start' }}>
 
             {/* LEFT: tool + info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
@@ -370,7 +370,7 @@ export default function ToolPage({
             </div>
 
             {/* RIGHT: sidebar */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: '100px' }}>
+            <div className="subpage-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: '100px' }}>
 
               {/* What it does */}
               <div style={{

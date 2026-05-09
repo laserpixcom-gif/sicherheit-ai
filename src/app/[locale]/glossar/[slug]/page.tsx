@@ -139,7 +139,7 @@ export default function GlossarTermPage({
 
         {/* ── Content ── */}
         <div className="r-wrap" style={{ padding: '56px 48px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }}>
+          <div className="subpage-sidebar-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }}>
 
             {/* LEFT: main content */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -239,7 +239,7 @@ export default function GlossarTermPage({
             </div>
 
             {/* RIGHT: sidebar */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: '100px' }}>
+            <div className="subpage-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'sticky', top: '100px' }}>
 
               {/* Quick facts */}
               <div style={{

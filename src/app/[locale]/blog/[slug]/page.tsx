@@ -213,7 +213,7 @@ export default async function BlogPostPage({
 
         {/* ── Article layout ── */}
         <div className="r-wrap" style={{ paddingTop: '64px', paddingBottom: '80px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: headings.length > 0 ? '220px 1fr 48px' : '1fr', gap: '48px', alignItems: 'start', maxWidth: '1200px' }}>
+          <div className="subpage-sidebar-grid" style={{ display: 'grid', gridTemplateColumns: headings.length > 0 ? '220px 1fr 48px' : '1fr', gap: '48px', alignItems: 'start', maxWidth: '1200px' }}>
 
             {/* TOC — desktop left */}
             {headings.length > 0 && (

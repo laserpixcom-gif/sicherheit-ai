@@ -363,7 +363,9 @@ nav.scrolled {
 .g-news { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 16px; }
 @media (max-width: 900px) { .g-news { grid-template-columns: 1fr; } }
 
-/* BentoThreats grid */
+/* BentoThreats grid — light mode featured card resets span */
+.light .bento-featured { grid-column: auto !important; grid-row: auto !important; }
+
 .g-bento { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 16px; }
 @media (max-width: 900px) {
   .g-bento { grid-template-columns: 1fr 1fr; }
@@ -402,6 +404,25 @@ nav.scrolled {
 .subpage-content { padding: 80px 48px; }
 @media (max-width: 1024px) { .subpage-content { padding: 60px 32px; } }
 @media (max-width: 640px)  { .subpage-content { padding: 40px 16px; } }
+
+/* Glossar + Tool + Blog subpage sidebar grids → single column on mobile */
+@media (max-width: 900px) {
+  .subpage-sidebar-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .subpage-sidebar {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+/* Subpage inline padding override on small screens */
+@media (max-width: 640px) {
+  .r-wrap [style*="padding: '56px 48px'"],
+  .r-wrap [style*="padding: '48px 48px"] {
+    padding: 32px 0 !important;
+  }
+}
 
 /* Responsive font for section headers */
 @media (max-width: 640px) {
@@ -589,8 +610,8 @@ nav.scrolled {
 }
 
 .prose pre {
-  background: #080E1F;
-  border: 1px solid rgba(0,240,255,0.15);
+  background: var(--bg2);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 24px;
   overflow-x: auto;
@@ -611,8 +632,12 @@ nav.scrolled {
 .prose pre code {
   background: none;
   padding: 0;
-  color: #C8D8F0;
+  color: var(--text-dim);
   font-size: inherit;
+}
+
+.light .prose a {
+  text-decoration-color: rgba(0,120,160,0.35);
 }
 
 .prose ul, .prose ol {

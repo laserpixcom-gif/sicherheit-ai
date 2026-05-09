@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const CARDS = [
   {
@@ -165,6 +166,9 @@ const cardVariants = {
 
 function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured?: boolean }) {
   const router = useRouter();
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   return (
     <motion.article
       className={featured ? 'bento-featured' : undefined}
@@ -172,7 +176,9 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
       onClick={() => router.push(`/de/blog/${card.slug}`)}
       whileHover={{
         scale: 1.02,
-        boxShadow: card.glowHover,
+        boxShadow: isLight
+          ? `0 8px 40px rgba(0,0,0,0.15), 0 0 30px ${card.catColor}22`
+          : card.glowHover,
         transition: { duration: 0.3, ease: 'easeOut' },
       }}
       style={{
@@ -182,19 +188,30 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
         borderRadius: '18px',
         overflow: 'hidden',
         cursor: 'pointer',
-        background: card.gradientBg,
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: isLight ? 'var(--card-bg)' : card.gradientBg,
+        border: isLight ? `1px solid var(--border)` : '1px solid rgba(255,255,255,0.06)',
         display: 'flex',
         flexDirection: 'column',
         minHeight: featured ? '420px' : '200px',
         willChange: 'transform',
+        boxShadow: isLight ? 'var(--card-shadow)' : 'none',
       }}
     >
-      {/* Ambient glow */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: `radial-gradient(ellipse 60% 50% at 30% 30%, ${card.glowColor} 0%, transparent 70%)`,
-      }} />
+      {/* Ambient glow — dark mode only */}
+      {!isLight && (
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: `radial-gradient(ellipse 60% 50% at 30% 30%, ${card.glowColor} 0%, transparent 70%)`,
+        }} />
+      )}
+      {/* Light mode top accent */}
+      {isLight && (
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+          background: `linear-gradient(90deg, ${card.catColor}, transparent)`,
+          borderRadius: '18px 18px 0 0',
+        }} />
+      )}
 
       {/* Animated gradient border */}
       <div style={{
@@ -262,7 +279,7 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
             fontWeight: 700,
             lineHeight: 1.3,
             letterSpacing: '-0.02em',
-            color: '#E8EDF8',
+            color: 'var(--text)',
             margin: 0,
           }}>
             {card.title}
@@ -277,7 +294,7 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
         </div>
 
         {card.sub && (
-          <p style={{ fontSize: '13px', color: 'rgba(232,237,248,0.55)', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-dim)', lineHeight: 1.6, margin: 0 }}>
             {card.sub}
           </p>
         )}
@@ -285,7 +302,7 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
         {'hook' in card && card.hook && (
           <p style={{
             fontSize: featured ? '14px' : '12px',
-            color: 'rgba(232,237,248,0.60)',
+            color: 'var(--text-dim)',
             lineHeight: 1.65,
             margin: 0,
           }}>
@@ -293,7 +310,7 @@ function BentoCard({ card, featured = false }: { card: typeof CARDS[0]; featured
           </p>
         )}
 
-        <div style={{ fontSize: '11px', color: 'rgba(232,237,248,0.30)', fontFamily: 'var(--mono)' }}>
+        <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--mono)' }}>
           {card.meta}
         </div>
 
@@ -389,7 +406,7 @@ export default function BentoThreats() {
             fontWeight: 800,
             letterSpacing: '-0.04em',
             lineHeight: 0.95,
-            color: '#E8EDF8',
+            color: 'var(--text)',
             margin: 0,
           }}>
             Security<br />
