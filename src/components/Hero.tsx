@@ -284,10 +284,11 @@ export default function Hero() {
             textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
+            gap: '8px',
           }}>
-            Tools erkunden →
+            {t('cta1')} →
           </a>
-          <a href="#radar" style={{
+          <a href="#beratung" style={{
             background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'none',
             border: '1px solid var(--border)',
             color: 'var(--text-dim)',
@@ -302,8 +303,33 @@ export default function Hero() {
             alignItems: 'center',
             backdropFilter: theme === 'dark' ? 'blur(8px)' : 'none',
           }}>
-            Mehr erfahren
+            {t('cta2')}
           </a>
+        </div>
+
+        {/* Trust bar */}
+        <div style={{
+          marginTop: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          flexWrap: 'wrap',
+          justifyContent: theme === 'dark' ? 'flex-start' : 'center',
+        }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>
+            Basierend auf:
+          </span>
+          {['BSI', 'NIST', 'OWASP', 'EU AI Act', 'CISA'].map(src => (
+            <span key={src} style={{
+              fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700,
+              color: 'var(--cyan)', opacity: 0.7,
+              padding: '2px 7px', borderRadius: '4px',
+              border: '1px solid rgba(0,240,255,0.2)',
+              letterSpacing: '0.04em',
+            }}>
+              {src}
+            </span>
+          ))}
         </div>
       </motion.div>
 

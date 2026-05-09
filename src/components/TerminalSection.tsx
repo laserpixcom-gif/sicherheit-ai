@@ -114,6 +114,15 @@ export default function TerminalSection({ locale }: { locale: string }) {
                 <span style={{ marginLeft: 'auto', marginRight: 'auto', fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text-muted)' }}>
                   sicherheit.ai — threat-monitor v2.4.1
                 </span>
+                <span style={{
+                  fontFamily: 'var(--mono)', fontSize: '9px', fontWeight: 700,
+                  color: '#FF9632', background: 'rgba(255,150,50,0.12)',
+                  border: '1px solid rgba(255,150,50,0.3)',
+                  padding: '2px 6px', borderRadius: '4px', letterSpacing: '0.06em',
+                  textTransform: 'uppercase', flexShrink: 0,
+                }}>
+                  Demo
+                </span>
               </div>
               {/* Body */}
               <div

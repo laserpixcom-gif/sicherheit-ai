@@ -1,36 +1,41 @@
 {
   "nav": {
     "home": "Home",
-    "insights": "Insights",
+    "insights": "Blog",
     "glossar": "Glossar",
     "tools": "Tools",
+    "aiact": "AI Act",
+    "ueber": "Über uns",
+    "beratung": "Beratung buchen",
     "dark": "Dark",
     "light": "Hell"
   },
   "hero": {
-    "eyebrow": "Deutschlands führende KI-Sicherheitsplattform",
-    "headline1": "KI-Sicherheit.",
-    "headline2": "Neu definiert.",
+    "eyebrow": "KI-Sicherheit & Cybersecurity für Unternehmen",
+    "headline1": "Ist Ihr Unternehmen",
+    "headline2": "KI-sicher?",
     "phrases": [
-      "Intelligente Bedrohungserkennung · Echtzeit-Monitoring · KI-Expertise",
-      "Jeden Tag. Überall. Für jedes Unternehmen in Deutschland.",
-      "Von Forschern für Praktiker — unabhängig und faktenbasiert."
+      "ChatGPT, Copilot, n8n & Co. sicher nutzen — DSGVO- und AI-Act-konform.",
+      "Prüfen Sie in Minuten, ob Ihre KI-Nutzung Sicherheitslücken erzeugt.",
+      "Von Experten für Unternehmen — unabhängig, faktenbasiert, umsetzbar."
     ],
+    "cta1": "KI-Sicherheitscheck starten",
+    "cta2": "Beratung buchen",
     "scroll": "Entdecken"
   },
   "hud": {
     "threats": "Aktive Bedrohungen",
     "threatsValue": "2,847",
-    "threatsSub": "Global · Echtzeit",
+    "threatsSub": "Demo-Daten · Quelle: Cybersecurity Ventures",
     "status": "Sicherheitsstatus",
     "statusValue": "AKTIV",
-    "statusSub": "Alle Systeme normal",
+    "statusSub": "Demo-Anzeige · Illustrativ",
     "cve": "CVE-Feed",
     "cveValue": "14",
-    "cveSub": "Neue Schwachstellen heute",
+    "cveSub": "Demo · Echte CVEs: nist.gov/nvd",
     "ai": "KI-Modell-Status",
     "aiValue": "GPT-4 · Gemini · Claude",
-    "aiSub": "3 aktive Warnungen"
+    "aiSub": "Demo-Daten · Illustrativ"
   },
   "ticker": {
     "items": [
@@ -55,7 +60,7 @@
     "desc4": "// Quelle: IBM Cost of a Data Breach 2024"
   },
   "radar": {
-    "label": "// Live Threat Intelligence",
+    "label": "// Threat Intelligence — Demo-Visualisierung",
     "title1": "Die globale",
     "title2": "Bedrohungslage",
     "title3": "in Echtzeit",

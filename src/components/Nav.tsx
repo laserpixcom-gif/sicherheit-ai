@@ -71,9 +71,11 @@ export default function Nav({ locale }: NavProps) {
 
   const links = [
     { href: `/${locale}`, label: t('home') },
-    { href: `/${locale}/blog`, label: t('insights') },
-    { href: `/${locale}/glossar`, label: t('glossar') },
     { href: `/${locale}/tools`, label: t('tools') },
+    { href: `/${locale}/glossar`, label: t('glossar') },
+    { href: `/${locale}/ai-act`, label: t('aiact') },
+    { href: `/${locale}/blog`, label: t('insights') },
+    { href: `/${locale}/ueber-uns`, label: t('ueber') },
   ];
 
   const navHeight = scrolled ? '60px' : '72px';
@@ -190,7 +192,7 @@ export default function Nav({ locale }: NavProps) {
 
           {/* CTA */}
           <Link
-            href={`/${locale}/tools`}
+            href={`/${locale}/ueber-uns#beratung`}
             className="nav-desktop"
             style={{
               background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
@@ -214,7 +216,7 @@ export default function Nav({ locale }: NavProps) {
               (e.currentTarget as HTMLAnchorElement).style.transform = 'none';
             }}
           >
-            {t('tools')} →
+            {t('beratung')} →
           </Link>
 
           {/* Hamburger */}

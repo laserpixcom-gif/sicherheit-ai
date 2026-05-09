@@ -1,36 +1,41 @@
 {
   "nav": {
     "home": "Home",
-    "insights": "Insights",
+    "insights": "Blog",
     "glossar": "Glossary",
     "tools": "Tools",
+    "aiact": "AI Act",
+    "ueber": "About",
+    "beratung": "Book Consultation",
     "dark": "Dark",
     "light": "Light"
   },
   "hero": {
-    "eyebrow": "Germany's Leading AI Security Platform",
-    "headline1": "AI Security.",
-    "headline2": "Redefined.",
+    "eyebrow": "AI Security & Cybersecurity for Business",
+    "headline1": "Is Your Business",
+    "headline2": "AI-Secure?",
     "phrases": [
-      "Intelligent Threat Detection · Real-time Monitoring · AI Expertise",
-      "Every day. Everywhere. For every company in Germany.",
-      "By researchers for practitioners — independent and fact-based."
+      "Use ChatGPT, Copilot, n8n & Co. securely — GDPR & AI Act compliant.",
+      "Check in minutes whether your AI usage creates security gaps.",
+      "By experts for businesses — independent, fact-based, actionable."
     ],
+    "cta1": "Start AI Security Check",
+    "cta2": "Book Consultation",
     "scroll": "Discover"
   },
   "hud": {
     "threats": "Active Threats",
     "threatsValue": "2,847",
-    "threatsSub": "Global · Real-time",
+    "threatsSub": "Demo data · Source: Cybersecurity Ventures",
     "status": "Security Status",
     "statusValue": "ACTIVE",
-    "statusSub": "All systems normal",
+    "statusSub": "Demo display · Illustrative",
     "cve": "CVE Feed",
     "cveValue": "14",
-    "cveSub": "New vulnerabilities today",
+    "cveSub": "Demo · Live CVEs: nist.gov/nvd",
     "ai": "AI Model Status",
     "aiValue": "GPT-4 · Gemini · Claude",
-    "aiSub": "3 active alerts"
+    "aiSub": "Demo data · Illustrative"
   },
   "ticker": {
     "items": [
@@ -55,7 +60,7 @@
     "desc4": "// Source: IBM Cost of a Data Breach 2024"
   },
   "radar": {
-    "label": "// Live Threat Intelligence",
+    "label": "// Threat Intelligence — Demo Visualization",
     "title1": "The global",
     "title2": "threat landscape",
     "title3": "in real time",
