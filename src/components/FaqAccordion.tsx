@@ -1,96 +1,110 @@
 'use client';
 
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import JsonLd, { faqSchema } from './JsonLd';
 
-interface FaqItem {
+interface Faq {
   q: string;
   a: string;
 }
 
-interface Props {
-  items: FaqItem[];
-  title?: string;
-}
-
-export default function FaqAccordion({ items, title = 'Häufige Fragen' }: Props) {
+export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section>
-      <JsonLd data={faqSchema(items)} />
-
-      <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '16px' }}>
-        // FAQ
+    <div style={{
+      background: 'var(--card-bg)',
+      border: '1px solid var(--border)',
+      borderRadius: '14px',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        padding: '18px 24px',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', gap: '8px',
+      }}>
+        <span style={{ color: 'var(--cyan)', fontFamily: 'var(--mono)', fontSize: '14px', fontWeight: 700 }}>?</span>
+        <span style={{
+          fontFamily: 'var(--mono)', fontSize: '10px',
+          letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'var(--text-muted)',
+        }}>
+          Häufig gestellte Fragen
+        </span>
       </div>
-      <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: '24px' }}>
-        {title}
-      </h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {items.map((item, i) => {
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {faqs.map((faq, i) => {
           const isOpen = open === i;
           return (
             <div
               key={i}
-              style={{
-                background: isOpen ? 'var(--card-bg)' : 'transparent',
-                border: '1px solid',
-                borderColor: isOpen ? 'var(--border-bright)' : 'var(--border)',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                transition: 'border-color 0.2s, background 0.2s',
-              }}
+              style={{ borderBottom: i < faqs.length - 1 ? '1px solid var(--border)' : undefined }}
             >
               <button
                 onClick={() => setOpen(isOpen ? null : i)}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '16px',
                   width: '100%', textAlign: 'left',
-                  padding: '18px 20px',
-                  background: 'none', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  gap: '12px',
+                  padding: '18px 24px',
+                  background: isOpen ? 'rgba(0,240,255,0.04)' : 'none',
+                  border: 'none', cursor: 'pointer',
+                  transition: 'background 0.15s',
                 }}
               >
-                <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--cyan)', fontWeight: 700, flexShrink: 0 }}>
-                  Q{String(i + 1).padStart(2, '0')}
+                <span style={{
+                  fontSize: '14px', fontWeight: 600,
+                  color: isOpen ? 'var(--text)' : 'var(--text-dim)',
+                  lineHeight: 1.5, flex: 1,
+                  transition: 'color 0.15s',
+                }}>
+                  {faq.q}
                 </span>
-                <span style={{ flex: 1, fontSize: '15px', fontWeight: 600, color: 'var(--text)', lineHeight: 1.4 }}>
-                  {item.q}
+                <span style={{
+                  flexShrink: 0,
+                  width: '22px', height: '22px',
+                  borderRadius: '6px',
+                  border: `1px solid ${isOpen ? 'rgba(0,240,255,0.35)' : 'var(--border)'}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'var(--mono)', fontSize: '16px', lineHeight: 1,
+                  color: isOpen ? 'var(--cyan)' : 'var(--text-muted)',
+                  transition: 'all 0.2s',
+                  transform: isOpen ? 'rotate(45deg)' : 'none',
+                  userSelect: 'none',
+                }}>
+                  +
                 </span>
-                <motion.div
-                  animate={{ rotate: isOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ flexShrink: 0 }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </motion.div>
               </button>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    key="content"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    <div style={{ padding: '0 20px 20px 48px' }}>
-                      <p style={{ fontSize: '14px', color: 'var(--text-dim)', lineHeight: 1.75, margin: 0 }}>
-                        {item.a}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <div style={{
+                overflow: 'hidden',
+                maxHeight: isOpen ? '500px' : '0',
+                transition: 'max-height 0.3s ease',
+              }}>
+                <div style={{
+                  padding: '0 24px 20px 24px',
+                  display: 'flex', gap: '10px', alignItems: 'flex-start',
+                }}>
+                  <span style={{
+                    flexShrink: 0,
+                    fontFamily: 'var(--mono)', fontSize: '9px', fontWeight: 800,
+                    color: 'var(--cyan)', paddingTop: '4px',
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                  }}>
+                    Antwort
+                  </span>
+                  <p style={{
+                    fontSize: '14px', color: 'var(--text-dim)',
+                    margin: 0, lineHeight: 1.8,
+                  }}>
+                    {faq.a}
+                  </p>
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }

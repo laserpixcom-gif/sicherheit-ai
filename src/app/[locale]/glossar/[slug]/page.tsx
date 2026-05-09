@@ -4,6 +4,7 @@ import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import JsonLd, { faqSchema } from '@/components/JsonLd';
+import FaqAccordion from '@/components/FaqAccordion';
 import { GLOSSARY_TERMS, CATEGORY_COLORS, GlossaryTerm } from '@/lib/glossary';
 
 const BASE_URL = 'https://sicherheit.ai';
@@ -241,66 +242,7 @@ export default function GlossarTermPage({
 
               {/* FAQ Section */}
               {term.faqs && term.faqs.length > 0 && (
-                <div style={{
-                  background: 'var(--card-bg)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                }}>
-                  <div style={{
-                    padding: '22px 28px',
-                    borderBottom: '1px solid var(--border)',
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--mono)', fontSize: '10px',
-                      letterSpacing: '0.14em', textTransform: 'uppercase',
-                      color: 'var(--cyan)',
-                    }}>
-                      FAQ — Häufig gestellte Fragen
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {term.faqs.map((faq, i) => (
-                      <div key={i} style={{
-                        padding: '20px 28px',
-                        borderBottom: i < term.faqs!.length - 1 ? '1px solid var(--border)' : undefined,
-                      }}>
-                        <div style={{
-                          display: 'flex', gap: '12px', alignItems: 'flex-start',
-                          marginBottom: '10px',
-                        }}>
-                          <span style={{
-                            flexShrink: 0,
-                            fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 800,
-                            color: 'var(--cyan)',
-                            paddingTop: '1px',
-                          }}>Q</span>
-                          <p style={{
-                            fontSize: '15px', fontWeight: 600, color: 'var(--text)',
-                            margin: 0, lineHeight: 1.5,
-                          }}>
-                            {faq.q}
-                          </p>
-                        </div>
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                          <span style={{
-                            flexShrink: 0,
-                            fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 800,
-                            color: 'var(--text-muted)',
-                            paddingTop: '1px',
-                          }}>A</span>
-                          <p style={{
-                            fontSize: '14px', color: 'var(--text-dim)',
-                            margin: 0, lineHeight: 1.75,
-                          }}>
-                            {faq.a}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <FaqAccordion faqs={term.faqs} />
               )}
 
             </div>
