@@ -9,9 +9,9 @@ const QUIZ_TOPICS = [
     id: 'phishing', title: 'KI-Phishing', icon: '◈', color: '#00F0FF',
     source: 'SlashNext · Proofpoint · CISA',
     questions: [
-      { q: 'Um wie viel Prozent sind KI-Phishing-Mails laut SlashNext 2023 gestiegen?', options: ['120%', '210%', '340%', '580%'], correct: 2, explain: 'SlashNext 2023: +340% KI-Phishing gegenüber Vorjahr — angetrieben durch Tools wie WormGPT.' },
+      { q: 'Um wie viel Prozent sind KI-Phishing-Mails laut SlashNext 2023 gestiegen?', options: ['120%', '210%', '340%', '580%'], correct: 2, explain: 'SlashNext 2023: +340% KI-Phishing gegenüber Vorjahr, angetrieben durch Tools wie WormGPT.' },
       { q: 'Was unterscheidet Spear-Phishing von herkömmlichem Phishing?', options: ['Phishing per SMS', 'Gezielter Angriff mit persönlichen Daten', 'Automatisierter Massenversand', 'Nur auf mobile Geräte'], correct: 1, explain: 'Spear-Phishing nutzt persönliche Daten für überzeugende Angriffe. KI automatisiert diese Personalisierung massenhaft.' },
-      { q: 'Was ermöglicht WormGPT kriminellen Angreifern?', options: ['Stärkere Passwörter', 'Sicherheitslücken patchen', 'Fehlerfreie Phishing-Mails in jeder Sprache', 'VPN-Tunnel'], correct: 2, explain: 'WormGPT schreibt fehlerfreie Phishing-Mails in jeder Sprache — schlechtes Deutsch als Erkennungsmerkmal versagt.' },
+      { q: 'Was ermöglicht WormGPT kriminellen Angreifern?', options: ['Stärkere Passwörter', 'Sicherheitslücken patchen', 'Fehlerfreie Phishing-Mails in jeder Sprache', 'VPN-Tunnel'], correct: 2, explain: 'WormGPT schreibt fehlerfreie Phishing-Mails in jeder Sprache. Schlechtes Deutsch als Erkennungsmerkmal versagt.' },
       { q: 'Typisches Merkmal einer Phishing-Domain:', options: ['HTTPS vorhanden', 'Sehr kurze URL', 'Echte Marke als Subdomain (paypal.evil.com)', 'Professionelles Logo'], correct: 2, explain: 'Die echte Domain steht vor dem letzten Punkt. Bei paypal.evil-site.com ist evil-site.com die echte Domain.' },
       { q: 'Laut Proofpoint: Wie viel Prozent aller Angriffe beginnen mit Phishing?', options: ['41%', '67%', '91%', '99%'], correct: 2, explain: 'Proofpoint State of the Phish 2023: 91% aller Cyberangriffe starten mit einer Phishing-Mail.' },
     ],
@@ -22,8 +22,8 @@ const QUIZ_TOPICS = [
     questions: [
       { q: 'Laut Sophos 2023: Durchschnittliche Lösegeldzahlung?', options: ['250T USD', '540T USD', '1,54 Mio. USD', '8,2 Mio. USD'], correct: 2, explain: 'Sophos 2023: Ø-Zahlung 1,54 Mio. USD. 40% der Zahler erhielten trotzdem nicht alle Daten zurück.' },
       { q: 'Was bedeutet "Double Extortion"?', options: ['Zweimalige Forderung', 'Daten verschlüsselt UND gestohlen', 'Zwei Systeme gleichzeitig', 'Lösegeld verdoppelt nach 24h'], correct: 1, explain: 'Daten werden vor der Verschlüsselung gestohlen. Selbst mit Backup bleibt die Veröffentlichungsdrohung bestehen.' },
-      { q: 'Was ist Ransomware-as-a-Service (RaaS)?', options: ['Legaler Cloud-Backup', 'Antivirus im Abo', 'Kriminelle vermieten Ransomware gegen Umsatzbeteiligung', 'Staatliches Frühwarnsystem'], correct: 2, explain: 'RaaS-Gruppen wie LockBit vermieten Ransomware an Affiliates — meist 20-30% der erpressten Summe.' },
-      { q: 'Häufigstes Ransomware-Ziel laut IBM X-Force 2023?', options: ['Banken', 'Gesundheitswesen', 'Einzelhandel', 'Automobilindustrie'], correct: 1, explain: 'Krankenhäuser zahlen schnell — sie können keinen Ausfall tolerieren. Patientendaten erzielen hohe Darknet-Preise.' },
+      { q: 'Was ist Ransomware-as-a-Service (RaaS)?', options: ['Legaler Cloud-Backup', 'Antivirus im Abo', 'Kriminelle vermieten Ransomware gegen Umsatzbeteiligung', 'Staatliches Frühwarnsystem'], correct: 2, explain: 'RaaS-Gruppen wie LockBit vermieten Ransomware an Affiliates, meist 20-30% der erpressten Summe.' },
+      { q: 'Häufigstes Ransomware-Ziel laut IBM X-Force 2023?', options: ['Banken', 'Gesundheitswesen', 'Einzelhandel', 'Automobilindustrie'], correct: 1, explain: 'Krankenhäuser zahlen schnell, sie können keinen Ausfall tolerieren. Patientendaten erzielen hohe Darknet-Preise.' },
       { q: 'Wichtigste BSI-Schutzmaßnahme gegen Ransomware?', options: ['Täglicher Virenscan', 'Komplexere Passwörter', 'Offline-Backups nach 3-2-1-Prinzip', 'Neuere Hardware'], correct: 2, explain: 'BSI: 3-2-1-Backup (3 Kopien, 2 Medien, 1 offline) macht Ransomware wirkungslos. Backups müssen vom Netz getrennt sein.' },
     ],
   },
@@ -31,11 +31,11 @@ const QUIZ_TOPICS = [
     id: 'dsgvo', title: 'DSGVO', icon: '◉', color: '#A78BFA',
     source: 'EU-DSGVO · EDPB · EU AI Act',
     questions: [
-      { q: 'Maximales Bußgeld nach DSGVO Art. 83?', options: ['500T Euro', '10 Mio. Euro', '20 Mio. Euro oder 4% Jahresumsatz', '100 Mio. Euro'], correct: 2, explain: 'DSGVO Art. 83: Bis zu 20 Mio. Euro oder 4% des weltweiten Jahresumsatzes — je nachdem was höher ist.' },
+      { q: 'Maximales Bußgeld nach DSGVO Art. 83?', options: ['500T Euro', '10 Mio. Euro', '20 Mio. Euro oder 4% Jahresumsatz', '100 Mio. Euro'], correct: 2, explain: 'DSGVO Art. 83: Bis zu 20 Mio. Euro oder 4% des weltweiten Jahresumsatzes, je nachdem was höher ist.' },
       { q: 'Meldefrist für Datenpannen an die Aufsichtsbehörde?', options: ['12 Stunden', '24 Stunden', '72 Stunden', '7 Tage'], correct: 2, explain: 'DSGVO Art. 33: Meldepflicht innerhalb 72 Stunden nach Bekanntwerden bei der zuständigen Aufsichtsbehörde.' },
       { q: 'Rekord-Bußgeld gegen Meta 2023?', options: ['390 Mio. Euro', '746 Mio. Euro', '1,2 Mrd. Euro', '4,5 Mrd. Euro'], correct: 2, explain: 'Irische DPC: 1,2 Mrd. Euro gegen Meta im Mai 2023 wegen unzulässiger Datentransfers in die USA.' },
       { q: 'Was regelt der EU AI Act seit August 2024?', options: ['KI-Steuerrecht', 'Nur militärische KI', 'Risikokategorien und Pflichten für KI-Systeme', 'KI-Urheberrecht'], correct: 2, explain: 'EU AI Act: Weltweit erstes KI-Gesetz. Verbietet Social Scoring, fordert Transparenz bei Hochrisiko-KI.' },
-      { q: 'Was braucht ein Unternehmen beim Einsatz von Cloud-Diensten?', options: ['Nichts bei ISO-Zertifizierung', 'Keinen Vertrag bei US-Anbietern', 'Auftragsverarbeitungsvertrag (AVV) nach Art. 28', 'Nur interne Genehmigung'], correct: 2, explain: 'DSGVO Art. 28: Jede Auslagerung personenbezogener Daten erfordert einen AVV — das Unternehmen bleibt verantwortlich.' },
+      { q: 'Was braucht ein Unternehmen beim Einsatz von Cloud-Diensten?', options: ['Nichts bei ISO-Zertifizierung', 'Keinen Vertrag bei US-Anbietern', 'Auftragsverarbeitungsvertrag (AVV) nach Art. 28', 'Nur interne Genehmigung'], correct: 2, explain: 'DSGVO Art. 28: Jede Auslagerung personenbezogener Daten erfordert einen AVV. Das Unternehmen bleibt verantwortlich.' },
     ],
   },
   {
@@ -43,7 +43,7 @@ const QUIZ_TOPICS = [
     source: 'BSI · Hive Systems · NIST SP 800-63B',
     questions: [
       { q: 'Hive Systems 2024: Wie schnell wird ein 8-stelliges Kleinbuchstaben-PW geknackt?', options: ['3 Tage', '12 Stunden', '2 Minuten', 'Unter 1 Sekunde'], correct: 3, explain: 'Hive Systems 2024: 8-stellige Passwörter aus Kleinbuchstaben in unter 1 Sekunde. Mit Sonderzeichen ca. 8 Stunden.' },
-      { q: 'Was ist "Credential Stuffing"?', options: ['Passwort-Erstellungstool', 'Geleakte Logins auf anderen Diensten testen', 'Passwortverschlüsselung', 'Passwort-Reset per SMS'], correct: 1, explain: 'Milliarden geleakter Logins werden automatisiert auf anderen Diensten getestet — Passwort-Wiederverwendung ist fatal.' },
+      { q: 'Was ist "Credential Stuffing"?', options: ['Passwort-Erstellungstool', 'Geleakte Logins auf anderen Diensten testen', 'Passwortverschlüsselung', 'Passwort-Reset per SMS'], correct: 1, explain: 'Milliarden geleakter Logins werden automatisiert auf anderen Diensten getestet. Passwort-Wiederverwendung ist fatal.' },
       { q: 'Sicherste 2FA-Methode gegen Phishing (NIST)?', options: ['SMS-TAN', 'E-Mail-Link', 'TOTP-App', 'FIDO2 WebAuthn-Schlüssel'], correct: 3, explain: 'FIDO2/WebAuthn (z.B. YubiKey) ist phishing-resistent: Authentifizierung ist an die echte Domain gebunden.' },
       { q: 'BSI-Mindestlänge für normale Benutzerpasswörter?', options: ['6 Zeichen', '8 Zeichen', '12 Zeichen', '20 Zeichen'], correct: 2, explain: 'BSI IT-Grundschutz ORP.4: Mindestens 12 Zeichen mit Groß-/Kleinbuchstaben, Zahlen und Sonderzeichen.' },
       { q: 'Was empfiehlt NIST SP 800-63B ausdrücklich NICHT mehr?', options: ['2FA nutzen', 'Passwort-Manager', 'Regelmäßige Passwortrotation ohne Anlass', 'Lange Passwörter'], correct: 2, explain: 'NIST: Erzwungene Rotation führt zu schwächeren Passwörtern. Änderung nur bei tatsächlicher Kompromittierung.' },
@@ -53,14 +53,136 @@ const QUIZ_TOPICS = [
     id: 'unternehmen', title: 'IT-Security', icon: '▣', color: '#00D4A0',
     source: 'IBM Cost of Breach · BSI · Verizon DBIR',
     questions: [
-      { q: 'IBM 2023: Durchschnittliche Kosten einer Datenpanne weltweit?', options: ['1,2 Mio. USD', '2,8 Mio. USD', '4,45 Mio. USD', '9,8 Mio. USD'], correct: 2, explain: 'IBM 2023: Ø 4,45 Mio. USD — Rekord. Deutschland: 4,67 Mio. USD, über dem Weltdurchschnitt.' },
-      { q: 'Was beschreibt das Prinzip "Least Privilege"?', options: ['Alle erhalten Admin-Rechte', 'Nur minimal notwendige Rechte vergeben', 'Tägliche Rotation von Accounts', 'Nur Vorgesetzte haben Zugang'], correct: 1, explain: 'Principle of Least Privilege: Minimiert Schaden bei Kompromittierung — jeder nur was er zwingend benötigt.' },
-      { q: 'Was ist ein "Zero-Day-Exploit"?', options: ['Angriff innerhalb 24h', 'Erster Angriff auf ein Startup', 'Angriff auf unbekannte, ungepatchte Lücke', 'Malware die sich selbst löscht'], correct: 2, explain: 'Zero Days = Tage die der Hersteller hatte zu reagieren — nämlich null. Solche Exploits kosten Millionen im Darknet.' },
-      { q: 'Verizon DBIR 2023: Häufigster Faktor bei Datenpannen?', options: ['Ungepatchte Software', 'Menschliches Fehlverhalten (74%)', 'Schwache Verschlüsselung', 'Physischer Einbruch'], correct: 1, explain: 'Verizon DBIR 2023: 74% aller Datenpannen involvieren den Human Element — Technik allein reicht nicht.' },
-      { q: 'Zweck eines Penetrationstests?', options: ['Mitarbeiter heimlich prüfen', 'Netzwerkgeschwindigkeit messen', 'Autorisierter Angriff zur Aufdeckung realer Schwachstellen', 'Automatische Updates'], correct: 2, explain: 'Pentests simulieren echte Angriffe mit Genehmigung — Ergebnis: Bericht mit konkreten Schwachstellen und Empfehlungen.' },
+      { q: 'IBM 2023: Durchschnittliche Kosten einer Datenpanne weltweit?', options: ['1,2 Mio. USD', '2,8 Mio. USD', '4,45 Mio. USD', '9,8 Mio. USD'], correct: 2, explain: 'IBM 2023: Ø 4,45 Mio. USD, Rekord. Deutschland: 4,67 Mio. USD, über dem Weltdurchschnitt.' },
+      { q: 'Was beschreibt das Prinzip "Least Privilege"?', options: ['Alle erhalten Admin-Rechte', 'Nur minimal notwendige Rechte vergeben', 'Tägliche Rotation von Accounts', 'Nur Vorgesetzte haben Zugang'], correct: 1, explain: 'Principle of Least Privilege: Minimiert Schaden bei Kompromittierung. Jeder bekommt nur was er zwingend benötigt.' },
+      { q: 'Was ist ein "Zero-Day-Exploit"?', options: ['Angriff innerhalb 24h', 'Erster Angriff auf ein Startup', 'Angriff auf unbekannte, ungepatchte Lücke', 'Malware die sich selbst löscht'], correct: 2, explain: 'Zero Days = Tage die der Hersteller hatte zu reagieren, nämlich null. Solche Exploits kosten Millionen im Darknet.' },
+      { q: 'Verizon DBIR 2023: Häufigster Faktor bei Datenpannen?', options: ['Ungepatchte Software', 'Menschliches Fehlverhalten (74%)', 'Schwache Verschlüsselung', 'Physischer Einbruch'], correct: 1, explain: 'Verizon DBIR 2023: 74% aller Datenpannen involvieren den Human Element. Technik allein reicht nicht.' },
+      { q: 'Zweck eines Penetrationstests?', options: ['Mitarbeiter heimlich prüfen', 'Netzwerkgeschwindigkeit messen', 'Autorisierter Angriff zur Aufdeckung realer Schwachstellen', 'Automatische Updates'], correct: 2, explain: 'Pentests simulieren echte Angriffe mit Genehmigung. Ergebnis: Bericht mit konkreten Schwachstellen und Empfehlungen.' },
     ],
   },
 ];
+
+// 5 bar x-positions in SVG 0–100 space
+const BAR_X = [8, 22, 36, 57, 71];
+const BAR_W = 8;
+
+type BarState = 'hidden' | 'solid' | 'broken';
+
+function PrisonOverlay({ bars, solidCount }: { bars: BarState[], solidCount: number }) {
+  const hasVisible = bars.some(b => b !== 'hidden');
+  if (!hasVisible) return null;
+
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 10, pointerEvents: 'none' }}
+    >
+      <defs>
+        <linearGradient id="railGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#111" />
+          <stop offset="20%" stopColor="#777" />
+          <stop offset="50%" stopColor="#bbb" />
+          <stop offset="80%" stopColor="#777" />
+          <stop offset="100%" stopColor="#111" />
+        </linearGradient>
+        <linearGradient id="barGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#111" />
+          <stop offset="30%" stopColor="#666" />
+          <stop offset="50%" stopColor="#aaa" />
+          <stop offset="70%" stopColor="#666" />
+          <stop offset="100%" stopColor="#111" />
+        </linearGradient>
+        <linearGradient id="brokenGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#1a0000" />
+          <stop offset="40%" stopColor="#8b1a1a" />
+          <stop offset="60%" stopColor="#cc3333" />
+          <stop offset="100%" stopColor="#1a0000" />
+        </linearGradient>
+        <filter id="redGlow">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="metalGlow">
+          <feGaussianBlur stdDeviation="0.8" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+
+      {/* Top rail */}
+      <rect x="5" y="1" width="90" height="3.5" rx="1.5" fill="url(#railGrad)" filter="url(#metalGlow)" opacity={0.9} />
+      {/* Bottom rail */}
+      <rect x="5" y="95.5" width="90" height="3.5" rx="1.5" fill="url(#railGrad)" filter="url(#metalGlow)" opacity={0.9} />
+
+      {bars.map((state, i) => {
+        if (state === 'hidden') return null;
+        const x = BAR_X[i];
+        const w = BAR_W;
+        const cx = x + w / 2;
+
+        if (state === 'broken') {
+          return (
+            <g key={i} filter="url(#redGlow)">
+              {/* Top broken piece — angled left */}
+              <rect
+                x={x - 1.5} y={1} width={w} height={42}
+                rx={2} fill="url(#brokenGrad)" opacity={0.75}
+                transform={`rotate(-7, ${cx}, 43)`}
+              />
+              {/* Bottom broken piece — angled right */}
+              <rect
+                x={x + 1.5} y={57} width={w} height={42}
+                rx={2} fill="url(#brokenGrad)" opacity={0.75}
+                transform={`rotate(7, ${cx}, 57)`}
+              />
+              {/* Jagged crack */}
+              <path
+                d={`M${x + 1},40 L${cx - 1},44 L${cx + 2},48 L${cx - 1},52 L${x + w - 1},58`}
+                stroke="#ff4444" strokeWidth={0.9} fill="none" opacity={0.85}
+              />
+              {/* Hot glow at break */}
+              <ellipse cx={cx} cy={49} rx={3} ry={2} fill="#ff3333" opacity={0.35} />
+            </g>
+          );
+        }
+
+        // Solid bar — drop-in animation via motion.g
+        return (
+          <motion.g
+            key={`bar-${i}`}
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 0.45, ease: [0.34, 1.4, 0.64, 1] }}
+            style={{ transformOrigin: `${cx}px 2px` }}
+            filter="url(#metalGlow)"
+          >
+            <rect x={x} y={1} width={w} height={98} rx={2} fill="url(#barGrad)" opacity={0.92} />
+            {/* Highlight strip */}
+            <rect x={x + 2} y={1} width={1.5} height={98} rx={0.75} fill="rgba(255,255,255,0.18)" />
+          </motion.g>
+        );
+      })}
+
+      {/* Lock — appears only when all 5 solid */}
+      {solidCount === 5 && (
+        <motion.g
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.4, ease: 'backOut' }}
+          style={{ transformOrigin: '50px 58px' }}
+        >
+          {/* Lock body */}
+          <rect x={43} y={54} width={14} height={11} rx={2.5} fill="#888" stroke="#555" strokeWidth={0.5} />
+          {/* Shackle */}
+          <path d="M46,54 L46,49 Q50,44.5 54,49 L54,54" stroke="#888" strokeWidth={2.2} fill="none" strokeLinecap="round" />
+          {/* Keyhole */}
+          <circle cx={50} cy={59} r={1.8} fill="#333" />
+          <rect x={49.3} y={59} width={1.4} height={3.5} rx={0.5} fill="#333" />
+        </motion.g>
+      )}
+    </svg>
+  );
+}
 
 function useTypewriter(text: string, speed = 16, active = true) {
   const [displayed, setDisplayed] = useState('');
@@ -86,13 +208,42 @@ export default function RobotSection() {
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [showExplain, setShowExplain] = useState(false);
   const [typeActive, setTypeActive] = useState(true);
+
+  // Prison bar state
+  const [barStates, setBarStates] = useState<BarState[]>(Array(5).fill('hidden'));
+  // Robot flash: 'none' | 'correct' | 'wrong'
+  const [robotFlash, setRobotFlash] = useState<'none' | 'correct' | 'wrong'>('none');
+
   const topic = QUIZ_TOPICS[topicIdx];
   const q = topic.questions[current];
   const score = answers.filter(Boolean).length;
   const ac = topic.color;
 
+  const solidCount = barStates.filter(b => b === 'solid').length;
+  const brokenCount = barStates.filter(b => b === 'broken').length;
+
+  // Robot CSS filter: more solid bars = more red & more intense
+  const robotFilter = (() => {
+    if (solidCount === 0) return 'none';
+    const hue = solidCount * 28; // 0 → 140deg (cyan toward red)
+    const sat = 1.2 + solidCount * 0.3;
+    const bright = 1 - solidCount * 0.04;
+    if (robotFlash === 'wrong') return 'hue-rotate(0deg) saturate(4) brightness(1.6)';
+    if (robotFlash === 'correct') return `hue-rotate(${hue + 20}deg) saturate(${sat + 0.5}) brightness(1.3)`;
+    return `hue-rotate(${hue}deg) saturate(${sat}) brightness(${bright})`;
+  })();
+
+  // Glow color beneath robot
+  const glowColor = solidCount === 0
+    ? ac
+    : solidCount >= 4
+      ? '#FF2D2D'
+      : solidCount >= 2
+        ? '#FF7A00'
+        : '#FF3B5C';
+
   const bubbleText =
-    phase === 'select' ? 'Wähle ein Thema — ich stelle dir 5 Fragen und bewerte dein KI-Sicherheitswissen.'
+    phase === 'select' ? 'Wähle ein Thema. Ich stelle dir 5 Fragen und bewerte dein KI-Sicherheitswissen.'
     : phase === 'quiz' ? q.q
     : 'Analyse abgeschlossen. Hier ist deine Sicherheitsbewertung.';
 
@@ -104,22 +255,54 @@ export default function RobotSection() {
     return () => clearTimeout(t);
   }, [phase, current]);
 
-
   function startTopic(idx: number) {
-    setTopicIdx(idx); setCurrent(0); setAnswers([]); setSelected(null); setShowExplain(false); setPhase('quiz');
+    setTopicIdx(idx); setCurrent(0); setAnswers([]); setSelected(null);
+    setShowExplain(false); setPhase('quiz');
+    setBarStates(Array(5).fill('hidden'));
+    setRobotFlash('none');
   }
+
   function handleSelect(idx: number) {
     if (selected !== null || !typeDone) return;
     setSelected(idx);
-    setAnswers(prev => [...prev, idx === q.correct]);
+    const isCorrect = idx === q.correct;
+    setAnswers(prev => [...prev, isCorrect]);
+
+    if (isCorrect) {
+      // Add a bar: find first hidden slot
+      setBarStates(prev => {
+        const next = [...prev];
+        const firstHidden = next.indexOf('hidden');
+        if (firstHidden !== -1) next[firstHidden] = 'solid';
+        return next;
+      });
+      setRobotFlash('correct');
+    } else {
+      // Break last solid bar
+      setBarStates(prev => {
+        const next = [...prev];
+        let lastSolid = -1;
+        for (let i = next.length - 1; i >= 0; i--) {
+          if (next[i] === 'solid') { lastSolid = i; break; }
+        }
+        if (lastSolid !== -1) next[lastSolid] = 'broken';
+        return next;
+      });
+      setRobotFlash('wrong');
+    }
+
+    setTimeout(() => setRobotFlash('none'), 700);
     setTimeout(() => setShowExplain(true), 350);
   }
+
   function next() {
     if (current + 1 >= topic.questions.length) { setPhase('result'); return; }
     setCurrent(c => c + 1); setSelected(null); setShowExplain(false);
   }
+
   function reset() {
-    setPhase('select'); setCurrent(0); setAnswers([]); setSelected(null); setShowExplain(false);
+    setPhase('select'); setCurrent(0); setAnswers([]); setSelected(null);
+    setShowExplain(false); setBarStates(Array(5).fill('hidden')); setRobotFlash('none');
   }
 
   const GRADES = [
@@ -131,6 +314,15 @@ export default function RobotSection() {
   ];
   const gMeta = GRADES.find(g => score <= g.max) ?? GRADES[4];
 
+  // Status label above robot
+  const robotStatusLabel = (() => {
+    if (phase !== 'quiz') return null;
+    if (solidCount === 5) return { text: '🔒 KI eingesperrt!', color: '#FF3B5C' };
+    if (brokenCount > 0 && solidCount === 0) return { text: '⚠ KI bricht aus!', color: '#FF7A00' };
+    if (solidCount > 0) return { text: `🔒 ${solidCount}/5 Stäbe`, color: '#FF3B5C' };
+    return { text: topic.icon + ' ' + topic.title, color: ac };
+  })();
+
   return (
     <section style={{ position: 'relative', width: '100%', overflow: 'hidden', background: '#060B18', borderBottom: '1px solid rgba(0,240,255,0.07)' }}>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(0,240,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.02) 1px,transparent 1px)', backgroundSize: '56px 56px', maskImage: 'radial-gradient(ellipse 90% 90% at 60% 50%,black 0%,transparent 100%)' }} />
@@ -138,8 +330,14 @@ export default function RobotSection() {
       <style>{`
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
         @keyframes scandown{0%{top:0;opacity:0}5%{opacity:.35}90%{opacity:.35}100%{top:100%;opacity:0}}
+        @keyframes robotShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+        @keyframes robotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+        @keyframes barCrack{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-3px) rotate(-3deg)}75%{transform:translateX(3px) rotate(3deg)}100%{transform:translateX(0) rotate(0)}}
+        @keyframes glowPulse{0%,100%{opacity:0.5}50%{opacity:0.9}}
         .rs-scanline{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,240,255,0.28),transparent);animation:scandown 7s linear infinite;pointer-events:none;z-index:4}
         @media(max-width:760px){.rs-wrap{flex-direction:column!important}.rs-robot{width:100%!important;min-width:unset!important}}
+        .robot-shake { animation: robotShake 0.5s ease-in-out; }
+        .robot-pulse { animation: robotPulse 0.4s ease-in-out; }
       `}</style>
 
       <div className="rs-wrap" style={{ position: 'relative', maxWidth: '1080px', margin: '0 auto', padding: 'clamp(32px,5vw,56px) 24px', display: 'flex', alignItems: 'stretch', zIndex: 2 }}>
@@ -169,7 +367,6 @@ export default function RobotSection() {
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.22 }}
               style={{ position: 'relative', background: 'rgba(0,0,0,0.45)', border: '1px solid ' + ac + '22', borderRadius: '4px 16px 16px 16px', padding: '18px 22px', marginBottom: '16px' }}
             >
-              {/* Arrow right → toward robot */}
               <div style={{ position: 'absolute', top: '18px', right: '-9px', width: 0, height: 0, borderTop: '8px solid transparent', borderBottom: '8px solid transparent', borderLeft: '9px solid ' + ac + '22' }} />
               <div style={{ position: 'absolute', top: '18px', right: '-8px', width: 0, height: 0, borderTop: '8px solid transparent', borderBottom: '8px solid transparent', borderLeft: '9px solid rgba(0,0,0,0.45)' }} />
               <div style={{ fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.2em', color: ac + '55', textTransform: 'uppercase' as const, marginBottom: '7px' }}>
@@ -214,7 +411,9 @@ export default function RobotSection() {
                   {showExplain && (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ overflow: 'hidden' }}>
                       <div style={{ padding: '10px 13px', borderRadius: '9px', marginBottom: '7px', background: answers[answers.length - 1] ? 'rgba(0,240,160,0.05)' : 'rgba(255,59,92,0.05)', border: '1px solid ' + (answers[answers.length - 1] ? 'rgba(0,240,160,0.18)' : 'rgba(255,59,92,0.18)') }}>
-                        <div style={{ fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.18em', textTransform: 'uppercase' as const, marginBottom: '4px', color: answers[answers.length - 1] ? '#00F0A0' : '#FF3B5C' }}>{answers[answers.length - 1] ? '[ KORREKT ]' : '[ FALSCH ]'}</div>
+                        <div style={{ fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '0.18em', textTransform: 'uppercase' as const, marginBottom: '4px', color: answers[answers.length - 1] ? '#00F0A0' : '#FF3B5C' }}>
+                          {answers[answers.length - 1] ? '[ KORREKT — STAB GESETZT ]' : '[ FALSCH — STAB GEBROCHEN ]'}
+                        </div>
                         <p style={{ fontFamily: 'var(--font)', fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, margin: 0 }}>{q.explain}</p>
                       </div>
                       <button onClick={next}
@@ -261,6 +460,29 @@ export default function RobotSection() {
                     <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginTop: '3px' }}>{score}/{topic.questions.length} richtig · {topic.title}</div>
                   </div>
                 </div>
+
+                {/* Bar result summary */}
+                <div style={{ marginBottom: '12px', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px' }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>KI-Käfig Status</div>
+                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                    {barStates.map((s, i) => (
+                      <div key={i} style={{
+                        width: '28px', height: '36px', borderRadius: '3px',
+                        background: s === 'solid' ? 'linear-gradient(180deg,#777,#444)' : s === 'broken' ? 'rgba(255,59,92,0.2)' : 'rgba(255,255,255,0.05)',
+                        border: `1px solid ${s === 'solid' ? '#666' : s === 'broken' ? 'rgba(255,59,92,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontFamily: 'var(--mono)', fontSize: '12px',
+                        color: s === 'solid' ? '#aaa' : s === 'broken' ? '#FF3B5C' : 'rgba(255,255,255,0.15)',
+                      }}>
+                        {s === 'solid' ? '|' : s === 'broken' ? '✗' : '·'}
+                      </div>
+                    ))}
+                    <div style={{ marginLeft: '8px', fontFamily: 'var(--mono)', fontSize: '10px', color: solidCount >= 4 ? '#00F0A0' : solidCount >= 2 ? '#FFB800' : '#FF3B5C' }}>
+                      {solidCount === 5 ? '🔒 Vollständig gesichert' : solidCount === 0 ? '⚠ KI ist frei!' : `${solidCount} Stäbe übrig`}
+                    </div>
+                  </div>
+                </div>
+
                 <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden', marginBottom: '11px' }}>
                   <motion.div initial={{ width: 0 }} animate={{ width: (score / topic.questions.length * 100) + '%' }} transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }} style={{ height: '100%', background: 'linear-gradient(90deg,' + gMeta.color + '70,' + gMeta.color + ')', borderRadius: '2px' }} />
                 </div>
@@ -294,32 +516,112 @@ export default function RobotSection() {
           </AnimatePresence>
         </div>
 
-        {/* RIGHT: Robot — no box, floats free */}
+        {/* RIGHT: Robot */}
         <div className="rs-robot" style={{ width: '50%', minWidth: '280px', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-          <motion.div animate={{ y: [0, -4, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.12em', color: ac, textTransform: 'uppercase' as const, background: 'rgba(6,11,24,0.85)', border: '1px solid ' + ac + '28', padding: '5px 11px', borderRadius: '100px', backdropFilter: 'blur(8px)', marginBottom: '8px', transition: 'color 0.4s, border-color 0.4s' }}
-          >
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: ac, animation: 'blink 1.4s infinite', transition: 'background 0.4s' }} />
-            {phase === 'quiz' ? topic.icon + ' ' + topic.title : phase === 'result' ? '✓ Fertig' : 'Bereit'}
-          </motion.div>
+          {/* Status badge */}
+          <AnimatePresence mode="wait">
+            {robotStatusLabel && (
+              <motion.div
+                key={robotStatusLabel.text}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 4 }}
+                transition={{ duration: 0.25 }}
+                style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.12em', color: robotStatusLabel.color, textTransform: 'uppercase' as const, background: 'rgba(6,11,24,0.85)', border: '1px solid ' + robotStatusLabel.color + '40', padding: '5px 11px', borderRadius: '100px', backdropFilter: 'blur(8px)', marginBottom: '8px', transition: 'color 0.4s, border-color 0.4s' }}
+              >
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: robotStatusLabel.color, animation: 'blink 1.4s infinite', transition: 'background 0.4s' }} />
+                {robotStatusLabel.text}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          {/* Canvas container: landscape ratio so Spline camera renders correctly */}
+          {/* Robot canvas + prison overlay */}
           <div style={{ width: '100%', position: 'relative', overflow: 'hidden', aspectRatio: '5 / 4' }}>
             <div className="rs-scanline" style={{ top: 0 }} />
-            <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '65%', height: '28%', background: 'radial-gradient(ellipse,' + ac + '12 0%,transparent 70%)', transition: 'all 0.6s', pointerEvents: 'none', zIndex: 2 }} />
-            {/* Slightly oversized canvas, centered — prevents camera clipping at scene edges */}
-            <div style={{ position: 'absolute', top: '-5%', left: '-5%', width: '110%', height: '110%' }}>
+
+            {/* Ground glow — color reacts to bar state */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
+              width: '65%', height: '28%',
+              background: `radial-gradient(ellipse,${glowColor}${solidCount > 0 ? '20' : '12'} 0%,transparent 70%)`,
+              transition: 'all 0.8s ease',
+              pointerEvents: 'none', zIndex: 2,
+              animation: solidCount >= 4 ? 'glowPulse 1.5s ease-in-out infinite' : 'none',
+            }} />
+
+            {/* Wrong answer flash overlay */}
+            <AnimatePresence>
+              {robotFlash === 'wrong' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  style={{ position: 'absolute', inset: 0, background: 'rgba(255,50,50,0.18)', zIndex: 8, pointerEvents: 'none', borderRadius: '8px' }}
+                />
+              )}
+              {robotFlash === 'correct' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  style={{ position: 'absolute', inset: 0, background: 'rgba(255,50,50,0.12)', zIndex: 8, pointerEvents: 'none', borderRadius: '8px' }}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Robot 3D — filter makes it red as bars grow */}
+            <motion.div
+              animate={robotFlash === 'wrong' ? { x: [-4, 5, -5, 4, -3, 0] } : { x: 0 }}
+              transition={{ duration: 0.4 }}
+              style={{
+                position: 'absolute', top: '-5%', left: '-5%', width: '110%', height: '110%',
+                filter: robotFilter,
+                transition: robotFlash === 'none' ? 'filter 0.8s ease' : 'none',
+              }}
+            >
               <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full" />
-            </div>
+            </motion.div>
+
+            {/* Prison bars SVG overlay */}
+            <PrisonOverlay bars={barStates} solidCount={solidCount} />
           </div>
 
+          {/* Progress dots */}
           {phase === 'quiz' && (
             <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
               {topic.questions.map((_, i) => (
                 <div key={i} style={{ width: i === current ? '18px' : '6px', height: '6px', borderRadius: '3px', background: i < current ? ac + '55' : i === current ? ac : 'rgba(255,255,255,0.1)', transition: 'all 0.35s' }} />
               ))}
             </div>
+          )}
+
+          {/* Bar legend during quiz */}
+          {phase === 'quiz' && (solidCount > 0 || brokenCount > 0) && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ marginTop: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}
+            >
+              {barStates.map((s, i) => (
+                <div key={i} style={{
+                  width: '10px', height: '22px', borderRadius: '2px',
+                  background: s === 'solid'
+                    ? 'linear-gradient(180deg,#888,#555)'
+                    : s === 'broken'
+                      ? 'rgba(255,59,92,0.35)'
+                      : 'rgba(255,255,255,0.07)',
+                  border: `1px solid ${s === 'solid' ? '#666' : s === 'broken' ? 'rgba(255,59,92,0.5)' : 'rgba(255,255,255,0.1)'}`,
+                  transition: 'all 0.4s ease',
+                }} />
+              ))}
+              <span style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginLeft: '6px' }}>
+                {solidCount > 0 && `${solidCount} Stab${solidCount !== 1 ? 'e' : ''}`}
+                {brokenCount > 0 && ` · ${brokenCount} zerbrochen`}
+              </span>
+            </motion.div>
           )}
         </div>
 
