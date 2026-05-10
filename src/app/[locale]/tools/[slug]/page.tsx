@@ -33,20 +33,20 @@ const TOOL_DATA: ToolInfo[] = [
     tag: 'Lokal · Sicher',
     tagColor: '#78C864',
     tagBg: 'rgba(120,200,100,0.1)',
-    description: 'Analysiert die kryptografische Stärke eines Passworts direkt in deinem Browser — ohne Netzwerkzugriff. Kein Byte verlässt dein Gerät.',
+    description: 'Analysiert die kryptografische Stärke eines Passworts direkt im Browser, ohne Netzwerkzugriff. Kein Byte verlässt dein Gerät.',
     whatItDoes: [
-      'Berechnet die Entropie in Bit nach NIST SP 800-63B — je mehr Bits, desto sicherer.',
+      'Berechnet die Entropie in Bit nach NIST SP 800-63B. Je mehr Bits, desto sicherer.',
       'Simuliert die Crackzeit bei einem modernen GPU-Cluster mit 10¹² Versuchen pro Sekunde.',
       'Prüft 6 Sicherheitskriterien: Länge, Groß-/Kleinbuchstaben, Ziffern, Sonderzeichen, Wörterbuch-Angriff.',
       'Zeigt einen visuellen Stärke-Score von "Extrem schwach" bis "Maximale Sicherheit".',
     ],
     howToUse: [
-      'Gib dein Passwort in das Eingabefeld ein — die Analyse erfolgt sofort und live.',
+      'Gib dein Passwort in das Eingabefeld ein. Die Analyse erfolgt sofort und live.',
       'Nutze den Augen-Button, um zwischen sichtbarem und verborgenem Text zu wechseln.',
-      'Alle Berechnungen laufen lokal im Browser — keine Daten werden gesendet.',
+      'Alle Berechnungen laufen lokal im Browser. Keine Daten werden gesendet.',
     ],
     howToInterpret: [
-      'Entropie unter 40 Bit: Unsicher. Sofort ändern — crackt in Sekunden bis Minuten.',
+      'Entropie unter 40 Bit: Unsicher. Sofort ändern, crackt in Sekunden bis Minuten.',
       'Entropie 60–80 Bit: Akzeptabel für normale Konten, nicht für kritische Zugänge.',
       'Entropie über 100 Bit: Sicher gegen aktuelle Hardware-Angriffe. Crackzeit > 1 Million Jahre.',
       'Crackzeit "sofort": Das Passwort steht wahrscheinlich in einer Wörterliste. Sofort ersetzen.',
@@ -58,25 +58,25 @@ const TOOL_DATA: ToolInfo[] = [
     id: 'breach',
     icon: '🔍',
     title: 'Datenpanne-Checker',
-    subtitle: 'Have I Been Pwned — 13+ Milliarden kompromittierte Einträge',
+    subtitle: 'Have I Been Pwned: 13+ Milliarden kompromittierte Einträge',
     tag: 'Live · HIBP',
     tagColor: '#00F0FF',
     tagBg: 'rgba(0,240,255,0.1)',
-    description: 'Prüft, ob deine E-Mail-Adresse oder dein Passwort in bekannten Datenpannen aufgetaucht ist — mit der weltweit größten Datenbank kompromittierter Zugangsdaten.',
+    description: 'Prüft, ob deine E-Mail-Adresse oder dein Passwort in bekannten Datenpannen aufgetaucht ist. Genutzt wird die weltweit größte Datenbank kompromittierter Zugangsdaten.',
     whatItDoes: [
       'Prüft E-Mail-Adressen gegen die Have I Been Pwned Datenbank mit Milliarden Einträgen aus echten Datenlecks.',
-      'Prüft Passwörter mithilfe der k-Anonymity-Methode: Nur die ersten 5 Zeichen des SHA1-Hashwerts werden gesendet — das Passwort selbst verlässt nie dein Gerät.',
+      'Prüft Passwörter per k-Anonymity-Methode: Nur die ersten 5 Zeichen des SHA1-Hashwerts werden gesendet. Das Passwort selbst verlässt nie dein Gerät.',
       'Zeigt an, in wie vielen und welchen Datenpannen ein Eintrag gefunden wurde.',
     ],
     howToUse: [
       'Wähle den Modus "E-Mail prüfen" oder "Passwort prüfen" mit den Buttons oben.',
       'E-Mail: Gib deine Adresse ein und klicke "E-Mail prüfen". Erfordert API-Key für den HIBP-Dienst.',
-      'Passwort: Gib dein Passwort ein — es wird lokal gehasht, nur der Hashpräfix (5 Zeichen) wird gesendet.',
+      'Passwort: Gib dein Passwort ein. Es wird lokal gehasht, nur der Hashpräfix (5 Zeichen) wird gesendet.',
     ],
     howToInterpret: [
-      '"In Datenpannen gefunden": Dieses Passwort/diese E-Mail ist kompromittiert — sofort ändern!',
-      '"Nicht gefunden": Kein Treffer in der Datenbank. Kein 100%-Sicherheitsgarantie, aber ein gutes Zeichen.',
-      'Hohe Anzahl an Datenpannen: Das Passwort ist sehr weit verbreitet und gefährlich — sofort ersetzen.',
+      '"In Datenpannen gefunden": Dieses Passwort oder diese E-Mail ist kompromittiert. Sofort ändern!',
+      '"Nicht gefunden": Kein Treffer in der Datenbank. Keine 100%-Garantie, aber ein gutes Zeichen.',
+      'Hohe Anzahl an Datenpannen: Das Passwort ist sehr weit verbreitet und gefährlich. Sofort ersetzen.',
       'Auch wenn deine E-Mail "sauber" ist: Prüfe regelmäßig, da neue Datenpannen täglich auftauchen.',
     ],
     component: <BreachChecker />,
@@ -89,7 +89,7 @@ const TOOL_DATA: ToolInfo[] = [
     tag: 'Live · NVD API',
     tagColor: '#FF2D6F',
     tagBg: 'rgba(255,45,111,0.1)',
-    description: 'Zeigt aktuelle kritische Sicherheitslücken (CVEs mit CVSS ≥ 9) aus der offiziellen NIST National Vulnerability Database — aktualisiert alle 30 Minuten.',
+    description: 'Zeigt aktuelle kritische Sicherheitslücken (CVEs mit CVSS ≥ 9) aus der offiziellen NIST National Vulnerability Database, aktualisiert alle 30 Minuten.',
     whatItDoes: [
       'Ruft automatisch die neuesten kritischen CVEs (CVSS-Score ≥ 9) der letzten 30 Tage ab.',
       'Zeigt CVE-ID, CVSS-Score, kurze Beschreibung und Veröffentlichungsdatum.',
@@ -106,7 +106,7 @@ const TOOL_DATA: ToolInfo[] = [
       'CVSS 7.0–8.9 (Hoch, orange): Hohes Risiko. Zeitnah patchen, spätestens innerhalb einer Woche.',
       'CVSS 4.0–6.9 (Mittel, gelb): Mittleres Risiko. Im nächsten Wartungsfenster behandeln.',
       'Prüfe bei jeder CVE, ob deine eingesetzten Systeme/Software betroffen sind.',
-      '"Bekannte CVEs" statt "Live — NVD API": Fallback-Daten bei API-Ausfall — trotzdem aktuell relevant.',
+      '"Bekannte CVEs" statt "Live NVD API": Fallback-Daten bei API-Ausfall, trotzdem aktuell relevant.',
     ],
     component: <CveDashboard />,
   },
@@ -126,7 +126,7 @@ const TOOL_DATA: ToolInfo[] = [
       'Klassifiziert Header-Priorität: Critical (HSTS, CSP), High (X-Frame), Medium (Rest).',
     ],
     howToUse: [
-      'Gib eine Domain ein (z.B. "example.de") — das "https://" wird automatisch ergänzt.',
+      'Gib eine Domain ein (z.B. "example.de"). Das "https://" wird automatisch ergänzt.',
       'Drücke Enter oder klicke "Prüfen".',
       'Warte kurz, während der Server die Header der Zieldomain abruft.',
     ],
@@ -134,9 +134,9 @@ const TOOL_DATA: ToolInfo[] = [
       'Score 80–100: Gut konfiguriert. Alle kritischen Header sind gesetzt.',
       'Score 50–79: Verbesserungsbedarf. Mindestens ein kritischer Header fehlt.',
       'Score 0–49: Schlecht konfiguriert. Erhebliche Sicherheitslücken im HTTP-Layer.',
-      '✗ bei HSTS: Seite erzwingt kein HTTPS — Man-in-the-Middle-Angriffe möglich.',
-      '✗ bei CSP: Kein Schutz gegen Cross-Site-Scripting (XSS) — häufigster Web-Angriff.',
-      '✗ bei X-Frame-Options: Clickjacking-Angriffe möglich — Nutzer können manipuliert werden.',
+      '✗ bei HSTS: Seite erzwingt kein HTTPS. Man-in-the-Middle-Angriffe sind möglich.',
+      '✗ bei CSP: Kein Schutz gegen Cross-Site-Scripting (XSS), den häufigsten Web-Angriff.',
+      '✗ bei X-Frame-Options: Clickjacking-Angriffe möglich. Nutzer können manipuliert werden.',
     ],
     component: <HeaderChecker />,
   },
@@ -148,25 +148,25 @@ const TOOL_DATA: ToolInfo[] = [
     tag: 'Interaktiv',
     tagColor: '#FF9632',
     tagBg: 'rgba(255,150,50,0.1)',
-    description: 'Strukturierte, interaktive Checkliste für die ersten kritischen Stunden nach einem Sicherheitsvorfall — basierend auf BSI IT-Grundschutz, NIST SP 800-61 und SANS Incident Handler\'s Handbook.',
+    description: 'Strukturierte, interaktive Checkliste für die ersten kritischen Stunden nach einem Sicherheitsvorfall. Basierend auf BSI IT-Grundschutz, NIST SP 800-61 und dem SANS Incident Handler\'s Handbook.',
     whatItDoes: [
       '5 Phasen decken den kompletten Incident-Response-Prozess ab: Erkennung, Eindämmung, Forensik, Meldepflichten, Wiederherstellung.',
       '20 konkrete Maßnahmen mit rechtlichen Referenzen (BSI, DSGVO, MITRE ATT&CK).',
-      'Interaktive Checkboxen mit Fortschrittsanzeige — du siehst jederzeit wo du stehst.',
+      'Interaktive Checkboxen mit Fortschrittsanzeige. Du siehst jederzeit, wo du stehst.',
       'Farbkodierung nach Dringlichkeit: Rot (sofort), Orange (schnell), Gelb (bald), Blau (legal), Grün (Abschluss).',
     ],
     howToUse: [
       'Öffne diese Seite sofort nach Erkennung eines Sicherheitsvorfalls.',
-      'Arbeite die Phasen der Reihe nach ab — von oben nach unten.',
-      'Klicke jeden Schritt an, sobald er abgeschlossen ist — der Fortschrittsbalken aktualisiert sich.',
-      'Die Checkliste ist im Browser — kein Account, kein Login, funktioniert auch offline nach dem Laden.',
+      'Arbeite die Phasen der Reihe nach ab, von oben nach unten.',
+      'Klicke jeden Schritt an, sobald er abgeschlossen ist. Der Fortschrittsbalken aktualisiert sich automatisch.',
+      'Die Checkliste läuft im Browser ohne Account oder Login und funktioniert auch offline nach dem Laden.',
     ],
     howToInterpret: [
-      'Phase 01 (Rot): Erst bestätigen, dann handeln — Fehlalarme kosten Ressourcen.',
-      'Phase 02 (Orange): WICHTIG — Systeme isolieren, NICHT ausschalten! Ausschalten zerstört RAM-Forensik.',
-      'Phase 03 (Gelb): Forensik immer vor Wiederherstellung — sonst verlierst du Beweise.',
-      'Phase 04 (Blau): 72-Stunden-Frist bei DSGVO ist hart — Datenschutzbehörde benachrichtigen!',
-      'Phase 05 (Grün): Niemals aus kompromittierten Backups wiederherstellen — Integrität prüfen!',
+      'Phase 01 (Rot): Erst bestätigen, dann handeln. Fehlalarme kosten Ressourcen.',
+      'Phase 02 (Orange): Systeme isolieren, NICHT ausschalten! Ausschalten zerstört RAM-Forensik.',
+      'Phase 03 (Gelb): Forensik immer vor Wiederherstellung durchführen, sonst verlierst du Beweise.',
+      'Phase 04 (Blau): Die 72-Stunden-Frist der DSGVO ist verbindlich. Datenschutzbehörde benachrichtigen!',
+      'Phase 05 (Grün): Niemals aus kompromittierten Backups wiederherstellen. Integrität zuerst prüfen!',
     ],
     component: <IncidentResponse />,
   },
@@ -316,8 +316,8 @@ export default function ToolPage({
                 accentColor={tool.tagColor}
                 headline={tool.id === 'incident' ? 'Incident Response Playbook als PDF' : 'Ergebnis als PDF-Report erhalten'}
                 subline={tool.id === 'incident'
-                  ? 'Erhalte das vollständige IR-Playbook nach BSI & NIST SP 800-61 — mit allen Phasen, Kontaktlisten und Vorlagen.'
-                  : 'Wir schicken dir eine kompakte Auswertung mit konkreten Handlungsempfehlungen — kostenlos.'}
+                  ? 'Erhalte das vollständige IR-Playbook nach BSI und NIST SP 800-61 mit allen Phasen, Kontaktlisten und Vorlagen.'
+                  : 'Wir schicken dir eine kompakte Auswertung mit konkreten Handlungsempfehlungen. Kostenlos.'}
               />
 
               {/* How to use */}

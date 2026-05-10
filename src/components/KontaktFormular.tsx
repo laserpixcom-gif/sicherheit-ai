@@ -42,11 +42,11 @@ export default function KontaktFormular({ accentColor = 'var(--cyan)' }: Props) 
       if (res.ok) {
         setStatus('success');
       } else {
-        setErrorMsg(data.error ?? 'Fehler — bitte erneut versuchen.');
+        setErrorMsg(data.error ?? 'Fehler. Bitte erneut versuchen.');
         setStatus('error');
       }
     } catch {
-      setErrorMsg('Netzwerkfehler — bitte erneut versuchen.');
+      setErrorMsg('Netzwerkfehler. Bitte erneut versuchen.');
       setStatus('error');
     }
   };
@@ -64,7 +64,7 @@ export default function KontaktFormular({ accentColor = 'var(--cyan)' }: Props) 
           Nachricht erhalten!
         </div>
         <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: '400px', margin: '0 auto' }}>
-          Ich melde mich in der Regel innerhalb von 24 Stunden bei dir — werktags meist noch am selben Tag.
+          Ich melde mich in der Regel innerhalb von 24 Stunden bei dir, werktags meist noch am selben Tag.
         </p>
       </div>
     );

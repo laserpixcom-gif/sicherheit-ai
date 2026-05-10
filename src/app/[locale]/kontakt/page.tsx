@@ -52,7 +52,7 @@ const ANGEBOTE = [
     icon: '⚡',
     title: 'Incident First Response',
     price: '€199/h',
-    desc: 'Unterstützung in den ersten 72 Stunden nach einem Sicherheitsvorfall — remote oder vor Ort.',
+    desc: 'Unterstützung in den ersten 72 Stunden nach einem Sicherheitsvorfall, remote oder vor Ort.',
     color: '#FF9632',
   },
 ];
@@ -89,8 +89,8 @@ export default function KontaktPage({ params }: { params: { locale: string } }) 
             </h1>
             <p style={{ fontSize: '17px', color: 'var(--text-dim)', lineHeight: 1.7, maxWidth: '560px' }}>
               {isDE
-                ? 'Ob Beratungsanfrage, Sicherheitsfrage oder Pressekontakt — schreib mir direkt. Ich antworte werktags in der Regel innerhalb von 24 Stunden.'
-                : 'Whether consulting, security question or press contact — write me directly. I usually respond within 24 hours on weekdays.'}
+                ? 'Ob Beratungsanfrage, Sicherheitsfrage oder Pressekontakt: Schreib mir direkt. Ich antworte werktags in der Regel innerhalb von 24 Stunden.'
+                : 'Whether consulting, security question or press contact: Write me directly. I usually respond within 24 hours on weekdays.'}
             </p>
           </div>
         </div>

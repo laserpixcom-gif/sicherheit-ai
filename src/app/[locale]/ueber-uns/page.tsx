@@ -50,7 +50,7 @@ const STANDARDS = [
   { code: 'ISO 27001', desc: 'Informationssicherheits-Managementsystem' },
   { code: 'NIST SP 800-63B', desc: 'Richtlinien für Passwort- und Authentifizierungssicherheit' },
   { code: 'OWASP Top 10', desc: 'Kritischste Sicherheitsrisiken für Webanwendungen' },
-  { code: 'EU AI Act', desc: 'VO 2024/1689 — KI-Regulierung der Europäischen Union' },
+  { code: 'EU AI Act', desc: 'VO 2024/1689: KI-Regulierung der Europäischen Union' },
   { code: 'NIS2-Richtlinie', desc: 'EU-Richtlinie zur Netz- und Informationssicherheit' },
   { code: 'DSGVO / GDPR', desc: 'EU-Datenschutz-Grundverordnung' },
   { code: 'CVSS v3.1', desc: 'Common Vulnerability Scoring System für CVE-Bewertungen' },
@@ -76,7 +76,7 @@ const ANGEBOTE = [
   {
     name: 'Monatsbetreuung',
     price: 'ab € 1.500 / Monat',
-    desc: 'Laufende KI- und Cybersecurity-Begleitung für Ihr Unternehmen — monatlicher Report, CVE-Monitoring, Mitarbeiter-Awareness.',
+    desc: 'Laufende KI- und Cybersecurity-Begleitung für Ihr Unternehmen: monatlicher Report, CVE-Monitoring, Mitarbeiter-Awareness.',
     items: ['Monatlicher Security-Report', 'CVE-Monitoring & Alerts', 'KI-Governance-Unterstützung', 'Awareness-Materialien', 'Notfallplan & Ansprechpartner'],
     cta: 'Angebot anfragen',
     highlight: false,
@@ -124,8 +124,8 @@ export default function UeberUnsPage({
             </h1>
             <p style={{ fontSize: '18px', color: 'var(--text-dim)', lineHeight: 1.75, maxWidth: '680px', margin: 0 }}>
               {isDE
-                ? 'sicherheit.ai ist die unabhängige deutschsprachige Plattform für KI-Sicherheit, Cybersecurity-Tools und umsetzbare Sicherheitsleitfäden. Wir helfen Unternehmen, KI sicher einzusetzen und Cyberrisiken zu verstehen — ohne Herstellerinteressen, ohne Verkaufsdruck.'
-                : 'sicherheit.ai is the independent German-language platform for AI security, cybersecurity tools and actionable security guides. We help businesses use AI safely and understand cyber risks — without vendor interests, without sales pressure.'}
+                ? 'sicherheit.ai ist die unabhängige deutschsprachige Plattform für KI-Sicherheit, Cybersecurity-Tools und umsetzbare Sicherheitsleitfäden. Wir helfen Unternehmen, KI sicher einzusetzen und Cyberrisiken zu verstehen. Ohne Herstellerinteressen, ohne Verkaufsdruck.'
+                : 'sicherheit.ai is the independent German-language platform for AI security, cybersecurity tools and actionable security guides. We help businesses use AI safely and understand cyber risks. Without vendor interests, without sales pressure.'}
             </p>
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function UeberUnsPage({
           <section style={{ marginBottom: '72px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
               {[
-                { icon: '🎯', title: isDE ? 'Mission' : 'Mission', text: isDE ? 'Wir machen KI-Sicherheit und Cybersecurity für alle zugänglich — von Einzelunternehmen bis zum Mittelstand. Unsere Inhalte sind faktenbasiert, quellengeprüft und regelmäßig aktualisiert.' : 'We make AI security and cybersecurity accessible to everyone — from solo businesses to mid-market companies. Our content is fact-based, source-verified and regularly updated.' },
+                { icon: '🎯', title: isDE ? 'Mission' : 'Mission', text: isDE ? 'Wir machen KI-Sicherheit und Cybersecurity für alle zugänglich, von Einzelunternehmen bis zum Mittelstand. Unsere Inhalte sind faktenbasiert, quellengeprüft und regelmäßig aktualisiert.' : 'We make AI security and cybersecurity accessible to everyone, from solo businesses to mid-market companies. Our content is fact-based, source-verified and regularly updated.' },
                 { icon: '🔍', title: isDE ? 'Unabhängigkeit' : 'Independence', text: isDE ? 'sicherheit.ai ist keine Agentur und kein Softwareanbieter. Wir haben keine Verkaufsinteressen an bestimmten Produkten. Unsere Bewertungen basieren ausschließlich auf öffentlichen Standards und anerkannten Quellen.' : 'sicherheit.ai is not an agency and not a software vendor. We have no sales interest in specific products. Our assessments are based solely on public standards and recognized sources.' },
                 { icon: '📋', title: isDE ? 'Methodik' : 'Methodology', text: isDE ? 'Alle Inhalte orientieren sich an BSI, NIST, OWASP, MITRE ATT&CK und den Vorgaben des EU AI Act. CVE-Bewertungen nutzen den CVSS-Score (v3.1). Simulations- und Demo-Daten werden immer klar gekennzeichnet.' : 'All content follows BSI, NIST, OWASP, MITRE ATT&CK and EU AI Act guidelines. CVE ratings use the CVSS score (v3.1). Simulation and demo data is always clearly labeled.' },
                 { icon: '🔄', title: isDE ? 'Aktualität' : 'Currency', text: isDE ? 'Inhalte werden regelmäßig auf Aktualität geprüft. Bei sicherheitskritischen Themen wie CVEs, EU AI Act und NIS2 aktualisieren wir zeitnah nach neuen offiziellen Veröffentlichungen.' : 'Content is regularly reviewed for accuracy. For security-critical topics like CVEs, EU AI Act and NIS2, we update promptly after new official publications.' },
@@ -162,7 +162,7 @@ export default function UeberUnsPage({
               {[
                 { label: 'LIVE', color: '#78C864', bg: 'rgba(120,200,100,0.1)', text: isDE ? 'Echtzeitdaten aus externen APIs (z.B. NIST NVD für CVEs). Timestamp sichtbar.' : 'Real-time data from external APIs (e.g. NIST NVD for CVEs). Timestamp visible.' },
                 { label: 'REDAKTIONELL', color: '#00F0FF', bg: 'rgba(0,240,255,0.1)', text: isDE ? 'Von unserem Team recherchierte und geprüfte Inhalte mit Quellenangaben und Aktualisierungsdatum.' : 'Content researched and reviewed by our team with source citations and update date.' },
-                { label: 'DEMO', color: '#FF9632', bg: 'rgba(255,150,50,0.1)', text: isDE ? 'Illustrative Beispieldaten zur Veranschaulichung — kein Anspruch auf Aktualität oder Vollständigkeit.' : 'Illustrative example data for visualization — no claim of currency or completeness.' },
+                { label: 'DEMO', color: '#FF9632', bg: 'rgba(255,150,50,0.1)', text: isDE ? 'Illustrative Beispieldaten zur Veranschaulichung. Kein Anspruch auf Aktualität oder Vollständigkeit.' : 'Illustrative example data for visualization. No claim of currency or completeness.' },
               ].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '10px', padding: '16px 20px' }}>
                   <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, color: item.color, background: item.bg, border: `1px solid ${item.color}40`, padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.06em', flexShrink: 0, marginTop: '2px' }}>

@@ -12,7 +12,7 @@ interface Props {
 export default function LeadCapture({
   tool,
   headline = 'Ergebnis als PDF-Report erhalten',
-  subline = 'Wir schicken dir eine kompakte Auswertung mit konkreten Handlungsempfehlungen — kostenlos.',
+  subline = 'Wir schicken dir eine kompakte Auswertung mit konkreten Handlungsempfehlungen. Kostenlos.',
   accentColor = 'var(--cyan)',
 }: Props) {
   const [email, setEmail] = useState('');
@@ -36,11 +36,11 @@ export default function LeadCapture({
         setStatus('success');
       } else {
         const d = await res.json();
-        setErrorMsg(d.error ?? 'Fehler — bitte erneut versuchen.');
+        setErrorMsg(d.error ?? 'Fehler. Bitte erneut versuchen.');
         setStatus('error');
       }
     } catch {
-      setErrorMsg('Netzwerkfehler — bitte erneut versuchen.');
+      setErrorMsg('Netzwerkfehler. Bitte erneut versuchen.');
       setStatus('error');
     }
   };

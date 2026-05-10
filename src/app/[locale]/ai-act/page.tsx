@@ -69,7 +69,7 @@ const RISIKOKLASSEN = [
     bg: 'rgba(120,200,100,0.1)',
     geltung: 'Keine Pflichten',
     examples: ['KI-Spamfilter', 'KI-gestützte Suche', 'Empfehlungssysteme (ohne kritische Anwendung)', 'Produktivitäts-KI (Copilot, ChatGPT für Texte)'],
-    pflicht: 'Keine gesetzlichen Pflichten — freiwillige Verhaltenskodizes empfohlen.',
+    pflicht: 'Keine gesetzlichen Pflichten. Freiwillige Verhaltenskodizes empfohlen.',
   },
 ];
 
@@ -78,7 +78,7 @@ const FRISTEN = [
   { date: 'Februar 2025', event: 'Verbote für inakzeptables Risiko gelten (Kapitel I & II)', done: true },
   { date: 'August 2025', event: 'Verhaltenskodizes für GPAI-Modelle werden angewendet', done: false },
   { date: 'August 2026', event: 'Hauptteil gilt: Hochrisiko-KI, Transparenzpflichten, Behörden eingerichtet', done: false },
-  { date: 'August 2027', event: 'Vollständiger Rollout — auch für bestehende Hochrisiko-Systeme', done: false },
+  { date: 'August 2027', event: 'Vollständiger Rollout, auch für bestehende Hochrisiko-Systeme', done: false },
 ];
 
 const BUSSGELDER = [
@@ -89,9 +89,9 @@ const BUSSGELDER = [
 
 const FAQS = [
   { q: 'Was ist der EU AI Act?', a: 'Der EU AI Act (Verordnung 2024/1689) ist das weltweit erste umfassende KI-Regelwerk. Er klassifiziert KI-Systeme nach Risikostufen und definiert Pflichten für Unternehmen, die KI entwickeln oder einsetzen. Er gilt EU-weit und damit auch für alle deutschen Unternehmen.' },
-  { q: 'Welche Unternehmen sind vom EU AI Act betroffen?', a: 'Alle Unternehmen, die KI-Systeme in der EU entwickeln, vertreiben oder einsetzen — unabhängig von ihrer Größe oder ihrem Sitz. Auch Nicht-EU-Unternehmen sind betroffen, wenn ihre KI-Systeme in der EU genutzt werden.' },
+  { q: 'Welche Unternehmen sind vom EU AI Act betroffen?', a: 'Alle Unternehmen, die KI-Systeme in der EU entwickeln, vertreiben oder einsetzen, unabhängig von ihrer Größe oder ihrem Sitz. Auch Nicht-EU-Unternehmen sind betroffen, wenn ihre KI-Systeme in der EU genutzt werden.' },
   { q: 'Was ist eine KI laut EU AI Act?', a: 'Der AI Act definiert KI-Systeme als maschinenbasierte Systeme, die auf Basis von Eingaben Vorhersagen, Empfehlungen, Entscheidungen oder Inhalte erzeugen und damit physische oder virtuelle Umgebungen beeinflussen können. Das umfasst LLMs wie ChatGPT, Bilderkennungssysteme, Empfehlungsalgorithmen und mehr.' },
-  { q: 'Gilt der AI Act für den Einsatz von ChatGPT oder Microsoft Copilot?', a: 'Für die meisten Einsatzzwecke (Texterstellung, Zusammenfassung, Recherche) fallen ChatGPT und Copilot in die Kategorie minimales Risiko — es gelten keine speziellen Pflichten. Werden sie jedoch in hochriskanten Kontexten eingesetzt (z.B. HR-Entscheidungen, Kreditbewertung), gelten die Hochrisiko-Anforderungen.' },
+  { q: 'Gilt der AI Act für den Einsatz von ChatGPT oder Microsoft Copilot?', a: 'Für die meisten Einsatzzwecke (Texterstellung, Zusammenfassung, Recherche) fallen ChatGPT und Copilot in die Kategorie minimales Risiko und es gelten keine speziellen Pflichten. Werden sie jedoch in hochriskanten Kontexten eingesetzt (z.B. HR-Entscheidungen, Kreditbewertung), gelten die Hochrisiko-Anforderungen.' },
   { q: 'Was müssen Unternehmen jetzt konkret tun?', a: 'Schritt 1: Inventar aller eingesetzten KI-Systeme erstellen. Schritt 2: Risikoklasse jedes Systems bestimmen. Schritt 3: Für Hochrisiko-Systeme: Konformitätsbewertung, Risikomanagement und Dokumentationspflichten aufsetzen. Schritt 4: Mitarbeiter schulen, die mit KI arbeiten. Schritt 5: KI-Governance-Richtlinie erstellen.' },
   { q: 'Was sind GPAI-Modelle (General Purpose AI)?', a: 'GPAI-Modelle sind leistungsstarke KI-Grundlagenmodelle wie GPT-4, Claude oder Gemini. Ab einer Trainingsrechenleistung von 10²⁵ FLOP gelten sie als systemisch relevant und unterliegen zusätzlichen Transparenz- und Sicherheitspflichten.' },
   { q: 'Wie hoch sind die Bußgelder beim AI Act?', a: 'Bis zu 35 Millionen Euro oder 7% des weltweiten Jahresumsatzes bei Verstößen gegen verbotene KI-Praktiken. Bis zu 15 Millionen Euro oder 3% des Umsatzes bei Verletzung der Hochrisiko-Anforderungen.' },
@@ -164,8 +164,8 @@ export default function AiActPage({
             </h1>
             <p style={{ fontSize: '17px', color: 'var(--text-dim)', lineHeight: 1.75, maxWidth: '700px', margin: 0 }}>
               {isDE
-                ? 'Die Verordnung (EU) 2024/1689 ist seit August 2024 in Kraft — das weltweit erste umfassende KI-Gesetz. Was bedeutet das konkret für Ihr Unternehmen? Welche Pflichten gelten wann? Und wie werden Bußgelder bis 35 Millionen Euro vermieden?'
-                : 'Regulation (EU) 2024/1689 has been in force since August 2024 — the world\'s first comprehensive AI law. What does this mean concretely for your business? Which obligations apply when? And how are fines of up to €35 million avoided?'}
+                ? 'Die Verordnung (EU) 2024/1689 ist seit August 2024 in Kraft: das weltweit erste umfassende KI-Gesetz. Was bedeutet das konkret für Ihr Unternehmen? Welche Pflichten gelten wann? Und wie werden Bußgelder bis 35 Millionen Euro vermieden?'
+                : 'Regulation (EU) 2024/1689 has been in force since August 2024: the world\'s first comprehensive AI law. What does this mean concretely for your business? Which obligations apply when? And how are fines of up to €35 million avoided?'}
             </p>
           </div>
         </div>
@@ -185,8 +185,8 @@ export default function AiActPage({
                 <div style={{ fontSize: '15px', color: 'var(--text-dim)', lineHeight: 1.85, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <p style={{ margin: 0 }}>
                     {isDE
-                      ? 'Der EU AI Act (Verordnung (EU) 2024/1689) ist das weltweit erste umfassende Regelwerk für Künstliche Intelligenz. Er wurde am 1. August 2024 im EU-Amtsblatt veröffentlicht und trat am selben Tag in Kraft. Der AI Act gilt für alle Unternehmen, die KI-Systeme in der EU entwickeln, vertreiben oder einsetzen — unabhängig davon, wo das Unternehmen seinen Sitz hat.'
-                      : 'The EU AI Act (Regulation (EU) 2024/1689) is the world\'s first comprehensive regulatory framework for artificial intelligence. It was published in the EU Official Journal on 1 August 2024 and entered into force on the same day. The AI Act applies to all companies that develop, distribute or use AI systems in the EU — regardless of where the company is based.'}
+                      ? 'Der EU AI Act (Verordnung (EU) 2024/1689) ist das weltweit erste umfassende Regelwerk für Künstliche Intelligenz. Er wurde am 1. August 2024 im EU-Amtsblatt veröffentlicht und trat am selben Tag in Kraft. Der AI Act gilt für alle Unternehmen, die KI-Systeme in der EU entwickeln, vertreiben oder einsetzen, unabhängig davon, wo das Unternehmen seinen Sitz hat.'
+                      : 'The EU AI Act (Regulation (EU) 2024/1689) is the world\'s first comprehensive regulatory framework for artificial intelligence. It was published in the EU Official Journal on 1 August 2024 and entered into force on the same day. The AI Act applies to all companies that develop, distribute or use AI systems in the EU, regardless of where the company is based.'}
                   </p>
                   <p style={{ margin: 0 }}>
                     {isDE
