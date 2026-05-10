@@ -69,6 +69,17 @@ const BAR_W = 4;
 
 type BarState = 'hidden' | 'solid' | 'broken';
 
+type CompletedTest = {
+  topicId: string;
+  topicTitle: string;
+  topicIcon: string;
+  color: string;
+  score: number;
+  total: number;
+  answers: boolean[];
+  barStates: BarState[];
+};
+
 function PrisonOverlay({ bars, solidCount, showScaffold }: { bars: BarState[], solidCount: number, showScaffold: boolean }) {
   if (!showScaffold) return null;
 
@@ -219,6 +230,9 @@ export default function RobotSection() {
   const [barStates, setBarStates] = useState<BarState[]>(Array(5).fill('hidden'));
   // Robot flash: 'none' | 'correct' | 'wrong'
   const [robotFlash, setRobotFlash] = useState<'none' | 'correct' | 'wrong'>('none');
+  // Completed tests across all topics
+  const [completedTests, setCompletedTests] = useState<CompletedTest[]>([]);
+  const [copied, setCopied] = useState(false);
 
   const topic = QUIZ_TOPICS[topicIdx];
   const q = topic.questions[current];
@@ -302,13 +316,74 @@ export default function RobotSection() {
   }
 
   function next() {
-    if (current + 1 >= topic.questions.length) { setPhase('result'); return; }
+    if (current + 1 >= topic.questions.length) {
+      // Save this test result before showing result screen
+      const finalScore = answers.filter(Boolean).length;
+      setCompletedTests(prev => {
+        const without = prev.filter(t => t.topicId !== topic.id);
+        return [...without, {
+          topicId: topic.id,
+          topicTitle: topic.title,
+          topicIcon: topic.icon,
+          color: topic.color,
+          score: finalScore,
+          total: topic.questions.length,
+          answers: [...answers],
+          barStates: [...barStates],
+        }];
+      });
+      setPhase('result');
+      return;
+    }
     setCurrent(c => c + 1); setSelected(null); setShowExplain(false);
   }
 
   function reset() {
     setPhase('select'); setCurrent(0); setAnswers([]); setSelected(null);
     setShowExplain(false); setBarStates(Array(5).fill('hidden')); setRobotFlash('none');
+  }
+
+  async function share(text: string) {
+    const full = text + '\n\n→ sicherheit.ai';
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try { await navigator.share({ text: full }); return; } catch {}
+    }
+    try {
+      await navigator.clipboard.writeText(full);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {}
+  }
+
+  function buildSingleShareText() {
+    const bars = '█'.repeat(score) + '░'.repeat(topic.questions.length - score);
+    const answerRow = answers.map(a => a ? '✓' : '✗').join(' ');
+    const g = GRADES.find(g => score <= g.max) ?? GRADES[4];
+    return (
+      `🔒 KI-Sicherheits-Quiz — ${topic.title}\n` +
+      `${score}/${topic.questions.length} richtig · Note ${g.grade} (${g.label})\n\n` +
+      `${answerRow}\n` +
+      `${bars}\n\n` +
+      `Käfig-Status: ${barStates.filter(b => b === 'solid').length} von 5 Stäben gesetzt`
+    );
+  }
+
+  function buildAllShareText(tests: CompletedTest[]) {
+    const totalScore = tests.reduce((s, t) => s + t.score, 0);
+    const totalMax = tests.reduce((s, t) => s + t.total, 0);
+    const pct = Math.round((totalScore / totalMax) * 100);
+    const overallGrade = GRADES.find(g => totalScore / tests.length <= g.max) ?? GRADES[4];
+
+    const rows = tests.map(t => {
+      const bars = '█'.repeat(t.score) + '░'.repeat(t.total - t.score);
+      return `${t.topicIcon} ${t.topicTitle.padEnd(14)} ${t.score}/${t.total}  ${bars}`;
+    }).join('\n');
+
+    return (
+      `🔐 Mein KI-Sicherheitswissen\n\n` +
+      `${rows}\n\n` +
+      `Gesamt: ${totalScore}/${totalMax} (${pct}%) · Note ${overallGrade.grade}`
+    );
   }
 
   const GRADES = [
@@ -437,20 +512,69 @@ export default function RobotSection() {
             {phase === 'select' && (
               <motion.div key="sel" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                  {QUIZ_TOPICS.map((t, i) => (
-                    <motion.button key={t.id} onClick={() => startTopic(i)}
-                      initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
-                      whileHover={{ borderColor: t.color + '50', scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                      style={{ padding: '12px 13px', background: i === topicIdx ? t.color + '10' : 'rgba(255,255,255,0.02)', border: '1px solid ' + (i === topicIdx ? t.color + '30' : 'rgba(255,255,255,0.06)'), borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s', textAlign: 'left' as const }}
-                    >
-                      <span style={{ width: '30px', height: '30px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: t.color + '12', border: '1px solid ' + t.color + '22', borderRadius: '7px', fontSize: '13px', color: t.color }}>{t.icon}</span>
-                      <div>
-                        <div style={{ fontFamily: 'var(--font)', fontSize: '13px', fontWeight: 700, color: '#CCD8EF' }}>{t.title}</div>
-                        <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: t.color, letterSpacing: '0.06em', marginTop: '1px' }}>5 Fragen</div>
-                      </div>
-                    </motion.button>
-                  ))}
+                  {QUIZ_TOPICS.map((t, i) => {
+                    const done = completedTests.find(ct => ct.topicId === t.id);
+                    return (
+                      <motion.button key={t.id} onClick={() => startTopic(i)}
+                        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+                        whileHover={{ borderColor: t.color + '50', scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                        style={{ padding: '12px 13px', background: done ? t.color + '08' : i === topicIdx ? t.color + '10' : 'rgba(255,255,255,0.02)', border: '1px solid ' + (done ? t.color + '35' : i === topicIdx ? t.color + '30' : 'rgba(255,255,255,0.06)'), borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s', textAlign: 'left' as const, position: 'relative' as const }}
+                      >
+                        {done && (
+                          <span style={{ position: 'absolute', top: '6px', right: '8px', fontFamily: 'var(--mono)', fontSize: '9px', color: t.color, opacity: 0.8 }}>
+                            {done.score}/{done.total}
+                          </span>
+                        )}
+                        <span style={{ width: '30px', height: '30px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: t.color + '12', border: '1px solid ' + t.color + '22', borderRadius: '7px', fontSize: '13px', color: t.color }}>{t.icon}</span>
+                        <div>
+                          <div style={{ fontFamily: 'var(--font)', fontSize: '13px', fontWeight: 700, color: '#CCD8EF' }}>{t.title}</div>
+                          <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: done ? t.color : 'rgba(255,255,255,0.25)', letterSpacing: '0.06em', marginTop: '1px' }}>
+                            {done ? '█'.repeat(done.score) + '░'.repeat(done.total - done.score) : '5 Fragen'}
+                          </div>
+                        </div>
+                      </motion.button>
+                    );
+                  })}
                 </div>
+
+                {/* Gesamtauswertung — erscheint wenn ≥2 Tests abgeschlossen */}
+                <AnimatePresence>
+                  {completedTests.length >= 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                      style={{ overflow: 'hidden', marginTop: '10px' }}
+                    >
+                      <div style={{ padding: '14px 16px', background: 'rgba(0,240,255,0.04)', border: '1px solid rgba(0,240,255,0.15)', borderRadius: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                          <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: 'rgba(0,240,255,0.6)' }}>
+                            Gesamtauswertung · {completedTests.length}/{QUIZ_TOPICS.length} Themen
+                          </div>
+                          <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', fontWeight: 700, color: '#00F0FF' }}>
+                            {completedTests.reduce((s, t) => s + t.score, 0)}/{completedTests.reduce((s, t) => s + t.total, 0)}
+                          </div>
+                        </div>
+
+                        {completedTests.map(ct => (
+                          <div key={ct.topicId} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
+                            <span style={{ fontSize: '11px', color: ct.color, flexShrink: 0 }}>{ct.topicIcon}</span>
+                            <span style={{ fontFamily: 'var(--font)', fontSize: '11px', color: 'rgba(255,255,255,0.5)', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{ct.topicTitle}</span>
+                            <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: ct.color, flexShrink: 0 }}>{'█'.repeat(ct.score)}{'░'.repeat(ct.total - ct.score)}</span>
+                            <span style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'rgba(255,255,255,0.25)', flexShrink: 0 }}>{ct.score}/{ct.total}</span>
+                          </div>
+                        ))}
+
+                        <motion.button
+                          onClick={() => share(buildAllShareText(completedTests))}
+                          whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
+                          style={{ marginTop: '10px', width: '100%', padding: '10px', background: copied ? 'rgba(0,240,160,0.08)' : 'rgba(0,240,255,0.06)', border: '1px solid ' + (copied ? 'rgba(0,240,160,0.3)' : 'rgba(0,240,255,0.2)'), borderRadius: '8px', color: copied ? '#00F0A0' : '#00F0FF', fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.25s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}
+                        >
+                          <span>{copied ? '✓' : '↗'}</span>
+                          {copied ? 'Kopiert!' : 'Gesamtergebnis teilen'}
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )}
 
@@ -500,6 +624,17 @@ export default function RobotSection() {
                     </motion.div>
                   ))}
                 </div>
+                {/* Share single result */}
+                <motion.button
+                  onClick={() => share(buildSingleShareText())}
+                  initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+                  whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
+                  style={{ width: '100%', marginBottom: '7px', padding: '12px', background: copied ? 'rgba(0,240,160,0.08)' : 'rgba(255,255,255,0.04)', border: '1px solid ' + (copied ? 'rgba(0,240,160,0.3)' : 'rgba(255,255,255,0.1)'), borderRadius: '9px', color: copied ? '#00F0A0' : 'rgba(255,255,255,0.55)', fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.25s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}
+                >
+                  <span style={{ fontSize: '13px' }}>{copied ? '✓' : '↗'}</span>
+                  {copied ? 'Kopiert!' : 'Ergebnis teilen'}
+                </motion.button>
+
                 <div style={{ display: 'flex', gap: '7px' }}>
                   <button onClick={reset}
                     style={{ flex: 1, padding: '11px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '9px', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s' }}
