@@ -343,47 +343,233 @@ export default function RobotSection() {
     setShowExplain(false); setBarStates(Array(5).fill('hidden')); setRobotFlash('none');
   }
 
-  async function share(text: string) {
-    const full = text + '\n\n→ sicherheit.ai';
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try { await navigator.share({ text: full }); return; } catch {}
-    }
-    try {
-      await navigator.clipboard.writeText(full);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
-    } catch {}
+  function triggerDownload(canvas: HTMLCanvasElement, filename: string) {
+    canvas.toBlob(blob => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, 'image/png');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }
 
-  function buildSingleShareText() {
-    const bars = '█'.repeat(score) + '░'.repeat(topic.questions.length - score);
-    const answerRow = answers.map(a => a ? '✓' : '✗').join(' ');
-    const g = GRADES.find(g => score <= g.max) ?? GRADES[4];
-    return (
-      `🔒 KI-Sicherheits-Quiz — ${topic.title}\n` +
-      `${score}/${topic.questions.length} richtig · Note ${g.grade} (${g.label})\n\n` +
-      `${answerRow}\n` +
-      `${bars}\n\n` +
-      `Käfig-Status: ${barStates.filter(b => b === 'solid').length} von 5 Stäben gesetzt`
-    );
+  function drawCardBase(ctx: CanvasRenderingContext2D, W: number, H: number) {
+    // Background
+    ctx.fillStyle = '#060B18';
+    ctx.fillRect(0, 0, W, H);
+    // Subtle grid
+    ctx.strokeStyle = 'rgba(0,240,255,0.035)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= W; x += 44) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = 0; y <= H; y += 44) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    // Top accent gradient bar
+    const bar = ctx.createLinearGradient(0, 0, W * 0.65, 0);
+    bar.addColorStop(0, 'rgba(0,240,255,0.9)');
+    bar.addColorStop(1, 'transparent');
+    ctx.fillStyle = bar;
+    ctx.fillRect(0, 0, W, 2.5);
+    // Border
+    ctx.strokeStyle = 'rgba(0,240,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
   }
 
-  function buildAllShareText(tests: CompletedTest[]) {
+  function drawPrisonBars(ctx: CanvasRenderingContext2D, bars: BarState[], x: number, y: number, w: number, h: number) {
+    const BAR_COUNT = 5;
+    const barW = 6;
+    const gap = (w - BAR_COUNT * barW) / (BAR_COUNT + 1);
+    // Top rail
+    ctx.fillStyle = '#888'; ctx.fillRect(x, y, w, 4);
+    // Bottom rail
+    ctx.fillStyle = '#888'; ctx.fillRect(x, y + h - 4, w, 4);
+    bars.forEach((state, i) => {
+      const bx = x + gap + i * (barW + gap);
+      if (state === 'hidden') {
+        ctx.strokeStyle = 'rgba(0,240,255,0.2)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(bx, y + 4, barW, h - 8);
+        ctx.setLineDash([]);
+      } else if (state === 'solid') {
+        const g = ctx.createLinearGradient(bx, 0, bx + barW, 0);
+        g.addColorStop(0, '#333'); g.addColorStop(0.4, '#aaa'); g.addColorStop(0.6, '#ccc'); g.addColorStop(1, '#333');
+        ctx.fillStyle = g;
+        ctx.fillRect(bx, y + 4, barW, h - 8);
+      } else {
+        // Broken — top half angled
+        ctx.save();
+        ctx.translate(bx + barW / 2, y + h * 0.45);
+        ctx.rotate(-0.12);
+        ctx.fillStyle = '#8b1a1a'; ctx.fillRect(-barW / 2, -(h * 0.45 - 4), barW, h * 0.4);
+        ctx.restore();
+        // bottom half
+        ctx.save();
+        ctx.translate(bx + barW / 2, y + h * 0.55);
+        ctx.rotate(0.12);
+        ctx.fillStyle = '#8b1a1a'; ctx.fillRect(-barW / 2, 0, barW, h * 0.4);
+        ctx.restore();
+        // glow dot at break
+        ctx.fillStyle = 'rgba(255,60,60,0.5)';
+        ctx.beginPath(); ctx.ellipse(bx + barW / 2, y + h / 2, 5, 3, 0, 0, Math.PI * 2); ctx.fill();
+      }
+    });
+  }
+
+  function downloadSingleImage() {
+    const GRADES_LOCAL = [
+      { max: 1, label: 'Kritisches Risiko', grade: 'F', color: '#FF3B5C' },
+      { max: 2, label: 'Gefährdet', grade: 'D', color: '#FF7A00' },
+      { max: 3, label: 'Basisschutz', grade: 'C', color: '#FFB800' },
+      { max: 4, label: 'Solide', grade: 'B', color: '#00D4A0' },
+      { max: 5, label: 'Experte', grade: 'A+', color: '#00F0FF' },
+    ];
+    const g = GRADES_LOCAL.find(gr => score <= gr.max) ?? GRADES_LOCAL[4];
+    const DPR = 2, W = 600, H = 340;
+    const canvas = document.createElement('canvas');
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(DPR, DPR);
+
+    drawCardBase(ctx, W, H);
+
+    // Header tag
+    ctx.fillStyle = 'rgba(0,240,255,0.55)';
+    ctx.font = '700 10px monospace';
+    ctx.fillText('[ KI-SICHERHEITSQUIZ ]', 28, 36);
+
+    // Topic icon + name
+    ctx.fillStyle = topic.color;
+    ctx.font = '700 22px monospace';
+    ctx.fillText(topic.icon, 28, 76);
+    ctx.fillStyle = '#D4E0F5';
+    ctx.font = '700 22px sans-serif';
+    ctx.fillText(topic.title, 56, 76);
+
+    // Score big
+    ctx.fillStyle = g.color;
+    ctx.font = '900 72px monospace';
+    ctx.fillText(g.grade, 28, 168);
+
+    // Grade label
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '400 13px sans-serif';
+    ctx.fillText(g.label, 28, 186);
+
+    // Score fraction
+    ctx.fillStyle = g.color;
+    ctx.font = '700 14px monospace';
+    ctx.fillText(`${score} / ${topic.questions.length} richtig`, 28, 210);
+
+    // Answer dots
+    const dotSize = 26, dotGap = 8, dotY = 228;
+    answers.forEach((correct, i) => {
+      const dx = 28 + i * (dotSize + dotGap);
+      ctx.fillStyle = correct ? 'rgba(0,240,160,0.15)' : 'rgba(255,59,92,0.15)';
+      ctx.beginPath(); ctx.roundRect(dx, dotY, dotSize, dotSize, 5); ctx.fill();
+      ctx.strokeStyle = correct ? 'rgba(0,240,160,0.4)' : 'rgba(255,59,92,0.4)';
+      ctx.lineWidth = 1; ctx.stroke();
+      ctx.fillStyle = correct ? '#00F0A0' : '#FF3B5C';
+      ctx.font = '700 13px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(correct ? '✓' : '✗', dx + dotSize / 2, dotY + 17);
+      ctx.textAlign = 'left';
+    });
+
+    // Prison bars on right side
+    drawPrisonBars(ctx, barStates, 310, 60, 260, 200);
+
+    // Cage label
+    const solid = barStates.filter(b => b === 'solid').length;
+    ctx.fillStyle = solid === 5 ? '#00F0FF' : solid >= 3 ? '#FFB800' : '#FF3B5C';
+    ctx.font = '700 12px monospace';
+    ctx.fillText(solid === 5 ? '🔒 KI eingesperrt' : `${solid}/5 Stäbe gesetzt`, 310, 278);
+
+    // Watermark
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = '400 11px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('sicherheit.ai', W - 24, H - 18);
+    ctx.textAlign = 'left';
+
+    triggerDownload(canvas, `sicherheit-ai-${topic.id}.png`);
+  }
+
+  function downloadAllImage(tests: CompletedTest[]) {
+    const GRADES_LOCAL = [
+      { max: 1, label: 'Kritisches Risiko', grade: 'F', color: '#FF3B5C' },
+      { max: 2, label: 'Gefährdet', grade: 'D', color: '#FF7A00' },
+      { max: 3, label: 'Basisschutz', grade: 'C', color: '#FFB800' },
+      { max: 4, label: 'Solide', grade: 'B', color: '#00D4A0' },
+      { max: 5, label: 'Experte', grade: 'A+', color: '#00F0FF' },
+    ];
     const totalScore = tests.reduce((s, t) => s + t.score, 0);
     const totalMax = tests.reduce((s, t) => s + t.total, 0);
     const pct = Math.round((totalScore / totalMax) * 100);
-    const overallGrade = GRADES.find(g => totalScore / tests.length <= g.max) ?? GRADES[4];
+    const avgScore = totalScore / tests.length;
+    const overallGrade = GRADES_LOCAL.find(g => avgScore <= g.max) ?? GRADES_LOCAL[4];
 
-    const rows = tests.map(t => {
-      const bars = '█'.repeat(t.score) + '░'.repeat(t.total - t.score);
-      return `${t.topicIcon} ${t.topicTitle.padEnd(14)} ${t.score}/${t.total}  ${bars}`;
-    }).join('\n');
+    const DPR = 2, W = 600, H = 160 + tests.length * 58 + 80;
+    const canvas = document.createElement('canvas');
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(DPR, DPR);
 
-    return (
-      `🔐 Mein KI-Sicherheitswissen\n\n` +
-      `${rows}\n\n` +
-      `Gesamt: ${totalScore}/${totalMax} (${pct}%) · Note ${overallGrade.grade}`
-    );
+    drawCardBase(ctx, W, H);
+
+    // Header
+    ctx.fillStyle = 'rgba(0,240,255,0.55)';
+    ctx.font = '700 10px monospace';
+    ctx.fillText('[ KI-SICHERHEITSWISSEN — GESAMTAUSWERTUNG ]', 28, 36);
+
+    // Overall grade
+    ctx.fillStyle = overallGrade.color;
+    ctx.font = '900 56px monospace';
+    ctx.fillText(overallGrade.grade, 28, 106);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '400 13px sans-serif';
+    ctx.fillText(`${totalScore}/${totalMax} richtig · ${pct}%`, 28, 124);
+    ctx.fillStyle = overallGrade.color;
+    ctx.font = '700 13px monospace';
+    ctx.fillText(overallGrade.label, 28, 143);
+
+    // Per-topic rows
+    tests.forEach((t, i) => {
+      const rowY = 165 + i * 58;
+      // Row bg
+      ctx.fillStyle = 'rgba(255,255,255,0.025)';
+      ctx.beginPath(); ctx.roundRect(24, rowY, W - 48, 46, 6); ctx.fill();
+      // Icon
+      ctx.fillStyle = t.color;
+      ctx.font = '700 15px monospace';
+      ctx.fillText(t.topicIcon, 40, rowY + 26);
+      // Title
+      ctx.fillStyle = '#CCD8EF';
+      ctx.font = '700 14px sans-serif';
+      ctx.fillText(t.topicTitle, 64, rowY + 26);
+      // Score
+      ctx.fillStyle = t.color;
+      ctx.font = '700 13px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${t.score}/${t.total}`, W - 40, rowY + 22);
+      // Bar progress
+      const barW = 120, barH = 6, barX = W - 40 - barW, barY = rowY + 30;
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.roundRect(barX, barY, barW, barH, 3); ctx.fill();
+      ctx.fillStyle = t.color;
+      ctx.beginPath(); ctx.roundRect(barX, barY, barW * (t.score / t.total), barH, 3); ctx.fill();
+      ctx.textAlign = 'left';
+    });
+
+    // Watermark
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = '400 11px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('sicherheit.ai', W - 24, H - 18);
+    ctx.textAlign = 'left';
+
+    triggerDownload(canvas, 'sicherheit-ai-gesamtauswertung.png');
   }
 
   const GRADES = [
@@ -564,12 +750,12 @@ export default function RobotSection() {
                         ))}
 
                         <motion.button
-                          onClick={() => share(buildAllShareText(completedTests))}
+                          onClick={() => downloadAllImage(completedTests)}
                           whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
                           style={{ marginTop: '10px', width: '100%', padding: '10px', background: copied ? 'rgba(0,240,160,0.08)' : 'rgba(0,240,255,0.06)', border: '1px solid ' + (copied ? 'rgba(0,240,160,0.3)' : 'rgba(0,240,255,0.2)'), borderRadius: '8px', color: copied ? '#00F0A0' : '#00F0FF', fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.25s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}
                         >
                           <span>{copied ? '✓' : '↗'}</span>
-                          {copied ? 'Kopiert!' : 'Gesamtergebnis teilen'}
+                          {copied ? 'Gespeichert!' : 'Gesamtauswertung herunterladen'}
                         </motion.button>
                       </div>
                     </motion.div>
@@ -626,13 +812,13 @@ export default function RobotSection() {
                 </div>
                 {/* Share single result */}
                 <motion.button
-                  onClick={() => share(buildSingleShareText())}
+                  onClick={() => downloadSingleImage()}
                   initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
                   whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
                   style={{ width: '100%', marginBottom: '7px', padding: '12px', background: copied ? 'rgba(0,240,160,0.08)' : 'rgba(255,255,255,0.04)', border: '1px solid ' + (copied ? 'rgba(0,240,160,0.3)' : 'rgba(255,255,255,0.1)'), borderRadius: '9px', color: copied ? '#00F0A0' : 'rgba(255,255,255,0.55)', fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.25s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px' }}
                 >
                   <span style={{ fontSize: '13px' }}>{copied ? '✓' : '↗'}</span>
-                  {copied ? 'Kopiert!' : 'Ergebnis teilen'}
+                  {copied ? 'Gespeichert!' : 'Als Bild herunterladen'}
                 </motion.button>
 
                 <div style={{ display: 'flex', gap: '7px' }}>
