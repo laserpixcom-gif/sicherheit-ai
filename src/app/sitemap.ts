@@ -8,67 +8,56 @@ const LOCALES = ['de', 'en'];
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticPages = LOCALES.flatMap(locale => [
-    {
-      url: `${BASE_URL}/${locale}`,
-      lastModified: now,
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/${locale}/blog`,
-      lastModified: now,
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/${locale}/glossar`,
-      lastModified: now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/${locale}/tools`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/${locale}/ai-act`,
-      lastModified: now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.85,
-    },
-    {
-      url: `${BASE_URL}/${locale}/ueber-uns`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
-    {
-      url: `${BASE_URL}/${locale}/kontakt`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.55,
-    },
-  ]);
+  const staticSlugs = ['', '/blog', '/glossar', '/tools', '/ai-act', '/ueber-uns', '/kontakt'];
+  const staticPriorities: Record<string, number> = {
+    '': 1.0, '/blog': 0.9, '/ai-act': 0.85, '/glossar': 0.8,
+    '/tools': 0.7, '/ueber-uns': 0.6, '/kontakt': 0.55,
+  };
+  const staticFreq: Record<string, 'daily' | 'weekly' | 'monthly'> = {
+    '': 'daily', '/blog': 'daily', '/ai-act': 'weekly', '/glossar': 'weekly',
+    '/tools': 'monthly', '/ueber-uns': 'monthly', '/kontakt': 'monthly',
+  };
 
-  const blogPages = LOCALES.flatMap(locale =>
-    STATIC_POSTS.map(post => ({
+  const staticPages = staticSlugs.flatMap(slug =>
+    LOCALES.map(locale => ({
+      url: `${BASE_URL}/${locale}${slug}`,
+      lastModified: now,
+      changeFrequency: staticFreq[slug],
+      priority: staticPriorities[slug],
+      alternates: {
+        languages: Object.fromEntries(
+          LOCALES.map(l => [l, `${BASE_URL}/${l}${slug}`])
+        ),
+      },
+    }))
+  );
+
+  const blogPages = STATIC_POSTS.flatMap(post =>
+    LOCALES.map(locale => ({
       url: `${BASE_URL}/${locale}/blog/${post.slug}`,
       lastModified: new Date(post.publishedAt),
       changeFrequency: 'weekly' as const,
-      priority: 0.8,
+      priority: 0.82,
+      alternates: {
+        languages: Object.fromEntries(
+          LOCALES.map(l => [l, `${BASE_URL}/${l}/blog/${post.slug}`])
+        ),
+      },
     }))
   );
 
   // One page per glossary term — individual URLs for SEO
-  const glossarPages = LOCALES.flatMap(locale =>
-    GLOSSARY_TERMS.map(term => ({
+  const glossarPages = GLOSSARY_TERMS.flatMap(term =>
+    LOCALES.map(locale => ({
       url: `${BASE_URL}/${locale}/glossar/${term.id}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.75,
+      alternates: {
+        languages: Object.fromEntries(
+          LOCALES.map(l => [l, `${BASE_URL}/${l}/glossar/${term.id}`])
+        ),
+      },
     }))
   );
 
