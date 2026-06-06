@@ -86,6 +86,48 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
 
         {/* ── Tool Grid ── */}
         <div className="subpage-content">
+
+          {/* Featured: KI-Sicherheitscheck */}
+          <Link href={`/${locale}/ki-sicherheitscheck`} style={{ display: 'block', textDecoration: 'none', marginBottom: '20px' }}>
+            <div style={{
+              background: 'var(--card-bg)',
+              border: '1px solid rgba(0,240,255,0.3)',
+              borderRadius: '18px',
+              padding: '32px 36px',
+              position: 'relative',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '24px',
+              flexWrap: 'wrap',
+              boxShadow: '0 0 40px rgba(0,240,255,0.06)',
+            }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--cyan), transparent)' }} />
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, color: '#78C864', background: 'rgba(120,200,100,0.1)', border: '1px solid rgba(120,200,100,0.25)', padding: '3px 8px', borderRadius: '4px' }}>KOSTENLOS</span>
+                  <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, color: '#00F0FF', background: 'rgba(0,240,255,0.08)', border: '1px solid rgba(0,240,255,0.2)', padding: '3px 8px', borderRadius: '4px' }}>EMPFOHLEN</span>
+                </div>
+                <h2 style={{ fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 800, color: 'var(--text)', marginBottom: '8px', letterSpacing: '-0.03em' }}>
+                  🛡️ KI-Sicherheitscheck für Unternehmen
+                </h2>
+                <p style={{ fontSize: '15px', color: 'var(--text-dim)', lineHeight: 1.65, margin: 0 }}>
+                  Prüfen Sie in 10 Minuten, ob Ihre KI-Nutzung DSGVO-konform und EU AI Act-sicher ist. Kein Login, kein Datentransfer.
+                </p>
+              </div>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px', flexShrink: 0,
+                background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
+                color: '#060B18', fontWeight: 800, fontSize: '14px',
+                padding: '12px 24px', borderRadius: '8px',
+                boxShadow: '0 0 24px rgba(0,240,255,0.2)',
+              }}>
+                Check starten →
+              </span>
+            </div>
+          </Link>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))', gap: '20px' }}>
             {TOOLS.map(tool => (
               <Link

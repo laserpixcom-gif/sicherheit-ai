@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, CSSProperties } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useTheme } from '@/contexts/ThemeContext';
 import { motion } from 'framer-motion';
 
@@ -30,6 +30,7 @@ export default function Hero() {
   const t = useTranslations('hero');
   const hudT = useTranslations('hud');
   const { theme } = useTheme();
+  const locale = useLocale();
   const [heroText, setHeroText] = useState('');
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -296,7 +297,7 @@ export default function Hero() {
 
         <div className="hero-ctas" style={{ justifyContent: theme === 'dark' ? 'flex-start' : 'center', alignItems: 'center' }}>
           {/* PRIMARY CTA — dominant, groß, klar */}
-          <a href="#tools" style={{
+          <a href={`/${locale}/ki-sicherheitscheck`} style={{
             background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
             color: '#060B18',
             border: 'none',

@@ -10,7 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 interface NavProps { locale: string }
 
 /* ── Magnetic link wrapper ── */
-function MagLink({ href, label, active }: { href: string; label: string; active: boolean }) {
+function MagLink({ href, label, active, highlight }: { href: string; label: string; active: boolean; highlight?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -31,16 +31,22 @@ function MagLink({ href, label, active }: { href: string; label: string; active:
         href={href}
         className={active ? 'nav-link-active' : ''}
         style={{
-          color: active ? 'var(--text)' : 'var(--text-dim)',
+          color: highlight ? 'var(--cyan)' : active ? 'var(--text)' : 'var(--text-dim)',
           textDecoration: 'none',
           fontSize: '14px',
-          fontWeight: 500,
+          fontWeight: highlight ? 700 : 500,
           position: 'relative',
           transition: 'color 0.2s',
           paddingBottom: '4px',
+          ...(highlight && !active ? {
+            border: '1px solid rgba(0,240,255,0.3)',
+            padding: '4px 10px',
+            borderRadius: '6px',
+            background: 'rgba(0,240,255,0.05)',
+          } : {}),
         }}
-        onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text)'; }}
-        onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-dim)'; }}
+        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--cyan)'; }}
+        onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = highlight ? 'var(--cyan)' : 'var(--text-dim)'; }}
       >
         {label}
       </Link>
@@ -71,6 +77,7 @@ export default function Nav({ locale }: NavProps) {
 
   const links = [
     { href: `/${locale}`, label: t('home') },
+    { href: `/${locale}/ki-sicherheitscheck`, label: t('kicheck'), highlight: true },
     { href: `/${locale}/tools`, label: t('tools') },
     { href: `/${locale}/glossar`, label: t('glossar') },
     { href: `/${locale}/ai-act`, label: t('aiact') },
@@ -130,9 +137,9 @@ export default function Nav({ locale }: NavProps) {
           listStyle: 'none',
           alignItems: 'center',
         }} className="nav-desktop">
-          {links.map(({ href, label }) => (
+          {links.map(({ href, label, highlight }) => (
             <li key={href}>
-              <MagLink href={href} label={label} active={pathname === href} />
+              <MagLink href={href} label={label} active={pathname === href} highlight={highlight} />
             </li>
           ))}
         </ul>
