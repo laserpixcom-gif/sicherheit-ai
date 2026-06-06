@@ -128,7 +128,7 @@ export default function KontaktPage({ params }: { params: { locale: string } }) 
                 <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '16px' }}>
                   Direktkontakt
                 </div>
-                <a href="mailto:mahdi.mahmoud2008@gmail.com" style={{
+                <a href="mailto:info@laserpix.de" style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '14px 16px',
                   background: 'var(--surface)',
@@ -140,7 +140,7 @@ export default function KontaktPage({ params }: { params: { locale: string } }) 
                   <span style={{ fontSize: '20px' }}>✉</span>
                   <div>
                     <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)', fontFamily: 'var(--mono)' }}>E-Mail</div>
-                    <div style={{ fontSize: '12px', color: 'var(--cyan)' }}>mahdi.mahmoud2008@gmail.com</div>
+                    <div style={{ fontSize: '12px', color: 'var(--cyan)' }}>info@laserpix.de</div>
                   </div>
                 </a>
                 <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.6, padding: '0 4px' }}>

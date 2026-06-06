@@ -267,7 +267,7 @@ export default function NewsletterSection() {
             color: 'var(--text-dim)',
             fontFamily: 'var(--mono)',
           }}>
-            Über <strong style={{ color: 'var(--text)' }}>2.400</strong> Sicherheitsexperten lesen mit
+            Werde Teil der wachsenden <strong style={{ color: 'var(--text)' }}>sicherheit.ai</strong>-Community
           </span>
         </div>
 

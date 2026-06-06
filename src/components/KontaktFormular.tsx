@@ -2,23 +2,12 @@
 
 import { useState } from 'react';
 
-const ZWECKE = [
-  'Beratungsanfrage',
-  'KI-Sicherheitscheck',
-  'AI Act Compliance',
-  'Incident Response',
-  'Partnerschaften',
-  'Presse & Medien',
-  'Allgemeine Frage',
-  'Sonstiges',
-];
-
 interface Props {
   accentColor?: string;
 }
 
 export default function KontaktFormular({ accentColor = 'var(--cyan)' }: Props) {
-  const [form, setForm] = useState({ name: '', email: '', zweck: '', betreff: '', nachricht: '' });
+  const [form, setForm] = useState({ name: '', email: '', nachricht: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -36,7 +25,7 @@ export default function KontaktFormular({ accentColor = 'var(--cyan)' }: Props) 
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, zweck: '', betreff: '' }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -123,33 +112,6 @@ export default function KontaktFormular({ accentColor = 'var(--cyan)' }: Props) 
             className="contact-input"
           />
         </div>
-      </div>
-
-      {/* Zweck */}
-      <div>
-        <label style={labelStyle}>Anlass</label>
-        <select
-          value={form.zweck}
-          onChange={e => set('zweck', e.target.value)}
-          style={{ ...inputStyle, cursor: 'pointer', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center' }}
-          className="contact-input"
-        >
-          <option value="">Bitte wählen…</option>
-          {ZWECKE.map(z => <option key={z} value={z}>{z}</option>)}
-        </select>
-      </div>
-
-      {/* Betreff */}
-      <div>
-        <label style={labelStyle}>Betreff</label>
-        <input
-          type="text"
-          value={form.betreff}
-          onChange={e => set('betreff', e.target.value)}
-          placeholder="Worum geht es?"
-          style={inputStyle}
-          className="contact-input"
-        />
       </div>
 
       {/* Nachricht */}

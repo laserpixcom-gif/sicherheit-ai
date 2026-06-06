@@ -303,38 +303,41 @@ export default function Hero() {
           <span className="cursor-blink" />
         </p>
 
-        <div className="hero-ctas" style={{ justifyContent: theme === 'dark' ? 'flex-start' : 'center' }}>
+        <div className="hero-ctas" style={{ justifyContent: theme === 'dark' ? 'flex-start' : 'center', alignItems: 'center' }}>
+          {/* PRIMARY CTA — dominant, groß, klar */}
           <a href="#tools" style={{
             background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
-            color: theme === 'dark' ? '#060B18' : '#fff',
+            color: '#060B18',
             border: 'none',
-            padding: '14px 32px',
+            padding: '16px 36px',
             borderRadius: '8px',
-            fontSize: '15px',
-            fontWeight: 700,
+            fontSize: '16px',
+            fontWeight: 800,
             cursor: 'pointer',
             fontFamily: 'var(--font)',
             textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
+            boxShadow: '0 0 32px rgba(0,240,255,0.25)',
+            letterSpacing: '-0.01em',
           }}>
-            {t('cta1')} →
+            {t('cta1')}
           </a>
+          {/* SECONDARY CTA — dezent, kein visueller Wettbewerb */}
           <a href="#beratung" style={{
-            background: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'none',
-            border: '1px solid var(--border)',
-            color: 'var(--text-dim)',
-            padding: '14px 32px',
-            borderRadius: '8px',
-            fontSize: '15px',
-            fontWeight: 500,
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-muted)',
+            padding: '8px 4px',
+            fontSize: '14px',
+            fontWeight: 400,
             cursor: 'pointer',
             fontFamily: 'var(--font)',
-            textDecoration: 'none',
+            textDecoration: 'underline',
+            textUnderlineOffset: '3px',
             display: 'inline-flex',
             alignItems: 'center',
-            backdropFilter: theme === 'dark' ? 'blur(8px)' : 'none',
           }}>
             {t('cta2')}
           </a>

@@ -12,15 +12,15 @@
     "light": "Light"
   },
   "hero": {
-    "eyebrow": "AI Security & Cybersecurity for Business",
-    "headline1": "Is Your Business",
-    "headline2": "AI-Secure?",
+    "eyebrow": "For businesses with 10+ employees",
+    "headline1": "Use AI securely —",
+    "headline2": "GDPR-compliant.",
     "phrases": [
-      "Use ChatGPT, Copilot, n8n & Co. securely: GDPR and AI Act compliant.",
-      "Check in minutes whether your AI usage creates security gaps.",
-      "By experts for businesses: independent, fact-based, actionable."
+      "We audit your AI usage for security gaps — in 10 minutes, free of charge.",
+      "ChatGPT, Copilot & Co. without data leaks: your AI security check.",
+      "For SMEs: independent, fact-based, no sales pressure."
     ],
-    "cta1": "Start AI Security Check",
+    "cta1": "Start Free Check →",
     "cta2": "Book Consultation",
     "scroll": "Discover"
   },

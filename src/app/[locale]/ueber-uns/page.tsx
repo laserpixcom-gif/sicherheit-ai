@@ -272,6 +272,43 @@ export default function UeberUnsPage({
             </p>
           </section>
 
+          {/* Gründer */}
+          <section style={{ marginBottom: '72px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
+              {isDE ? 'Der Gründer' : 'The Founder'}
+            </div>
+            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: '32px' }}>
+              {isDE ? 'Ein Gesicht hinter der Plattform' : 'A face behind the platform'}
+            </h2>
+            <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              <div style={{
+                width: '80px', height: '80px', borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '32px', fontWeight: 800, color: '#060B18',
+                border: '2px solid rgba(0,240,255,0.3)',
+              }}>
+                M
+              </div>
+              <div style={{ flex: 1, minWidth: '260px' }}>
+                <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>Mahdi Mahmoud</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--cyan)', marginBottom: '16px' }}>
+                  {isDE ? 'Gründer · KI-Sicherheit & Automatisierung · Hannover' : 'Founder · AI Security & Automation · Hannover, Germany'}
+                </div>
+                <p style={{ fontSize: '15px', color: 'var(--text-dim)', lineHeight: 1.75, maxWidth: '560px', margin: '0 0 16px' }}>
+                  {isDE
+                    ? 'Ich baue sicherheit.ai, weil ich täglich sehe, wie Unternehmen KI-Tools wie ChatGPT oder Copilot einsetzen — ohne zu wissen, ob sie dabei Datenschutzverstöße begehen oder Sicherheitslücken öffnen. Mein Ziel: KI-Sicherheit verständlich und umsetzbar machen.'
+                    : 'I build sicherheit.ai because I see daily how businesses use AI tools like ChatGPT or Copilot — without knowing whether they\'re creating data protection violations or security gaps. My goal: make AI security understandable and actionable.'}
+                </p>
+                <a href="mailto:info@laserpix.de" style={{
+                  fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--cyan)', textDecoration: 'none',
+                }}>
+                  info@laserpix.de
+                </a>
+              </div>
+            </div>
+          </section>
+
           {/* Haftung */}
           <section style={{ marginBottom: '40px' }}>
             <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text)', marginBottom: '12px', letterSpacing: '-0.02em' }}>
@@ -307,14 +344,14 @@ export default function UeberUnsPage({
               }}>
                 {isDE ? 'Zum Kontaktformular →' : 'Contact form →'}
               </Link>
-              <a href="mailto:mahdi.mahmoud2008@gmail.com" style={{
+              <a href="mailto:info@laserpix.de" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
                 background: 'transparent',
                 border: '1px solid var(--border)',
                 color: 'var(--text-dim)', fontWeight: 600, fontSize: '15px',
                 padding: '13px 28px', borderRadius: '8px', textDecoration: 'none',
               }}>
-                mahdi.mahmoud2008@gmail.com
+                info@laserpix.de
               </a>
             </div>
           </section>

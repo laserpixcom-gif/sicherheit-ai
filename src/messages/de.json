@@ -12,15 +12,15 @@
     "light": "Hell"
   },
   "hero": {
-    "eyebrow": "KI-Sicherheit & Cybersecurity für Unternehmen",
-    "headline1": "Ist Ihr Unternehmen",
-    "headline2": "KI-sicher?",
+    "eyebrow": "Für Unternehmen ab 10 Mitarbeitern",
+    "headline1": "KI sicher nutzen —",
+    "headline2": "DSGVO-konform.",
     "phrases": [
-      "ChatGPT, Copilot, n8n & Co. sicher nutzen: DSGVO- und AI-Act-konform.",
-      "Prüfen Sie in Minuten, ob Ihre KI-Nutzung Sicherheitslücken erzeugt.",
-      "Von Experten für Unternehmen: unabhängig, faktenbasiert, umsetzbar."
+      "Wir prüfen Ihre KI-Nutzung auf Sicherheitslücken — in 10 Minuten, kostenlos.",
+      "ChatGPT, Copilot & Co. ohne Datenleck: Ihr KI-Sicherheitscheck.",
+      "Für Mittelstand & KMU: unabhängig, faktenbasiert, ohne Verkaufsdruck."
     ],
-    "cta1": "KI-Sicherheitscheck starten",
+    "cta1": "Kostenlosen Check starten →",
     "cta2": "Beratung buchen",
     "scroll": "Entdecken"
   },
