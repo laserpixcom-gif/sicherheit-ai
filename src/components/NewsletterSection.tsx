@@ -9,7 +9,7 @@ function seeded(i: number, salt = 0) {
 }
 
 /* ── 25 CSS-only floating particles ── */
-const PARTICLES = Array.from({ length: 25 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 8 }, (_, i) => ({
   id: i,
   x: seeded(i, 0) * 100,
   y: seeded(i, 1) * 100,

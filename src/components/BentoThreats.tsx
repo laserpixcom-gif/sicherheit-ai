@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const CARDS = [
@@ -366,8 +366,7 @@ export default function BentoThreats() {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
-  const springY = useSpring(y, { stiffness: 60, damping: 20 });
+  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
 
   return (
     <section
@@ -390,7 +389,7 @@ export default function BentoThreats() {
         maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
       }} />
 
-      <motion.div className="r-wrap" style={{ opacity, y: springY }}>
+      <motion.div className="r-wrap" style={{ opacity, y }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
           <div style={{

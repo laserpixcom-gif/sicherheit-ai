@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const THREAT_LOGS = [
   { time: '09:41:33', type: 'Brute-Force', target: 'SSH · 185.234.219.42', severity: 'high', country: 'RU' },
@@ -197,10 +197,8 @@ export default function StickyThreatRadar() {
     offset: ['start start', 'end end'],
   });
 
-  const springProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 20 });
-
-  // Radar sweep driven by scroll
-  const radarProgress = useTransform(springProgress, [0, 1], [0, 1]);
+  // Direct scroll progress — no spring physics for better performance
+  const springProgress = scrollYProgress;
 
   return (
     <div

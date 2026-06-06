@@ -79,16 +79,7 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, [theme]);
 
-  // Scroll progress
-  useEffect(() => {
-    const onScroll = () => {
-      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-      const el = document.getElementById('scroll-progress');
-      if (el) el.style.width = pct + '%';
-    };
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  // Scroll progress handled by ScrollProgress component — no duplicate listener here
 
   const hudCards: HudCard[] = [
     {
