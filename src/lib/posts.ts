@@ -437,8 +437,8 @@ POST /guestaccess.aspx HTTP/1.1
   {
     id: 'post-wormgpt-ki-phishing-tool',
     slug: 'wormgpt-ki-phishing-tool',
-    title: 'WormGPT: Das KI-Tool, das Phishing-Angriffe auf ein neues Level hebt',
-    excerpt: 'WormGPT ist ein unkontrolliertes Large Language Model, das gezielt für Cyberkriminelle entwickelt wurde. Es erstellt täuschend echte Phishing-Mails ohne Sicherheitsgrenzen – und verzeichnet laut SlashNext einen Anstieg von 340% bei KI-generierten Phishing-Angriffen.',
+    title: 'KI Phishing erkennen 2026: WormGPT, FraudGPT & Schutzmaßnahmen für Unternehmen',
+    excerpt: 'KI-Phishing ist 2026 der häufigste Angriffsvektor. WormGPT und FraudGPT erstellen täuschend echte Phishing-Mails ohne Sicherheitsgrenzen — 340% Anstieg laut SlashNext. So erkennen und schützen sich Unternehmen konkret.',
     content: `<h2>Was ist WormGPT?</h2>
 <p>WormGPT ist ein Large Language Model (LLM), das auf Basis von Open-Source-Modellen entwickelt und speziell auf schädliche Inhalte trainiert wurde. Anders als kommerzielle Modelle wie ChatGPT oder Claude verfügt WormGPT über keinerlei Sicherheitsmechanismen, Inhaltsfilter oder ethische Leitlinien. Es wurde erstmals im Juli 2023 im Darknet-Forum "hackforums" angeboten und richtete sich explizit an Cyberkriminelle.</p>
 <p>Das Modell basiert nach Angaben seines Erstellers auf dem Open-Source-Modell GPT-J von EleutherAI, wurde jedoch mit Datensätzen aus dem Bereich Malware, Exploits und Phishing-Korrespondenz nachtrainiert. Das Ergebnis: Ein Sprachmodell, das auf Anfrage professionell formulierte Betrugs-E-Mails, Business Email Compromise (BEC)-Angriffe und Schadcode erstellt, ohne die Anfrage zu verweigern.</p>
@@ -523,8 +523,8 @@ POST /guestaccess.aspx HTTP/1.1
   {
     id: 'post-shadow-ai-unternehmen-risiken',
     slug: 'shadow-ai-unternehmen-risiken',
-    title: 'Shadow AI: Wenn Mitarbeiter KI-Tools ohne IT-Wissen nutzen',
-    excerpt: 'Shadow AI bezeichnet den unkontrollierten Einsatz von KI-Tools durch Mitarbeiter ohne Wissen der IT-Abteilung. Die Folgen reichen von DSGVO-Verstößen bis zu massiven Datenlecks. Wie Unternehmen das Risiko erkennen und kontrollieren.',
+    title: 'Shadow AI erkennen & kontrollieren: 44% der deutschen Unternehmen bereits betroffen',
+    excerpt: '44% der deutschen Unternehmen melden Sicherheitsverletzungen durch Shadow AI — unkontrollierte KI-Nutzung kostet durchschnittlich 670.000 € pro Vorfall. So erkennen, bewerten und stoppen Sie Shadow AI in Ihrem Unternehmen.',
     content: `<h2>Was ist Shadow AI?</h2>
 <p>Shadow AI ist ein Phänomen, das sich aus dem älteren Konzept der "Shadow IT" ableitet: Mitarbeiter nutzen Softwaretools und digitale Dienste, die von der IT-Abteilung weder genehmigt noch kontrolliert werden. Im Kontext künstlicher Intelligenz bedeutet dies den Einsatz von KI-Anwendungen wie ChatGPT, Google Gemini, Claude, Copilot oder spezialisierten KI-Tools für Bildgenerierung, Transkription und Datenanalyse, ohne dass die IT-Abteilung darüber informiert ist oder diese Nutzung in die Sicherheitsarchitektur des Unternehmens eingebettet ist.</p>
 <p>Das Ausmaß ist erheblich: Laut einer Umfrage von Salesforce aus dem Jahr 2024 nutzen <strong>55% der Mitarbeiter KI-Tools bei der Arbeit</strong>, und über die Hälfte davon tut dies ohne explizite Genehmigung des Arbeitgebers. Eine separate Studie von Cyberhaven aus dem Jahr 2023 zeigte, dass 10,7% aller in ChatGPT eingegebenen Daten als vertraulich klassifiziert werden könnten.</p>
@@ -589,8 +589,8 @@ POST /guestaccess.aspx HTTP/1.1
   {
     id: 'post-eu-ai-act-verbotene-ki-systeme',
     slug: 'eu-ai-act-verbotene-ki-systeme',
-    title: 'EU AI Act: Diese KI-Systeme sind in der EU vollständig verboten',
-    excerpt: 'Der EU AI Act definiert klare Verbote für KI-Systeme, die Grundrechte gefährden. Social Scoring, Echtzeit-Biometrieüberwachung und unterschwellige Manipulation sind ab Februar 2025 verboten. Bußgelder erreichen bis zu 35 Millionen Euro.',
+    title: 'EU AI Act Checkliste 2026: Verbotene KI-Systeme, Pflichten & Bußgelder für Unternehmen',
+    excerpt: 'EU AI Act Checkliste für Unternehmen: Welche KI-Systeme sind ab August 2026 verboten? Social Scoring, Echtzeit-Biometrie, unterschwellige Manipulation — Bußgelder bis 35 Mio. €. Mit praktischer Compliance-Checkliste.',
     content: `<h2>Was ist der EU AI Act?</h2>
 <p>Der EU Artificial Intelligence Act (EU AI Act) ist die weltweit erste umfassende gesetzliche Regulierung für künstliche Intelligenz. Er wurde am 13. März 2024 vom Europäischen Parlament verabschiedet und trat am 1. August 2024 in Kraft. Das Gesetz verfolgt einen risikobasierten Ansatz: KI-Systeme werden in vier Risikokategorien eingeteilt, von unakzeptablem Risiko (verboten) über Hochrisiko (streng reguliert) bis zu minimalem Risiko (kaum Anforderungen).</p>
 <p>Der EU AI Act gilt für alle Anbieter, die KI-Systeme in der EU in Verkehr bringen, unabhängig davon, ob das Unternehmen seinen Sitz in der EU hat. Die Umsetzung erfolgt gestaffelt: Erste Verbote gelten ab Februar 2025.</p>
@@ -662,8 +662,8 @@ POST /guestaccess.aspx HTTP/1.1
   {
     id: 'post-nis2-richtlinie-mittelstand',
     slug: 'nis2-richtlinie-mittelstand',
-    title: 'NIS2-Richtlinie: Was der Mittelstand jetzt wissen und tun muss',
-    excerpt: 'Die NIS2-Richtlinie erweitert die Cybersicherheitspflichten auf zehntausende deutsche Unternehmen. Ab 50 Mitarbeitern oder 10 Millionen Euro Umsatz in kritischen Sektoren drohen bei Verstößen Bußgelder bis 10 Millionen Euro. Ein Überblick für den Mittelstand.',
+    title: 'NIS2 Checkliste Mittelstand 2026: Pflichten, Fristen & Sofortmaßnahmen',
+    excerpt: 'NIS2 trifft 29.500 deutsche Unternehmen — nur 10% haben sich bisher beim BSI registriert. Bußgelder bis 10 Millionen Euro drohen. Unsere NIS2-Checkliste zeigt Ihnen welche Pflichten gelten, bis wann und was Sie sofort tun müssen.',
     content: `<h2>Was ist die NIS2-Richtlinie?</h2>
 <p>NIS2 steht für "Network and Information Security Directive 2" – die zweite EU-Richtlinie zur Netz- und Informationssicherheit. Sie wurde am 14. Dezember 2022 vom Europäischen Rat verabschiedet. In Deutschland erfolgt die Umsetzung durch das NIS2-Umsetzungsgesetz (NIS2UmsuCG).</p>
 <p>Gegenüber der Vorgängerrichtlinie erweitert NIS2 den Anwendungsbereich erheblich: Statt weniger hundert kritischer Infrastrukturen in Deutschland sind nun schätzungsweise <strong>29.000 bis 40.000 deutsche Unternehmen</strong> betroffen.</p>
@@ -721,14 +721,77 @@ POST /guestaccess.aspx HTTP/1.1
 </ul>
 <blockquote>
 <p>"NIS2 ist keine bürokratische Übung. Die Anforderungen spiegeln den Mindeststandard wider, den Unternehmen für ihre eigene Überlebensfähigkeit in der aktuellen Bedrohungslage benötigen." – Bundesamt für Sicherheit in der Informationstechnik (BSI)</p>
-</blockquote>`,
+</blockquote>
+
+<h2 id="checkliste">NIS2-Checkliste für den Mittelstand 2026</h2>
+<p>Nur knapp <strong>10% der ~29.500 verpflichteten deutschen Unternehmen</strong> haben sich bis zur BSI-Registrierungsfrist (6. März 2026) registriert. Nutzen Sie diese Checkliste als Sofortmaßnahmen-Plan. Abhaken bedeutet: diese Pflicht ist erfüllt.</p>
+
+<h3 id="checkliste-phase1">Phase 1: Betroffenheit prüfen (sofort)</h3>
+<ul>
+<li>✅ <strong>Sektor-Check:</strong> Gehört Ihr Unternehmen zu einem der 18 NIS2-Sektoren (Energie, Gesundheit, Transport, IKT, Finanz, Lebensmittel, Maschinenbau etc.)?</li>
+<li>✅ <strong>Größen-Check:</strong> ≥ 50 Mitarbeiter ODER ≥ 10 Mio. € Jahresumsatz + 2 Mio. € Bilanzsumme?</li>
+<li>✅ <strong>Lieferkette prüfen:</strong> Sind Sie IT-Dienstleister (MSP/MSSP) für betroffene Unternehmen? Dann direkt betroffen.</li>
+<li>✅ <strong>BSI-Selbsteinstufung:</strong> Wesentliche Einrichtung (≥ 250 MA oder ≥ 50 Mio. €) oder wichtige Einrichtung?</li>
+</ul>
+
+<h3 id="checkliste-phase2">Phase 2: BSI-Registrierung (dringend)</h3>
+<ul>
+<li>✅ <strong>ELSTER-Zertifikat beantragen:</strong> Benötigt für BSI-Registrierungsportal. Bearbeitungszeit: 5–10 Werktage.</li>
+<li>✅ <strong>Registrierung im BSI-Portal:</strong> Auf bsi.bund.de/nis2 registrieren. Pflichtangaben: Unternehmensname, Sektor, Kontaktdaten, KRITIS-Status.</li>
+<li>✅ <strong>NIS2-Kontaktperson benennen:</strong> Eine verantwortliche Person für Cybersicherheit und BSI-Meldungen bestimmen.</li>
+</ul>
+
+<h3 id="checkliste-phase3">Phase 3: Risikomanagement (innerhalb 3 Monate)</h3>
+<ul>
+<li>✅ <strong>IT-Asset-Inventar erstellen:</strong> Alle Systeme, Software, Cloud-Dienste und OT-Komponenten erfassen.</li>
+<li>✅ <strong>Risikoanalyse durchführen:</strong> Für jeden Asset: Wahrscheinlichkeit × Schadenspotenzial. Dokumentiert und aktuell halten.</li>
+<li>✅ <strong>Sicherheitskonzept erstellen:</strong> Schriftliches Informationssicherheits-Managementsystem (ISMS) — auch vereinfacht nach BSI IT-Grundschutz möglich.</li>
+<li>✅ <strong>MFA für alle kritischen Systeme:</strong> VPN, E-Mail, Admin-Konsolen, Cloud-Dienste — Multi-Faktor-Authentifizierung aktivieren.</li>
+<li>✅ <strong>Backup-Strategie 3-2-1:</strong> 3 Kopien, 2 Medien, 1 Offline/Air-Gap. Regelmäßig auf Wiederherstellbarkeit testen.</li>
+<li>✅ <strong>Patch-Management-Prozess:</strong> Kritische Sicherheitslücken (CVSS ≥ 9) innerhalb von 24 Stunden patchen.</li>
+<li>✅ <strong>Verschlüsselung einführen:</strong> Ende-zu-Ende-Verschlüsselung für sensible Daten und Kommunikation.</li>
+</ul>
+
+<h3 id="checkliste-phase4">Phase 4: Incident Response (innerhalb 6 Monate)</h3>
+<ul>
+<li>✅ <strong>Incident-Response-Plan erstellen:</strong> Schriftlicher Plan mit klaren Verantwortlichkeiten, Eskalationswegen und Kommunikationsprotokoll.</li>
+<li>✅ <strong>Meldeprozess BSI etablieren:</strong> Automatismus für 24h-Erstmeldung, 72h-Detailmeldung, 1-Monat-Abschlussbericht.</li>
+<li>✅ <strong>Krisenteam definieren:</strong> Wer entscheidet was im Notfall? IT, Geschäftsführung, Rechtsabteilung, PR — klare Rollen.</li>
+<li>✅ <strong>IR-Übung durchführen:</strong> Jährliche Simulation eines Sicherheitsvorfalls (Tabletop-Übung).</li>
+</ul>
+
+<h3 id="checkliste-phase5">Phase 5: Lieferkette & Schulung (laufend)</h3>
+<ul>
+<li>✅ <strong>Lieferanten-Sicherheitsanforderungen:</strong> Sicherheitsanforderungen vertraglich in alle neuen IT-Verträge aufnehmen.</li>
+<li>✅ <strong>Mitarbeiterschulungen:</strong> Jährliche Cyber-Hygiene-Schulungen, Phishing-Simulationen, NIS2-Awareness für Führungskräfte.</li>
+<li>✅ <strong>Geschäftsführung briefen:</strong> GF und Vorstand müssen Cybersicherheitsmaßnahmen billigen — persönliche Haftung besteht.</li>
+</ul>
+
+<h2 id="fristen">Fristen im Überblick 2026</h2>
+<pre><code># NIS2-Fristen Deutschland 2026
+06.12.2025  → NIS2-Umsetzungsgesetz in Kraft
+06.03.2026  → BSI-Registrierungsfrist (bereits abgelaufen — sofort nachholen!)
+Laufend     → Meldepflicht: 24h Erstmeldung bei Sicherheitsvorfällen
+Laufend     → Risikomanagement und ISMS-Pflichten aktiv
+2026+       → BSI-Audits und Kontrollen</code></pre>
+
+<h2 id="bussgelder">Bußgelder bei NIS2-Verstößen</h2>
+<ul>
+<li><strong>Wesentliche Einrichtungen:</strong> Bis zu <strong>10 Millionen Euro</strong> oder 2% des weltweiten Jahresumsatzes (der höhere Wert)</li>
+<li><strong>Wichtige Einrichtungen:</strong> Bis zu <strong>7 Millionen Euro</strong> oder 1,4% des Jahresumsatzes</li>
+<li><strong>Persönliche Haftung GF/Vorstand:</strong> Bei nachgewiesener Fahrlässigkeit kann die Geschäftsführung persönlich haftbar gemacht werden — auch mit Privatvermögen</li>
+</ul>
+
+<h2 id="fazit-nis2">Fazit: Was jetzt zu tun ist</h2>
+<p>Wenn Ihr Unternehmen in einen der 18 NIS2-Sektoren fällt und die Schwellenwerte überschreitet, haben Sie jetzt drei Optionen: <strong>1) Sofort handeln</strong> (diese Checkliste abarbeiten), <strong>2) Externen Berater beauftragen</strong> (empfohlen wenn kein eigenes ISMS vorhanden) oder <strong>3) Nichts tun</strong> und auf Bußgelder warten. Option 3 empfehlen wir nicht.</p>
+<p>Der wichtigste erste Schritt: <strong>BSI-Registrierung nachholen</strong>, auch wenn die Frist abgelaufen ist. Das BSI bewertet den Willen zur Compliance positiv — eine nachgeholte Registrierung ist besser als keine.</p>`,
     category: 'Compliance',
     categoryColor: '#00D4A0',
     categoryBg: 'rgba(0,212,160,0.08)',
     author: 'sicherheit.ai Redaktion',
-    authorRole: 'Basierend auf: NIS2-Richtlinie (EU) 2022/2555, BSI-Lagebericht 2023, NIS2UmsuCG',
-    publishedAt: '2026-05-07',
-    readTime: 10,
+    authorRole: 'Basierend auf: NIS2-Richtlinie (EU) 2022/2555, BSI NIS2-Portal, Heise.de, NIS2UmsuCG',
+    publishedAt: '2026-06-06',
+    readTime: 14,
     imageGradient: 'linear-gradient(135deg, #001A14 0%, #00291F 40%, #001A14 100%)',
     imageAlt: 'NIS2 Richtlinie Mittelstand Compliance',
     tags: ['NIS2', 'Compliance', 'Cybersicherheit', 'KRITIS', 'Mittelstand', 'Meldepflicht'],
