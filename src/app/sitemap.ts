@@ -8,14 +8,14 @@ const LOCALES = ['de', 'en'];
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticSlugs = ['', '/blog', '/glossar', '/tools', '/ai-act', '/ueber-uns', '/kontakt'];
+  const staticSlugs = ['', '/blog', '/glossar', '/tools', '/ai-act', '/ki-sicherheitscheck', '/ueber-uns', '/kontakt'];
   const staticPriorities: Record<string, number> = {
     '': 1.0, '/blog': 0.9, '/ai-act': 0.85, '/glossar': 0.8,
-    '/tools': 0.7, '/ueber-uns': 0.6, '/kontakt': 0.55,
+    '/tools': 0.7, '/ki-sicherheitscheck': 0.92, '/ueber-uns': 0.6, '/kontakt': 0.55,
   };
   const staticFreq: Record<string, 'daily' | 'weekly' | 'monthly'> = {
     '': 'daily', '/blog': 'daily', '/ai-act': 'weekly', '/glossar': 'weekly',
-    '/tools': 'monthly', '/ueber-uns': 'monthly', '/kontakt': 'monthly',
+    '/tools': 'monthly', '/ki-sicherheitscheck': 'monthly', '/ueber-uns': 'monthly', '/kontakt': 'monthly',
   };
 
   const staticPages = staticSlugs.flatMap(slug =>
