@@ -694,6 +694,22 @@ nav.scrolled {
   box-shadow: 0 0 6px var(--cyan);
   animation: pulse-dot 2s infinite;
 }
+/* ─── Nav highlight badge ─── */
+.nav-highlight-link {
+  border: 1px solid rgba(0,240,255,0.3);
+  padding: 4px 10px !important;
+  border-radius: 6px;
+  background: rgba(0,240,255,0.05);
+}
+/* On mobile menu the large font looks better without the border box */
+@media (max-width: 768px) {
+  .nav-highlight-link {
+    border: none;
+    padding: 0 !important;
+    background: none;
+  }
+}
+
 .source-card:hover { border-color: rgba(0,240,255,0.3) !important; }
 .aiact-src-link:hover { opacity: 1 !important; }
 .contact-input:focus { border-color: var(--border-bright) !important; }

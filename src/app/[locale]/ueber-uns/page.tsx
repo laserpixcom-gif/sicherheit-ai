@@ -110,7 +110,7 @@ export default function UeberUnsPage({
 
         {/* Header */}
         <div style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)' }}>
-          <div className="r-wrap" style={{ padding: '48px 48px 40px' }}>
+          <div className="r-wrap" style={{ paddingTop: '48px', paddingBottom: '40px' }}>
             <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
               <Link href={`/${locale}`} style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Home</Link>
               <span>›</span>
@@ -130,7 +130,7 @@ export default function UeberUnsPage({
           </div>
         </div>
 
-        <div className="r-wrap" style={{ padding: '56px 48px' }}>
+        <div className="r-wrap" style={{ paddingTop: '56px', paddingBottom: '56px' }}>
 
           {/* Mission */}
           <section style={{ marginBottom: '72px' }}>

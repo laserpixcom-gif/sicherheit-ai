@@ -138,12 +138,33 @@ const toolSchema = {
 
 export default function KiSicherheitscheckPage({ params }: { params: { locale: string } }) {
   setRequestLocale(params.locale);
-  const isDE = params.locale === 'de';
 
   return (
     <>
       <JsonLd data={faqSchema} />
       <JsonLd data={toolSchema} />
+      <style>{`
+        .kisec-hero-wrap { padding-top: 64px; padding-bottom: 56px; }
+        .kisec-content-wrap { padding-top: 80px; padding-bottom: 80px; }
+        .kisec-pro-grid { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+        .kisec-pro-card { padding: 48px; }
+        .kisec-badges { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .kisec-trust-row { display: flex; gap: 24px; margin-top: 36px; flex-wrap: wrap; }
+        .kisec-cta-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+        @media (max-width: 1024px) {
+          .kisec-hero-wrap { padding-top: 48px; padding-bottom: 40px; }
+          .kisec-content-wrap { padding-top: 60px; padding-bottom: 60px; }
+        }
+        @media (max-width: 640px) {
+          .kisec-hero-wrap { padding-top: 36px; padding-bottom: 32px; }
+          .kisec-content-wrap { padding-top: 48px; padding-bottom: 48px; }
+          .kisec-pro-grid { grid-template-columns: 1fr; }
+          .kisec-pro-card { padding: 28px 20px; }
+          .kisec-trust-row { gap: 12px; margin-top: 24px; }
+          .kisec-cta-row { flex-direction: column; align-items: flex-start; }
+          .kisec-cta-row a { width: 100%; text-align: center; justify-content: center; }
+        }
+      `}</style>
 
       <main style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: '80px' }}>
 
@@ -161,7 +182,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
             backgroundSize: '40px 40px',
           }} />
 
-          <div className="r-wrap" style={{ padding: '64px 48px 56px', position: 'relative' }}>
+          <div className="r-wrap kisec-hero-wrap" style={{ position: 'relative' }}>
             <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px', fontFamily: 'var(--mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
               <Link href={`/${params.locale}`} style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Home</Link>
               <span>›</span>
@@ -170,7 +191,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
               <span style={{ color: 'var(--cyan)' }}>KI-Sicherheitscheck</span>
             </nav>
 
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
+            <div className="kisec-badges">
               <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, color: '#78C864', background: 'rgba(120,200,100,0.1)', border: '1px solid rgba(120,200,100,0.25)', padding: '4px 10px', borderRadius: '4px', letterSpacing: '0.06em' }}>
                 KOSTENLOS
               </span>
@@ -204,7 +225,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
               Prüfen Sie in <strong style={{ color: 'var(--text)' }}>10 Minuten kostenlos</strong>, ob Ihre KI-Nutzung — ChatGPT, Copilot, Gemini & Co. — DSGVO-konform ist und welche Sicherheitsrisiken bestehen. Basierend auf EU AI Act, BSI IT-Grundschutz und OWASP.
             </p>
 
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="kisec-cta-row">
               <Link href={`/${params.locale}/#tools`} style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
                 background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
@@ -221,7 +242,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
             </div>
 
             {/* Trust row */}
-            <div style={{ display: 'flex', gap: '24px', marginTop: '36px', flexWrap: 'wrap' }}>
+            <div className="kisec-trust-row">
               {[
                 { label: 'BSI IT-Grundschutz', color: '#00F0FF' },
                 { label: 'EU AI Act 2026', color: '#7890FF' },
@@ -236,7 +257,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
           </div>
         </header>
 
-        <div className="r-wrap" style={{ padding: '80px 48px' }}>
+        <div className="r-wrap kisec-content-wrap">
 
           {/* ── Warum KI-Sicherheitscheck ── */}
           <section style={{ marginBottom: '96px' }}>
@@ -344,12 +365,11 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
               background: 'var(--card-bg)',
               border: '1px solid rgba(0,240,255,0.2)',
               borderRadius: '20px',
-              padding: '48px',
               position: 'relative',
               overflow: 'hidden',
-            }}>
+            }} className="kisec-pro-card">
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--cyan), transparent)' }} />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '32px', alignItems: 'center' }}>
+              <div className="kisec-pro-grid">
                 <div>
                   <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cyan)', marginBottom: '12px' }}>
                     Professioneller KI-Sicherheitscheck
@@ -368,7 +388,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
                       </li>
                     ))}
                   </ul>
-                  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div className="kisec-cta-row">
                     <Link href={`/${params.locale}/kontakt`} style={{
                       display: 'inline-flex', alignItems: 'center', gap: '8px',
                       background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',

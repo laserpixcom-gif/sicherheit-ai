@@ -29,7 +29,7 @@ function MagLink({ href, label, active, highlight }: { href: string; label: stri
     <motion.div ref={ref} style={{ x: sx, y: sy }} onMouseMove={onMove} onMouseLeave={onLeave}>
       <Link
         href={href}
-        className={active ? 'nav-link-active' : ''}
+        className={`${active ? 'nav-link-active' : ''} ${highlight ? 'nav-highlight-link' : ''}`}
         style={{
           color: highlight ? 'var(--cyan)' : active ? 'var(--text)' : 'var(--text-dim)',
           textDecoration: 'none',
@@ -38,12 +38,6 @@ function MagLink({ href, label, active, highlight }: { href: string; label: stri
           position: 'relative',
           transition: 'color 0.2s',
           paddingBottom: '4px',
-          ...(highlight && !active ? {
-            border: '1px solid rgba(0,240,255,0.3)',
-            padding: '4px 10px',
-            borderRadius: '6px',
-            background: 'rgba(0,240,255,0.05)',
-          } : {}),
         }}
         onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--cyan)'; }}
         onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.color = highlight ? 'var(--cyan)' : 'var(--text-dim)'; }}

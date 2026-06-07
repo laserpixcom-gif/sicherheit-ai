@@ -88,22 +88,26 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
         <div className="subpage-content">
 
           {/* Featured: KI-Sicherheitscheck */}
+          <style>{`
+            .ki-featured { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+            .ki-featured-btn { flex-shrink: 0; }
+            @media (max-width: 640px) {
+              .ki-featured { flex-direction: column; align-items: flex-start; }
+              .ki-featured-btn { width: 100%; text-align: center; justify-content: center; }
+            }
+          `}</style>
           <Link href={`/${locale}/ki-sicherheitscheck`} style={{ display: 'block', textDecoration: 'none', marginBottom: '20px' }}>
             <div style={{
               background: 'var(--card-bg)',
               border: '1px solid rgba(0,240,255,0.3)',
               borderRadius: '18px',
-              padding: '32px 36px',
+              padding: 'clamp(20px, 4vw, 36px)',
               position: 'relative',
               overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '24px',
-              flexWrap: 'wrap',
               boxShadow: '0 0 40px rgba(0,240,255,0.06)',
             }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, var(--cyan), transparent)' }} />
+              <div className="ki-featured">
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: 'var(--mono)', fontSize: '10px', fontWeight: 700, color: '#78C864', background: 'rgba(120,200,100,0.1)', border: '1px solid rgba(120,200,100,0.25)', padding: '3px 8px', borderRadius: '4px' }}>KOSTENLOS</span>
@@ -116,8 +120,8 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
                   Prüfen Sie in 10 Minuten, ob Ihre KI-Nutzung DSGVO-konform und EU AI Act-sicher ist. Kein Login, kein Datentransfer.
                 </p>
               </div>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px', flexShrink: 0,
+              <span className="ki-featured-btn" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
                 background: 'linear-gradient(135deg, var(--cyan) 0%, #007A9A 100%)',
                 color: '#060B18', fontWeight: 800, fontSize: '14px',
                 padding: '12px 24px', borderRadius: '8px',
@@ -125,7 +129,8 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
               }}>
                 Check starten →
               </span>
-            </div>
+              </div>{/* ki-featured */}
+            </div>{/* card */}
           </Link>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))', gap: '20px' }}>
