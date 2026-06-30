@@ -3,7 +3,9 @@ import { STATIC_POSTS } from '@/lib/posts';
 import { GLOSSARY_TERMS } from '@/lib/glossary';
 
 const BASE_URL = 'https://sicherheit.ai';
-const LOCALES = ['de', 'en'];
+// DACH-Fokus: nur DE in der Sitemap. EN ist noindex (siehe [locale]/layout.tsx),
+// daher kein hreflang/keine EN-URLs — bündelt das Crawl-Budget auf DE.
+const LOCALES = ['de'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

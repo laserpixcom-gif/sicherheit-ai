@@ -43,16 +43,13 @@ export async function generateMetadata({
     },
     alternates: {
       canonical: `${BASE_URL}/${locale}`,
-      languages: {
-        de: `${BASE_URL}/de`,
-        en: `${BASE_URL}/en`,
-        'x-default': `${BASE_URL}/de`,
-      },
     },
+    // DACH-Fokus: nur DE wird indexiert. EN bleibt erreichbar (follow),
+    // aber noindex, um das knappe Crawl-Budget der jungen Domain auf DE zu bündeln.
     robots: {
-      index: true,
+      index: isDE,
       follow: true,
-      googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
+      googleBot: { index: isDE, follow: true, 'max-image-preview': 'large' },
     },
   };
 }
