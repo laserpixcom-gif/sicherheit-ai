@@ -12,6 +12,7 @@ import ScrollProgress from '@/components/ScrollProgress';
 import PageTransition from '@/components/PageTransition';
 import IntroAnimation from '@/components/IntroAnimation';
 import JsonLd, { organizationSchema, websiteSchema } from '@/components/JsonLd';
+import { Analytics } from '@vercel/analytics/next';
 import '../globals.css';
 
 const BASE_URL = 'https://sicherheit.ai';
@@ -85,6 +86,8 @@ export default async function LocaleLayout({
             </PageTransition>
           </ThemeProvider>
         </NextIntlClientProvider>
+        {/* Cookieloses, DSGVO-freundliches Web Analytics — kein Consent-Banner nötig */}
+        <Analytics />
       </body>
     </html>
   );
