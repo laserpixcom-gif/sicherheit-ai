@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
+import Link from 'next/link';
 import Footer from '@/components/Footer';
 import GlossarClient from '@/components/GlossarClient';
 import JsonLd, { definedTermSetSchema } from '@/components/JsonLd';
@@ -9,10 +10,13 @@ export function generateStaticParams() {
   return [{ locale: 'de' }, { locale: 'en' }];
 }
 
-export const metadata: Metadata = {
-  title: 'Glossar — KI-Sicherheit & Cybersecurity Begriffe | sicherheit.ai',
-  description: 'Über 25 Begriffe aus KI-Sicherheit und Cybersecurity — verständlich erklärt mit Kategorien, erweiterten Definitionen und verwandten Begriffen.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const count = GLOSSARY_TERMS.length;
+  return {
+    title: 'Cybersecurity & KI-Sicherheit Glossar — Begriffe A–Z | sicherheit.ai',
+    description: `${count} Begriffe aus KI-Sicherheit und Cybersecurity — verständlich erklärt: Definition, einfache Erklärung, Funktionsweise und FAQs. Von APT bis Zero-Day.`,
+  };
+}
 
 // All possible letters A-Z for nav display
 const ALL_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -96,6 +100,30 @@ export default function GlossarPage({
         <div className="subpage-content">
           <GlossarClient terms={GLOSSARY_TERMS} letters={ALL_LETTERS} locale={locale} />
         </div>
+
+        {/* SSR-Liste aller Begriffe — garantiert serverseitig crawlbare interne Links.
+            Kritisch für Indexierung: verteilt Link-Signal vom Hub an alle 113 Term-Seiten,
+            unabhängig davon, ob der Google-Crawler das Client-JS ausführt. */}
+        <nav aria-label="Alle Glossarbegriffe" className="r-wrap" style={{ padding: '8px 48px 56px' }}>
+          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '20px' }}>
+            Alle Begriffe A–Z
+          </h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {[...GLOSSARY_TERMS].sort((a, b) => a.term.localeCompare(b.term, 'de')).map(t => (
+              <Link
+                key={t.id}
+                href={`/${locale}/glossar/${t.id}`}
+                style={{
+                  padding: '6px 12px', borderRadius: '6px', fontSize: '12px',
+                  background: 'var(--card-bg)', border: '1px solid var(--border)',
+                  color: 'var(--text-dim)', textDecoration: 'none',
+                }}
+              >
+                {t.term}{t.abbr ? ` (${t.abbr})` : ''}
+              </Link>
+            ))}
+          </div>
+        </nav>
       </main>
       <Footer locale={locale} />
     </>
