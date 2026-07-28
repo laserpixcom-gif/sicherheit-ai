@@ -82,7 +82,7 @@ export default function Footer({ locale }: { locale: string }) {
               title: t('legal'),
               links: [
                 { label: t('privacy'), href: '#' },
-                { label: t('imprint'), href: '#' },
+                { label: t('imprint'), href: `/${locale}/impressum` },
                 { label: t('terms'), href: '#' },
                 { label: t('gdpr'), href: '#' },
                 { label: locale === 'de' ? 'Kontakt' : 'Contact', href: `/${locale}/kontakt` },
