@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import RelatedLinks from '@/components/RelatedLinks';
 import JsonLd from '@/components/JsonLd';
 
 const BASE_URL = 'https://sicherheit.ai';
@@ -19,8 +20,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const isDE = params.locale === 'de';
   const title = isDE
-    ? 'KI Sicherheitscheck kostenlos — Prüfen Sie Ihre KI-Nutzung in 10 Minuten | sicherheit.ai'
-    : 'Free AI Security Check — Test Your AI Usage in 10 Minutes | sicherheit.ai';
+    ? 'KI-Sicherheitscheck kostenlos in 10 Minuten | sicherheit.ai'
+    : 'Free AI Security Check in 10 Minutes | sicherheit.ai';
   const description = isDE
     ? 'Kostenloser KI Sicherheitscheck für Unternehmen: Prüfen Sie ob ChatGPT, Copilot & Co. DSGVO-konform eingesetzt werden. Sofortiges Ergebnis, kein Login, kein Risiko. Basierend auf EU AI Act & BSI-Standards.'
     : 'Free AI security check for businesses: Test whether ChatGPT, Copilot & Co. are used GDPR-compliantly. Instant result, no login, no risk. Based on EU AI Act & BSI standards.';
@@ -453,6 +454,18 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
             </div>
           </section>
         </div>
+        <RelatedLinks
+          locale={params.locale}
+          title="Weiterführend zum KI-Sicherheitscheck"
+          links={[
+            { label: 'Shadow AI erkennen & kontrollieren', href: '/blog/shadow-ai-unternehmen-risiken' },
+            { label: 'EU AI Act: Verbotene KI-Systeme & Pflichten', href: '/blog/eu-ai-act-verbotene-ki-systeme' },
+            { label: 'KI-Phishing erkennen (WormGPT & Co.)', href: '/blog/wormgpt-ki-phishing-tool' },
+            { label: 'Glossar: Prompt Injection', href: '/glossar/prompt-injection' },
+            { label: 'Glossar: Shadow AI', href: '/glossar/shadow-ai' },
+            { label: 'EU-AI-Act-Leitfaden ansehen', href: '/ai-act' },
+          ]}
+        />
       </main>
       <Footer locale={params.locale} />
     </>

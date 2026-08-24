@@ -19,7 +19,7 @@ export function organizationSchema() {
     '@type': 'Organization',
     '@id': 'https://sicherheit.ai/#organization',
     name: 'sicherheit.ai',
-    alternateName: ['Sicherheit AI', 'sicherheit.ai GmbH'],
+    alternateName: ['Sicherheit AI'],
     url: 'https://sicherheit.ai',
     logo: {
       '@type': 'ImageObject',
@@ -28,7 +28,7 @@ export function organizationSchema() {
       height: 512,
     },
     description: 'Deutschlands führende Plattform für KI-Sicherheit und Cybersecurity. Unabhängige Fachplattform für IT-Sicherheitsverantwortliche, Unternehmen und Forschende im DACH-Raum.',
-    foundingDate: '2024',
+    foundingDate: '2026',
     areaServed: ['DE', 'AT', 'CH'],
     knowsAbout: [
       'KI-Sicherheit',
@@ -54,7 +54,7 @@ export function organizationSchema() {
     sameAs: [],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'info@sicherheit.ai',
+      email: 'info@laserpix.de',
       contactType: 'customer support',
       availableLanguage: ['German', 'English'],
     },

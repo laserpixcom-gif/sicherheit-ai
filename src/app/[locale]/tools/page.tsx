@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { setRequestLocale } from 'next-intl/server';
 import Footer from '@/components/Footer';
+import RelatedLinks from '@/components/RelatedLinks';
 
 const TOOLS = [
   {
@@ -207,6 +208,18 @@ export default function ToolsPage({ params: { locale } }: { params: { locale: st
             ))}
           </div>
         </div>
+        <RelatedLinks
+          locale={locale}
+          title="Passend zu unseren Tools"
+          links={[
+            { label: 'KI-Phishing erkennen 2026', href: '/blog/wormgpt-ki-phishing-tool' },
+            { label: 'BSI Lagebericht 2024', href: '/blog/bsi-lagebericht-2024' },
+            { label: 'Glossar: Phishing', href: '/glossar/phishing' },
+            { label: 'Glossar: Passwort-Manager', href: '/glossar/password-manager' },
+            { label: 'Glossar: Zero-Day', href: '/glossar/zero-day' },
+            { label: 'KI-Sicherheitscheck (kostenlos)', href: '/ki-sicherheitscheck' },
+          ]}
+        />
       </main>
       <Footer locale={locale} />
     </>

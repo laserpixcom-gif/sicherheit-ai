@@ -52,7 +52,7 @@ export default function GlossarPage({
                 lineHeight: 0.95, color: 'var(--text)', margin: 0,
               }}
             >
-              Glossar
+              Cybersecurity &amp; KI-Sicherheit Glossar
             </h1>
             <p
               style={{

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import Footer from '@/components/Footer';
+import RelatedLinks from '@/components/RelatedLinks';
 import { getPosts, getPost, getRelatedPosts, formatDate } from '@/lib/posts';
 import ArticleTOC from '@/components/blog/ArticleTOC';
 import ArticleShare from '@/components/blog/ArticleShare';
@@ -398,6 +399,16 @@ export default async function BlogPostPage({
             </div>
           </div>
         )}
+        <RelatedLinks
+          locale={params.locale}
+          title="Mehr zu KI-Sicherheit"
+          links={[
+            { label: 'KI-Sicherheitscheck (kostenlos)', href: '/ki-sicherheitscheck' },
+            { label: 'EU-AI-Act-Leitfaden', href: '/ai-act' },
+            { label: 'Sicherheits-Tools', href: '/tools' },
+            { label: 'Glossar: 113 Begriffe A–Z', href: '/glossar' },
+          ]}
+        />
       </main>
       <Footer locale={params.locale} />
     </>

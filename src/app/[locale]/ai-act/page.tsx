@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import RelatedLinks from '@/components/RelatedLinks';
 import JsonLd, { faqSchema } from '@/components/JsonLd';
 import FaqAccordion from '@/components/FaqAccordion';
 
@@ -18,8 +19,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const isDE = locale === 'de';
   const title = isDE
-    ? 'EU AI Act 2026 — Checkliste, Pflichten & Fristen für Unternehmen | sicherheit.ai'
-    : 'EU AI Act 2026 — Checklist, Obligations & Deadlines for Businesses | sicherheit.ai';
+    ? 'EU AI Act 2026 — Checkliste, Pflichten & Fristen | sicherheit.ai'
+    : 'EU AI Act 2026 — Checklist, Obligations & Deadlines | sicherheit.ai';
   const description = isDE
     ? 'Der vollständige Leitfaden zum EU AI Act (VO 2024/1689) für Unternehmen: Risikoklassen, Compliance-Pflichten, Fristen bis 2027, Bußgelder bis 35 Mio. Euro und eine kostenlose Checkliste.'
     : 'The complete guide to the EU AI Act (Regulation 2024/1689) for businesses: risk classes, compliance obligations, deadlines until 2027, fines up to €35 million and a free checklist.';
@@ -364,6 +365,18 @@ export default function AiActPage({
             </div>
           </div>
         </div>
+        <RelatedLinks
+          locale={locale}
+          title="Weiterführend zum EU AI Act"
+          links={[
+            { label: 'EU AI Act: Vollständiger Überblick 2024', href: '/blog/eu-ai-act-2024-compliance' },
+            { label: 'EU AI Act Checkliste: Verbotene KI-Systeme', href: '/blog/eu-ai-act-verbotene-ki-systeme' },
+            { label: 'NIS2 Checkliste für den Mittelstand', href: '/blog/nis2-richtlinie-mittelstand' },
+            { label: 'Glossar: NIS2', href: '/glossar/nis2' },
+            { label: 'Glossar: Cyber Resilience Act', href: '/glossar/cyber-resilience-act' },
+            { label: 'Jetzt KI-Sicherheitscheck starten', href: '/ki-sicherheitscheck' },
+          ]}
+        />
       </main>
       <Footer locale={locale} />
     </>

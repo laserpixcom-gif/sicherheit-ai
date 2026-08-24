@@ -13,6 +13,7 @@ import PageTransition from '@/components/PageTransition';
 import IntroAnimation from '@/components/IntroAnimation';
 import JsonLd, { organizationSchema, websiteSchema } from '@/components/JsonLd';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '../globals.css';
 
 const BASE_URL = 'https://sicherheit.ai';
@@ -34,6 +35,7 @@ export async function generateMetadata({
       : "Germany's leading platform for AI security and cybersecurity.",
     openGraph: {
       siteName: 'sicherheit.ai',
+      url: `${BASE_URL}/${locale}`,
       locale: isDE ? 'de_DE' : 'en_US',
       type: 'website',
       images: [{ url: `${BASE_URL}/api/og?title=sicherheit.ai`, width: 1200, height: 630 }],
@@ -88,6 +90,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         {/* Cookieloses, DSGVO-freundliches Web Analytics — kein Consent-Banner nötig */}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
