@@ -37,21 +37,21 @@ const ANGEBOTE = [
   {
     icon: '🔍',
     title: 'KI-Sicherheitscheck',
-    price: '€499',
+    price: 'Auf Anfrage',
     desc: 'Analyse eurer KI-Nutzung auf Datenschutz- und Sicherheitsrisiken. Schriftlicher Report mit konkreten Maßnahmen.',
     color: '#00F0FF',
   },
   {
     icon: '📋',
     title: 'AI Act Compliance',
-    price: '€299',
+    price: 'Auf Anfrage',
     desc: 'Einordnung eurer KI-Systeme in Risikoklassen, Handlungsplan für EU AI Act-Konformität.',
     color: '#7890FF',
   },
   {
     icon: '⚡',
     title: 'Incident First Response',
-    price: '€199/h',
+    price: 'Auf Anfrage',
     desc: 'Unterstützung in den ersten 72 Stunden nach einem Sicherheitsvorfall, remote oder vor Ort.',
     color: '#FF9632',
   },
@@ -151,7 +151,7 @@ export default function KontaktPage({ params }: { params: { locale: string } }) 
               {/* Angebote */}
               <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '14px', padding: '24px' }}>
                 <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                  Leistungen & Preise
+                  Unsere Leistungen
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {ANGEBOTE.map(a => (

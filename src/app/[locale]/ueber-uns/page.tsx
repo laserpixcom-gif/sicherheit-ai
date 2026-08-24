@@ -59,7 +59,7 @@ const STANDARDS = [
 const ANGEBOTE = [
   {
     name: 'KI-Sicherheitscheck',
-    price: '€ 499',
+    price: 'Auf Anfrage',
     desc: 'Wir prüfen, ob Ihre KI-Nutzung (ChatGPT, Copilot, n8n, Make etc.) DSGVO- und AI-Act-konform ist. Ergebnis: schriftlicher Maßnahmenplan.',
     items: ['KI-Tool-Inventar Ihrer Organisation', 'DSGVO- & AI-Act-Risikobewertung', 'Shadow-AI-Erkennung', 'Maßnahmenplan als PDF', '30 min Auswertungsgespräch'],
     cta: 'Jetzt anfragen',
@@ -67,7 +67,7 @@ const ANGEBOTE = [
   },
   {
     name: 'Cybersecurity-Basischeck',
-    price: '€ 499',
+    price: 'Auf Anfrage',
     desc: 'Technische Prüfung Ihrer Website und E-Mail-Infrastruktur auf kritische Sicherheitslücken.',
     items: ['Security-Header-Analyse', 'SSL/TLS-Zertifikatsprüfung', 'E-Mail-Sicherheit SPF/DKIM/DMARC', 'Datenpannen-Prüfung', 'Management-Report'],
     cta: 'Jetzt anfragen',
@@ -75,7 +75,7 @@ const ANGEBOTE = [
   },
   {
     name: 'Monatsbetreuung',
-    price: 'ab € 1.500 / Monat',
+    price: 'Individuelles Angebot',
     desc: 'Laufende KI- und Cybersecurity-Begleitung für Ihr Unternehmen: monatlicher Report, CVE-Monitoring, Mitarbeiter-Awareness.',
     items: ['Monatlicher Security-Report', 'CVE-Monitoring & Alerts', 'KI-Governance-Unterstützung', 'Awareness-Materialien', 'Notfallplan & Ansprechpartner'],
     cta: 'Angebot anfragen',
@@ -268,7 +268,7 @@ export default function UeberUnsPage({
               ))}
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '20px', fontFamily: 'var(--mono)' }}>
-              {isDE ? '* Alle Preise netto zzgl. MwSt. · Anfragen per E-Mail: info@sicherheit.ai' : '* All prices net excl. VAT · Enquiries: info@sicherheit.ai'}
+              {isDE ? '* Individuelle Angebote nach Bedarf · Anfragen per E-Mail: info@laserpix.de' : '* Individual quotes on request · Enquiries: info@laserpix.de'}
             </p>
           </section>
 

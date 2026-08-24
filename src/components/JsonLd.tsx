@@ -46,9 +46,9 @@ export function organizationSchema() {
       '@type': 'OfferCatalog',
       name: 'Cybersecurity Beratungsleistungen',
       itemListElement: [
-        { '@type': 'Offer', name: 'KI-Sicherheitscheck', price: '499', priceCurrency: 'EUR' },
-        { '@type': 'Offer', name: 'AI Act Compliance-Audit', price: '299', priceCurrency: 'EUR' },
-        { '@type': 'Offer', name: 'Incident First Response', price: '199', priceCurrency: 'EUR' },
+        { '@type': 'Offer', name: 'KI-Sicherheitscheck', description: 'Individuelles Angebot auf Anfrage' },
+        { '@type': 'Offer', name: 'AI Act Compliance-Audit', description: 'Individuelles Angebot auf Anfrage' },
+        { '@type': 'Offer', name: 'Incident First Response', description: 'Individuelles Angebot auf Anfrage' },
       ],
     },
     sameAs: [],

@@ -104,7 +104,7 @@ const FAQS = [
   },
   {
     q: 'Was passiert nach dem Check?',
-    a: 'Sie erhalten sofort Ihren Sicherheitsscore und eine Risikobewertung. Wenn Sie eine detaillierte Analyse mit konkretem Maßnahmenplan wünschen, bieten wir einen professionellen KI-Sicherheitscheck ab 499 € an.',
+    a: 'Sie erhalten sofort Ihren Sicherheitsscore und eine Risikobewertung. Wenn Sie eine detaillierte Analyse mit konkretem Maßnahmenplan wünschen, bieten wir einen professionellen KI-Sicherheitscheck als individuelles Angebot an — Preis auf Anfrage, passgenau zu Ihrem Bedarf.',
   },
   {
     q: 'Wie oft sollte ich den KI Sicherheitscheck durchführen?',
@@ -398,7 +398,7 @@ export default function KiSicherheitscheckPage({ params }: { params: { locale: s
                     }}>
                       Professionellen Check anfragen →
                     </Link>
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: '20px', fontWeight: 800, color: 'var(--cyan)' }}>€ 499</span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: '16px', fontWeight: 800, color: 'var(--cyan)' }}>Auf Anfrage</span>
                   </div>
                 </div>
               </div>
